@@ -73,7 +73,4 @@
   <ItemGroup>
     <RefactorLog Include="DevBridgeDB.refactorlog" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="DevBridgeDB.publish.xml" />
-  </ItemGroup>
 </Project>
