@@ -9,10 +9,16 @@ namespace DevBridgeAPI.Controllers
 {
     public class TeamsController : ApiController
     {
+        private readonly IModelSelector selector;
+
+        public TeamsController(IModelSelector selector)
+        {
+            this.selector = selector;
+        }
+
         // GET api/users
         public IHttpActionResult Get()
         {
-            IModelSelector selector = new TeamsSelector(); // Gal kokį Dependency Injection panaudoti
             return Ok(selector.SelectAllRows().Cast<Team>());
         }
     }

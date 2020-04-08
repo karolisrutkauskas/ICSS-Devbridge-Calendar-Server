@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DevBridgeAPI.Repository.Selector
 {
-    interface IModelSelector
+    public interface IModelSelector
     {
         IEnumerable<IModel> SelectAllRows();
     }

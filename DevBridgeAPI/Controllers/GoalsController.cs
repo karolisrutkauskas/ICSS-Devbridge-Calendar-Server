@@ -8,10 +8,16 @@ namespace DevBridgeAPI.Controllers
 {
     public class GoalsController : ApiController
     {
+        private readonly IModelSelector selector;
+
+        public GoalsController(IModelSelector selector)
+        {
+            this.selector = selector;
+        }
+
         // GET api/users
         public IHttpActionResult Get()
         {
-            IModelSelector selector = new GoalsSelector(); // Gal kokį Dependency Injection panaudoti
             return Ok(selector.SelectAllRows().Cast<Goal>());
         }
     }

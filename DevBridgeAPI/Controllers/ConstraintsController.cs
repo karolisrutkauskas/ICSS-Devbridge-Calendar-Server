@@ -8,10 +8,16 @@ namespace DevBridgeAPI.Controllers
 {
     public class ConstraintsController : ApiController
     {
+        private readonly IModelSelector selector;
+
+        public ConstraintsController(IModelSelector selector)
+        {
+            this.selector = selector;
+        }
+
         // GET api/users
         public IHttpActionResult Get()
         {
-            IModelSelector selector = new ConstraintsSelector(); // Gal kokį Dependency Injection panaudoti
             return Ok(selector.SelectAllRows().Cast<Constraint>());
         }
     }
