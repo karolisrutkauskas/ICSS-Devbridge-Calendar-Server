@@ -8,10 +8,16 @@ namespace DevBridgeAPI.Controllers
 {
     public class AssignmentsController : ApiController
     {
+        private readonly IModelSelector selector;
+
+        public AssignmentsController(IModelSelector selector)
+        {
+            this.selector = selector;
+        }
+
         // GET api/users
         public IHttpActionResult Get()
         {
-            IModelSelector selector = new AssignmentsSelector(); // Gal kokį Dependency Injection panaudoti
             return Ok(selector.SelectAllRows().Cast<Assignment>());
         }
     }

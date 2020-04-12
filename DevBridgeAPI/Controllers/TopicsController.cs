@@ -8,10 +8,16 @@ namespace DevBridgeAPI.Controllers
 {
     public class TopicsController : ApiController
     {
+        private readonly IModelSelector selector;
+
+        public TopicsController(IModelSelector selector)
+        {
+            this.selector = selector;
+        }
+
         // GET api/users
         public IHttpActionResult Get()
         {
-            IModelSelector selector = new TopicsSelector(); // Gal kokį Dependency Injection panaudoti
             return Ok(selector.SelectAllRows().Cast<Topic>());
         }
     }

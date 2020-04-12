@@ -20,5 +20,14 @@ namespace DevBridgeAPI.Repository.Selector
                 return db.Query<User>(sql);
             }
         }
+
+        public IModel SelectOneRow(string username, string password)
+        {
+            string sql = "SELECT * FROM Users WHERE Email = @username AND Password = @password";
+            using (var db = new DbContext().Connection)
+            {
+                return db.Query<User>(sql, new { username, password }).FirstOrDefault();
+            }
+        }
     }
 }
