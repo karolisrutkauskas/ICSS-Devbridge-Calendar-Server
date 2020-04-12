@@ -17,6 +17,7 @@ namespace DevBridgeAPI.Controllers
             this.selector = selector;
         }
 
+        [Authorize]
         // GET api/users
         public IHttpActionResult Get()
         {
