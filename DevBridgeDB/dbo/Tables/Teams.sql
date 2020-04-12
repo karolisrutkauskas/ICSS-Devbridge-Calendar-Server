@@ -1,6 +1,0 @@
-﻿CREATE TABLE [dbo].[Teams]
-(
-	[TeamId] INT NOT NULL IDENTITY, 
-    [Name] NVARCHAR(200) NOT NULL
-	CONSTRAINT [PK_Teams_TeamId] PRIMARY KEY (TeamId ASC)
-)

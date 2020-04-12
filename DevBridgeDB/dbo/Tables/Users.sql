@@ -6,9 +6,13 @@
 	[Email] NVARCHAR(200) NOT NULL, 
     [Role] NVARCHAR(50) NULL, 
     [Password] NVARCHAR(200) NOT NULL,
-	[TeamId] INT NULL
+	[ManagerId] INT NULL,
+    [ConsecLimit] INT NULL, 
+    [MonthlyLimit] INT NULL, 
+    [YearlyLimit] INT NULL
 	CONSTRAINT [PK_Users_UserID] PRIMARY KEY ([UserId] ASC)
 	CONSTRAINT [UQ_Users_Email] UNIQUE ([Email])
+	CONSTRAINT [FK_Users_Manager] FOREIGN KEY ([ManagerId]) REFERENCES [Users] ([UserId]) ON DELETE NO ACTION
 )
 
 GO

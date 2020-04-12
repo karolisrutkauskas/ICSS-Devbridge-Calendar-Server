@@ -3,7 +3,7 @@
 	[TopicId] INT NOT NULL IDENTITY, 
     [Name] NVARCHAR(200) NOT NULL, 
     [Description] NVARCHAR(4000) NULL, 
-    [PrevTopicId] INT NULL, 
+    [ParentTopicId] INT NULL, 
     [ChangeByUserId] INT NOT NULL,
     [SysStart] DATETIME2 (7) GENERATED ALWAYS AS ROW START NOT NULL,
 	[SysEnd] DATETIME2 (7) GENERATED ALWAYS AS ROW END NOT NULL,
@@ -15,4 +15,4 @@
 
 GO
 
-CREATE INDEX [IX_Topics_PrevTopic] ON [dbo].[Topics] ([PrevTopicId])
+CREATE INDEX [IX_Topics_PrevTopic] ON [dbo].[Topics] ([ParentTopicId])
