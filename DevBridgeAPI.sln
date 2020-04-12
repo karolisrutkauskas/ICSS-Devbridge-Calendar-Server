@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevBridgeAPI.Tests", "DevBr
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DevBridgeDB", "DevBridgeDB\DevBridgeDB.sqlproj", "{3EA43566-BB59-4989-876E-0025F7EFE7D6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22B8B44A-A5CA-4E2C-8D23-07D7525191FB}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

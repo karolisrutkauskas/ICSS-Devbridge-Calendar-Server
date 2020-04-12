@@ -7,14 +7,24 @@ using System.Web;
 
 namespace DevBridgeAPI.Repository.Selector
 {
-    public class AssignmentsSelector : IModelSelector
+    public class AssignmentsSelector : IModelSelector, IAssignmentsSelector
     {
         public IEnumerable<IModel> SelectAllRows()
         {
             string sql = "SELECT * FROM Assignments";
-            using (var db = new DbContext().Connection)
+            using (var db = new DbContext())
             {
-                return db.Query<Assignment>(sql);
+                return db.Connection.Query<Assignment>(sql);
+            }
+        }
+
+        public IEnumerable<Assignment> SelectByUserId(int userId)
+        {
+            string sql = "SELECT * FROM Assignments " +
+                         "WHERE UserId = @userId";
+            using (var db = new DbContext())
+            {
+                return db.Connection.Query<Assignment>(sql, new { userId });
             }
         }
     }

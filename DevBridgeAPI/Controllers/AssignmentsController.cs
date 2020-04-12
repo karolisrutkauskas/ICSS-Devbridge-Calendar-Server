@@ -1,24 +1,65 @@
 ﻿using DevBridgeAPI.Models;
 using DevBridgeAPI.Repository;
 using DevBridgeAPI.Repository.Selector;
+using DevBridgeAPI.UseCases;
+using System;
 using System.Linq;
+using System.Net;
+using System.Web;
 using System.Web.Http;
 
 namespace DevBridgeAPI.Controllers
 {
     public class AssignmentsController : ApiController
     {
-        private readonly IModelSelector selector;
+        private const string genericError = "Unexpected error";
+        private readonly IAssignmentLogic asignLogic;
 
-        public AssignmentsController(IModelSelector selector)
+        public AssignmentsController(IAssignmentLogic asignLogic)
         {
-            this.selector = selector;
+            this.asignLogic = asignLogic;
         }
 
-        // GET api/users
+        [Route("assignments")]
+        [HttpGet]
         public IHttpActionResult Get()
         {
-            return Ok(selector.SelectAllRows().Cast<Assignment>());
+            try { return Ok(asignLogic.SelectAllAssignments()); }
+            catch (SystemException ex) 
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: genericError);
+            }
+        }
+
+        [Route("assignments/user/{userId}")]
+        [HttpGet]
+        public IHttpActionResult GetUsersAssignments(int userId)
+        {
+            try { return Ok(asignLogic.FindAssignments(userId)); }
+            catch (SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: genericError);
+            }
+        }
+
+        [Route("assignments/manager/{managerId}")]
+        [HttpGet]
+        public IHttpActionResult GetSubordinatesAssignments(int managerId)
+        {
+            try { return Ok(asignLogic.FindSubordinatesAssignments(managerId)); }
+            catch (SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: genericError);
+            }
         }
     }
 }
