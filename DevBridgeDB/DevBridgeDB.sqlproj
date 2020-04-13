@@ -60,17 +60,23 @@
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\Functions" />
     <Folder Include="dbo\Views" />
+    <Folder Include="dbo\DataScripts" />
+    <Folder Include="dbo\Triggers" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Users.sql" />
-    <Build Include="dbo\Tables\TeamManagers.sql" />
-    <Build Include="dbo\Tables\Teams.sql" />
-    <Build Include="dbo\Tables\Constraints.sql" />
     <Build Include="dbo\Tables\Goals.sql" />
     <Build Include="dbo\Tables\Topics.sql" />
     <Build Include="dbo\Tables\Assignments.sql" />
+    <Build Include="dbo\Tables\AssignmentStates.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DevBridgeDB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="dbo\DataScripts\AssignmentStates.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DevBridgeDB.publish.xml" />
   </ItemGroup>
 </Project>

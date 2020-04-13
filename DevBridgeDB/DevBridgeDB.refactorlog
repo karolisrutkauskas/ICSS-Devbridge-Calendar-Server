@@ -70,4 +70,39 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="[GetLatestTopicVersion]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="28abf9b2-3ca3-4b6c-a8b9-1f908c118bd2" ChangeDateTime="04/12/2020 10:26:28">
+    <Property Name="ElementName" Value="[dbo].[AssignmentStates].[Comments]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AssignmentStates]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="State" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ff7fe6db-0286-4752-a72a-9699f73ba03e" ChangeDateTime="04/12/2020 10:30:53">
+    <Property Name="ElementName" Value="[dbo].[Users].[TeamId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Users]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ManagerId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fea880ee-be69-4b9e-aa1d-66b029a590dd" ChangeDateTime="04/12/2020 10:37:46">
+    <Property Name="ElementName" Value="[dbo].[Assignments].[State]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Assignments]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StateId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f2d4eddc-2d33-4a74-8a48-333ac380d9bd" ChangeDateTime="04/12/2020 10:45:18">
+    <Property Name="ElementName" Value="[dbo].[Goals].[TeamId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Goals]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TeamManagerId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b5f1099f-38cb-45cb-87a7-78771e464f3c" ChangeDateTime="04/12/2020 10:46:41">
+    <Property Name="ElementName" Value="[dbo].[Topics].[PrevTopicId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Topics]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ParentTopicId" />
+  </Operation>
 </Operations>
