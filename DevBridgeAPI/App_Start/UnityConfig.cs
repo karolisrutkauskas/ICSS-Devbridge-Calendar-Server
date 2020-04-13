@@ -24,20 +24,8 @@ namespace DevBridgeAPI
                 c => new AssignmentsController(c.Resolve<AssignmentLogic>())
             );
 
-            container.RegisterFactory<ConstraintsController>(
-                c => new ConstraintsController(c.Resolve<ConstraintsSelector>())    
-            );
-
             container.RegisterFactory<GoalsController>(
                 c => new GoalsController(c.Resolve<GoalsSelector>())
-            );
-
-            container.RegisterFactory<TeamManagersController>(
-                c => new TeamManagersController(c.Resolve<TeamManagersSelector>())
-            );
-
-            container.RegisterFactory<TeamsController>(
-                c => new TeamsController(c.Resolve<TeamsSelector>())
             );
 
             container.RegisterFactory<TopicsController>(
