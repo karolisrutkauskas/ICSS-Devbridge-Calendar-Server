@@ -10,10 +10,17 @@ namespace DevBridgeAPI.Controllers
 {
     public class UsersController : ApiController
     {
+        private readonly IModelSelector selector;
+
+        public UsersController(IModelSelector selector)
+        {
+            this.selector = selector;
+        }
+
+        [Authorize]
         // GET api/users
         public IHttpActionResult Get()
         {
-            IModelSelector selector = new UsersSelector(); // Gal kokį Dependency Injection panaudoti
             return Ok(selector.SelectAllRows().Cast<User>());
         }
     }

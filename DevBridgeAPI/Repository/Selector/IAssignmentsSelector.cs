@@ -1,14 +1,11 @@
 ﻿using DevBridgeAPI.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevBridgeAPI.Repository.Selector
 {
-    public interface IModelSelector
+    public interface IAssignmentsSelector
     {
         IEnumerable<IModel> SelectAllRows();
+        IEnumerable<Assignment> SelectByUserId(int userId);
     }
 }

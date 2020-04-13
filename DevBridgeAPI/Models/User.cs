@@ -13,7 +13,10 @@ namespace DevBridgeAPI.Models
         public string Email { get; set; }
         public string Role { get; set; }
         public string Password { get; set; }
-        public int? TeamId { get; set; }
+        public int? ManagerId { get; set; }
+        public int? ConsecLimit { get; set; }
+        public int? MonthlyLimit { get; set; }
+        public int? YearlyLimit { get; set; }
 
     }
 }

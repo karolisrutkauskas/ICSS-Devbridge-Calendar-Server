@@ -9,7 +9,7 @@ namespace DevBridgeAPI.Models
     {
         public int GoalId { get; set; }
         public int? UserId { get; set; }
-        public int? TeamId { get; set; }
+        public int? TeamManagerId { get; set; }
         public int TopicId { get; set; }
         public string Role { get; set; }
         public DateTime Deadline { get; set; }
