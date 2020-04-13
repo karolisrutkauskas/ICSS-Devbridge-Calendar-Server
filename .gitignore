@@ -355,4 +355,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# SQL Server publish files
+# .publish.xml
+
+# Manually excluded files
 /Data.xlsx
