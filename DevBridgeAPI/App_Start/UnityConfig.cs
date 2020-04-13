@@ -1,5 +1,6 @@
 using DevBridgeAPI.Controllers;
 using DevBridgeAPI.Repository.Selector;
+using DevBridgeAPI.UseCases;
 using System.Web.Http;
 using Unity;
 using Unity.Lifetime;
@@ -9,6 +10,7 @@ namespace DevBridgeAPI
 {
     public static class UnityConfig
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed at inner workings")]
         public static void RegisterComponents()
         {
 			var container = new UnityContainer();
@@ -19,7 +21,7 @@ namespace DevBridgeAPI
             // e.g. container.RegisterType<ITestService, TestService>();
 
             container.RegisterFactory<AssignmentsController>(
-                c => new AssignmentsController(c.Resolve<AssignmentsSelector>())
+                c => new AssignmentsController(c.Resolve<AssignmentLogic>())
             );
 
             container.RegisterFactory<ConstraintsController>(
@@ -44,6 +46,11 @@ namespace DevBridgeAPI
 
             container.RegisterFactory<UsersController>(
                 c => new UsersController(c.Resolve<UsersSelector>())
+            );
+
+            container.RegisterFactory<AssignmentLogic>(
+                c => new AssignmentLogic(c.Resolve<AssignmentsSelector>(),
+                                         c.Resolve<UsersSelector>())
             );
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);

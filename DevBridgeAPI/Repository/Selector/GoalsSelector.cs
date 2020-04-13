@@ -12,9 +12,9 @@ namespace DevBridgeAPI.Repository.Selector
         public IEnumerable<IModel> SelectAllRows()
         {
             string sql = "SELECT * FROM Goals";
-            using (var db = new DbContext().Connection)
+            using (var db = new DbContext())
             {
-                return db.Query<Goal>(sql);
+                return db.Connection.Query<Goal>(sql);
             }
         }
     }
