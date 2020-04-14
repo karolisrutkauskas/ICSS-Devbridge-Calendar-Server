@@ -73,5 +73,21 @@ namespace DevBridgeAPI.Controllers
                 throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
             }
         }
+
+        [Authorize]
+        [Route("api/assignments")]
+        [HttpPost]
+        public IHttpActionResult Post([FromBody] Assignment assignment)
+        {
+            try { asignLogic.AddAssignment(assignment); }
+            catch (SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
+            return Ok();
+        }
     }
 }

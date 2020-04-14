@@ -27,5 +27,15 @@ namespace DevBridgeAPI.Repository.Selector
                 return db.Connection.Query<Assignment>(sql, new { userId });
             }
         }
+
+        public void AddRow(Assignment assignment)
+        {
+            string sql = "INSERT INTO Assignments " +
+                         "VALUES (@userId, @topicId, @stateId, @comments, @date)";
+            using (var db = new DbContext())
+            {
+                db.Connection.Query<Assignment>(sql, new { assignment.UserId, assignment.TopicId, assignment.StateId, assignment.Comments, assignment.Date });
+            }
+        }
     }
 }

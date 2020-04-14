@@ -12,5 +12,6 @@ namespace DevBridgeAPI.UseCases
         IEnumerable<Assignment> SelectAllAssignments();
         IEnumerable<Assignment> FindAssignments(int userId);
         IEnumerable<Assignment> FindSubordinatesAssignments(int managerId);
+        void AddAssignment(Assignment assignment);
     }
 }
