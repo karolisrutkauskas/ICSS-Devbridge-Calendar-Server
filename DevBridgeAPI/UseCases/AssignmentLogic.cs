@@ -39,5 +39,10 @@ namespace DevBridgeAPI.UseCases
         {
             return asgnSelector.SelectAllRows().Cast<Assignment>();
         }
+
+        public void AddAssignment(Assignment assignment)
+        {
+            asgnSelector.AddRow(assignment);
+        }
     }
 }

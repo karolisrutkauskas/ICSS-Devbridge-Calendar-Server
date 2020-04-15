@@ -7,5 +7,6 @@ namespace DevBridgeAPI.Repository.Selector
     {
         IEnumerable<IModel> SelectAllRows();
         IEnumerable<Assignment> SelectByUserId(int userId);
+        void AddRow(Assignment assignment);
     }
 }
