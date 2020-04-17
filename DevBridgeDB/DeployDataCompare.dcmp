@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataComparison>
+  <Version>10</Version>
+  <ConnectionProperties1>
+    <ConnectionString>Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DevBridgeDeploy;Integrated Security=True;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False</ConnectionString>
+    <FullDisplayName>(localdb)\MSSQLLocalDB.DevBridgeDeploy (GROUPINFRA\julius.rupsys)</FullDisplayName>
+  </ConnectionProperties1>
+  <ConnectionProperties2>
+    <ConnectionString>Data Source=dev-bridge-db.database.windows.net;Initial Catalog=DevBridgeDB;Persist Security Info=True;User ID=AzureDB;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False</ConnectionString>
+    <FullDisplayName>dev-bridge-db.database.windows.net.DevBridgeDB (AzureDB)</FullDisplayName>
+  </ConnectionProperties2>
+  <SessionSettings>Default</SessionSettings>
+</DataComparison>
