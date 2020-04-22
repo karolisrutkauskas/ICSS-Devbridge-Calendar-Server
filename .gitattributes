@@ -1,3 +1,4 @@
-DevBridgeAPI/Scripts/* linguist-vendored=false
-DevBridgeAPI/Content/* linguist-vendored=false
-DevBridgeAPI/Views/* linguist-vendored=false
+DevBridgeAPI/Scripts/* linguist-generated=true
+DevBridgeAPI/Content/* linguist-generated=true
+DevBridgeAPI/Views/* linguist-generated=true
+DevBridgeAPI/Areas/* linguist-generated=true
