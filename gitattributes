@@ -1,0 +1,3 @@
+./Scripts linguist-detectable=false
+./Content linguist-detectable=false
+./Views linguist-detectable=false
