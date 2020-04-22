@@ -1,10 +1,12 @@
 ﻿using Dapper;
 using DevBridgeAPI.Models;
 using DevBridgeAPI.Repository;
-using DevBridgeAPI.Repository.Selector;
+using DevBridgeAPI.Repository.Dao;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -18,10 +20,19 @@ namespace DevBridgeAPI.Controllers
         }
 
         [Authorize]
-        // GET api/users
+        [Route("api/users")]
+        [HttpGet]
         public IHttpActionResult Get()
         {
             return Ok(selector.SelectAllRows().Cast<User>());
+        }
+
+        [Route("api/users")]
+        [HttpPost]
+        [ResponseType(typeof(IEnumerable<Assignment>))]
+        public IHttpActionResult RegisterUser()
+        {
+            throw new NotImplementedException();
         }
     }
 }

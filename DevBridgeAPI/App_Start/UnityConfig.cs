@@ -1,5 +1,5 @@
 using DevBridgeAPI.Controllers;
-using DevBridgeAPI.Repository.Selector;
+using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.UseCases;
 using System.Web.Http;
 using Unity;
@@ -25,20 +25,20 @@ namespace DevBridgeAPI
             );
 
             container.RegisterFactory<GoalsController>(
-                c => new GoalsController(c.Resolve<GoalsSelector>())
+                c => new GoalsController(c.Resolve<GoalsDao>())
             );
 
             container.RegisterFactory<TopicsController>(
-                c => new TopicsController(c.Resolve<TopicsSelector>())
+                c => new TopicsController(c.Resolve<TopicsDao>())
             );
 
             container.RegisterFactory<UsersController>(
-                c => new UsersController(c.Resolve<UsersSelector>())
+                c => new UsersController(c.Resolve<UsersDao>())
             );
 
             container.RegisterFactory<AssignmentLogic>(
-                c => new AssignmentLogic(c.Resolve<AssignmentsSelector>(),
-                                         c.Resolve<UsersSelector>())
+                c => new AssignmentLogic(c.Resolve<AssignmentsDao>(),
+                                         c.Resolve<UsersDao>())
             );
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
