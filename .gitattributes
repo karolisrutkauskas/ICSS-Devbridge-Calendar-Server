@@ -1,8 +1,8 @@
-DevBridgeAPI/Scripts/* linguist-generated=true
-DevBridgeAPI/Content/* linguist-generated=true
-DevBridgeAPI/Views/* linguist-generated=true
-DevBridgeAPI/Areas/* linguist-generated=true
-DevBridgeAPI/Scripts/* binary
-DevBridgeAPI/Content/* binary
-DevBridgeAPI/Views/* binary
-DevBridgeAPI/Areas/* binary
+DevBridgeAPI/Scripts/** linguist-generated=true
+DevBridgeAPI/Content/** linguist-generated=true
+DevBridgeAPI/Views/** linguist-generated=true
+DevBridgeAPI/Areas/** linguist-generated=true
+DevBridgeAPI/Scripts/** binary
+DevBridgeAPI/Content/** binary
+DevBridgeAPI/Views/** binary
+DevBridgeAPI/Areas/** binary
