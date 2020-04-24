@@ -45,7 +45,6 @@ namespace DevBridgeAPI.Controllers
         [Route("api/assignments/user/{userId}")]
         [HttpGet]
         [ResponseType(typeof(IEnumerable<Assignment>))]
-
         public IHttpActionResult GetUsersAssignments(int userId)
         {
             try { return Ok(asignLogic.FindAssignments(userId)); }

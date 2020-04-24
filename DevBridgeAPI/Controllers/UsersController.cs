@@ -1,10 +1,15 @@
 ﻿using Dapper;
 using DevBridgeAPI.Models;
+using DevBridgeAPI.Models.Complex;
 using DevBridgeAPI.Repository;
 using DevBridgeAPI.Repository.Selector;
+using DevBridgeAPI.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -18,10 +23,29 @@ namespace DevBridgeAPI.Controllers
         }
 
         [Authorize]
-        // GET api/users
+        [Route("api/users")]
+        [HttpGet]
         public IHttpActionResult Get()
         {
             return Ok(selector.SelectAllRows().Cast<User>());
+        }
+
+        [Route("api/users/teamTree")]
+        [HttpGet]
+        [ResponseType(typeof(TeamTreeNode))]
+        public IHttpActionResult GetTeamTree()
+        {
+            try
+            {
+
+            }
+            catch(SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ namespace DevBridgeAPI.Models
 {
     public class User : IModel
     {
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -17,6 +17,5 @@ namespace DevBridgeAPI.Models
         public int? ConsecLimit { get; set; }
         public int? MonthlyLimit { get; set; }
         public int? YearlyLimit { get; set; }
-
     }
 }

@@ -7,7 +7,7 @@ namespace DevBridgeAPI.Models
 {
     public class Goal : IModel
     {
-        public int GoalId { get; set; }
+        public int? GoalId { get; set; }
         public int? UserId { get; set; }
         public int? TeamManagerId { get; set; }
         public int TopicId { get; set; }
