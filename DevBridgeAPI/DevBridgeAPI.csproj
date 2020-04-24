@@ -237,10 +237,10 @@
     </Compile>
     <Compile Include="UseCases\AssignmentLogic.cs" />
     <Compile Include="UseCases\IAssignmentLogic.cs" />
-    <Compile Include="UseCases\IUserLogic.cs" />
-    <Compile Include="UseCases\UserLogic.cs" />
-    <Compile Include="UseCases\ITempClassUserLogic.cs" />
-    <Compile Include="UseCases\TempClassUserLogic.cs" />
+    <Compile Include="UseCases\UserCasesN\ITeamTreeNodeFactory.cs" />
+    <Compile Include="UseCases\UserCasesN\IUserLogic.cs" />
+    <Compile Include="UseCases\UserCasesN\TeamTreeNodeFactory.cs" />
+    <Compile Include="UseCases\UserCasesN\UserLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

@@ -10,16 +10,19 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using DevBridgeAPI.UseCases.UserCasesN;
 
 namespace DevBridgeAPI.Controllers
 {
     public class UsersController : ApiController
     {
         private readonly IModelSelector selector;
+        private readonly IUserLogic userLogic;
 
-        public UsersController(IModelSelector selector)
+        public UsersController(IModelSelector selector, IUserLogic userLogic)
         {
             this.selector = selector;
+            this.userLogic = userLogic;
         }
 
         [Authorize]
@@ -32,20 +35,19 @@ namespace DevBridgeAPI.Controllers
 
         [Route("api/users")]
         [HttpPost]
-        [ResponseType(typeof(IEnumerable<Assignment>))]
         public IHttpActionResult RegisterUser()
         {
             throw new NotImplementedException();
         }
 
-        [Route("api/users/teamTree")]
+        [Route("api/users/teamTree/{id}")]
         [HttpGet]
         [ResponseType(typeof(TeamTreeNode))]
-        public IHttpActionResult GetTeamTree()
+        public IHttpActionResult GetTeamTree(int id)
         {
             try
             {
-
+                return Ok(userLogic.GetTeamTree(id));
             }
             catch(SystemException ex)
             {

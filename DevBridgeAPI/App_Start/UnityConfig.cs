@@ -1,6 +1,7 @@
 using DevBridgeAPI.Controllers;
 using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.UseCases;
+using DevBridgeAPI.UseCases.UserCasesN;
 using System.Web.Http;
 using Unity;
 using Unity.Lifetime;
@@ -33,12 +34,22 @@ namespace DevBridgeAPI
             );
 
             container.RegisterFactory<UsersController>(
-                c => new UsersController(c.Resolve<UsersDao>())
+                c => new UsersController(c.Resolve<UsersDao>(),
+                                         c.Resolve<UserLogic>())
             );
 
             container.RegisterFactory<AssignmentLogic>(
                 c => new AssignmentLogic(c.Resolve<AssignmentsDao>(),
                                          c.Resolve<UsersDao>())
+            );
+
+            container.RegisterFactory<UserLogic>(
+                c => new UserLogic(c.Resolve<UsersDao>(),
+                                   c.Resolve<TeamTreeNodeFactory>())
+            );
+
+            container.RegisterFactory<TeamTreeNodeFactory>(
+                c => new TeamTreeNodeFactory(c.Resolve<UsersDao>())
             );
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
