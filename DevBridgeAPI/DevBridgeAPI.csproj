@@ -56,6 +56,9 @@
     <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dapper.2.0.35\lib\net461\Dapper.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper.Contrib, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.Contrib.2.0.35\lib\net461\Dapper.Contrib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -220,13 +223,13 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\DbContext.cs" />
-    <Compile Include="Repository\Selector\IAssignmentsSelector.cs" />
-    <Compile Include="Repository\Selector\IModelSelector.cs" />
-    <Compile Include="Repository\Selector\IUsersSelector.cs" />
-    <Compile Include="Repository\Selector\AssignmentsSelector.cs" />
-    <Compile Include="Repository\Selector\GoalsSelector.cs" />
-    <Compile Include="Repository\Selector\TopicsSelector.cs" />
-    <Compile Include="Repository\Selector\UsersSelector.cs" />
+    <Compile Include="Repository\Dao\IAssignmentsDao.cs" />
+    <Compile Include="Repository\Dao\IModelSelector.cs" />
+    <Compile Include="Repository\Dao\IUsersDao.cs" />
+    <Compile Include="Repository\Dao\AssignmentsDao.cs" />
+    <Compile Include="Repository\Dao\GoalsDao.cs" />
+    <Compile Include="Repository\Dao\TopicsDao.cs" />
+    <Compile Include="Repository\Dao\UsersDao.cs" />
     <Compile Include="Resources\Strings1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -234,6 +237,8 @@
     </Compile>
     <Compile Include="UseCases\AssignmentLogic.cs" />
     <Compile Include="UseCases\IAssignmentLogic.cs" />
+    <Compile Include="UseCases\IUserLogic.cs" />
+    <Compile Include="UseCases\UserLogic.cs" />
     <Compile Include="UseCases\ITempClassUserLogic.cs" />
     <Compile Include="UseCases\TempClassUserLogic.cs" />
   </ItemGroup>

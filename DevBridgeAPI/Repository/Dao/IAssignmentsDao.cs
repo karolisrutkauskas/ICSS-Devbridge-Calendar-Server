@@ -1,9 +1,9 @@
 ﻿using DevBridgeAPI.Models;
 using System.Collections.Generic;
 
-namespace DevBridgeAPI.Repository.Selector
+namespace DevBridgeAPI.Repository.Dao
 {
-    public interface IAssignmentsSelector
+    public interface IAssignmentsDao
     {
         IEnumerable<IModel> SelectAllRows();
         IEnumerable<Assignment> SelectByUserId(int userId);

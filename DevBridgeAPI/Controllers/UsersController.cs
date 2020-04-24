@@ -2,8 +2,8 @@
 using DevBridgeAPI.Models;
 using DevBridgeAPI.Models.Complex;
 using DevBridgeAPI.Repository;
-using DevBridgeAPI.Repository.Selector;
 using DevBridgeAPI.Resources;
+using DevBridgeAPI.Repository.Dao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +28,14 @@ namespace DevBridgeAPI.Controllers
         public IHttpActionResult Get()
         {
             return Ok(selector.SelectAllRows().Cast<User>());
+        }
+
+        [Route("api/users")]
+        [HttpPost]
+        [ResponseType(typeof(IEnumerable<Assignment>))]
+        public IHttpActionResult RegisterUser()
+        {
+            throw new NotImplementedException();
         }
 
         [Route("api/users/teamTree")]

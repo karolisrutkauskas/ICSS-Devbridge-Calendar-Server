@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevBridgeAPI.Repository.Selector
+namespace DevBridgeAPI.UseCases
 {
-    public interface IModelSelector
+    public interface IUserLogic
     {
-        IEnumerable<IModel> SelectAllRows();
+        void RegisterNewUser(int registeredById, User newUser);
     }
 }
