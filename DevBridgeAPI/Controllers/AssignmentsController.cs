@@ -35,9 +35,9 @@ namespace DevBridgeAPI.Controllers
             try { return Ok(asignLogic.SelectAllAssignments()); }
             catch (SystemException ex) 
             {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
+                System.Diagnostics.Trace.TraceError(ex.StackTrace);
+                System.Diagnostics.Trace.TraceError(ex.Message);
+                System.Diagnostics.Trace.TraceError(ex.Source);
                 throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
             }
         }
@@ -51,9 +51,9 @@ namespace DevBridgeAPI.Controllers
             try { return Ok(asignLogic.FindAssignments(userId)); }
             catch (SystemException ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
+                System.Diagnostics.Trace.TraceError(ex.StackTrace);
+                System.Diagnostics.Trace.TraceError(ex.Message);
+                System.Diagnostics.Trace.TraceError(ex.Source);
                 throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
             }
         }
@@ -67,9 +67,9 @@ namespace DevBridgeAPI.Controllers
             try { return Ok(asignLogic.FindSubordinatesAssignments(managerId)); }
             catch (SystemException ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
+                System.Diagnostics.Trace.TraceError(ex.StackTrace);
+                System.Diagnostics.Trace.TraceError(ex.Message);
+                System.Diagnostics.Trace.TraceError(ex.Source);
                 throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
             }
         }
