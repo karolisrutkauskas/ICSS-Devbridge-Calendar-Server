@@ -10,7 +10,6 @@ namespace DevBridgeAPI.Models
     /// Entity that shows a relationship between user topic that was assigned to them.
     /// It is also known as 'Learning Day' that may be represented at user's calendar.
     /// </summary>
-    
     [ModelName("Assignment")]
     public class Assignment : IModel
     {

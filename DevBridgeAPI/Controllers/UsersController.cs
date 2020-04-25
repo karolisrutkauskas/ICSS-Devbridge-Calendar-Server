@@ -40,14 +40,20 @@ namespace DevBridgeAPI.Controllers
             throw new NotImplementedException();
         }
 
-        [Route("api/users/teamTree/{id}")]
+        /// <summary>
+        /// Gets a tree represantation of team hierarchy
+        /// starting from the specified root user
+        /// </summary>
+        /// <param name="rootUserId">Root user's ID that will be at the top of team hierarchy</param>
+        /// <returns></returns>
+        [Route("api/users/teamTree/{rootUserId}")]
         [HttpGet]
         [ResponseType(typeof(TeamTreeNode))]
-        public IHttpActionResult GetTeamTree(int id)
+        public IHttpActionResult GetTeamTree(int rootUserId)
         {
             try
             {
-                return Ok(userLogic.GetTeamTree(id));
+                return Ok(userLogic.GetTeamTree(rootUserId));
             }
             catch(SystemException ex)
             {
