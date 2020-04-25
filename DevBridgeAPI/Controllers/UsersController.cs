@@ -1,16 +1,16 @@
 ﻿using Dapper;
-using DevBridgeAPI.Models;
+using DevBridgeAPI.Models.Post;
 using DevBridgeAPI.Models.Complex;
-using DevBridgeAPI.Repository;
 using DevBridgeAPI.Resources;
 using DevBridgeAPI.Repository.Dao;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using DevBridgeAPI.UseCases.UserCasesN;
+using System.Net.Http;
+using System.Net;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -35,9 +35,28 @@ namespace DevBridgeAPI.Controllers
 
         [Route("api/users")]
         [HttpPost]
-        public IHttpActionResult RegisterUser()
+        public HttpResponseMessage RegisterUser([FromBody] User newUser)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (newUser == null)
+                {
+                    throw new HttpException(400, "Request body is empty");
+                }
+                if (newUser.ManagerId == null)
+                {
+                    throw new HttpException(400, "Manager ID should be provided");
+                }
+                userLogic.RegisterNewUser(newUser.ManagerId.Value, newUser);
+                return Request.CreateResponse(HttpStatusCode.NoContent);
+            }
+            catch (SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
         }
 
         /// <summary>

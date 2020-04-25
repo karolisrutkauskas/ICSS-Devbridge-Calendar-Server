@@ -1,5 +1,8 @@
 ﻿using DevBridgeAPI.Models;
+using DevBridgeAPI.Models.Post;
 using System.Collections.Generic;
+using User = DevBridgeAPI.Models.User;
+using PostUser = DevBridgeAPI.Models.Post.User;
 
 namespace DevBridgeAPI.Repository.Dao
 {
@@ -9,6 +12,6 @@ namespace DevBridgeAPI.Repository.Dao
         User SelectByID(int userId);
         IModel SelectOneRow(string username, string password);
         IEnumerable<User> SelectSubordinates(int managerId);
-        void InsertNewUser(User user);
+        void InsertNewUser(PostUser user);
     }
 }

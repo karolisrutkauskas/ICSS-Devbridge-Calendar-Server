@@ -1,10 +1,11 @@
-﻿using DevBridgeAPI.Models;
+﻿using DevBridgeAPI.Models.Post;
 using DevBridgeAPI.Models.Complex;
 using DevBridgeAPI.Repository.Dao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using DevBridgeAPI.UseCases.Util;
 
 namespace DevBridgeAPI.UseCases.UserCasesN
 {
@@ -19,11 +20,11 @@ namespace DevBridgeAPI.UseCases.UserCasesN
             this.tmTreeFactory = tmTreeFactory;
         }
 
-        public void RegisterNewUser(int registeredById, Models.User newUser)
+        public void RegisterNewUser(int registeredById, User newUser)
         {
             // TODO: Validate request objects (don't allow null for example)
             newUser.ManagerId = registeredById;
-            // TODO: Hash passwords
+            newUser.Password = HashingUtil.HashPasswordWithSalt(newUser.Password);
             usersDao.InsertNewUser(newUser);
         }
         public TeamTreeNode GetTeamTree(int rootUserId)

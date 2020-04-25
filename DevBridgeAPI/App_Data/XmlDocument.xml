@@ -543,6 +543,56 @@
             A list of this user's subordinates. Will be null if empty
             </summary>
         </member>
+        <member name="T:DevBridgeAPI.Models.Post.User">
+            <summary>
+            Entity that has information about the main user of this system
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.FirstName">
+            <summary>
+            Person's first name
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.LastName">
+            <summary>
+            Person's last name
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.Email">
+            <summary>
+            Persons email address. Must be unique among other users.
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.Role">
+            <summary>
+            Person's role, for example: Junior Developer, Human Resources etc...
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.Password">
+            <summary>
+            Person's password
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.ManagerId">
+            <summary>
+            Unique identifier of this user's manager. If user has no manager, this field is null.
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.ConsecLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take for consecutive days
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.MonthlyLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take per month
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.YearlyLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take per year
+            </summary>
+        </member>
         <member name="T:DevBridgeAPI.Models.User">
             <summary>
             Entity that has information about the main user of this system

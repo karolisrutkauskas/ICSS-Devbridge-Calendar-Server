@@ -364,6 +364,7 @@
     <Compile Include="Models\Complex\TeamTreeNode.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\IModel.cs" />
+    <Compile Include="Models\Post\User.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

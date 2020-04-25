@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Dapper.Contrib.Extensions;
+using User = DevBridgeAPI.Models.User;
+using PostUser = DevBridgeAPI.Models.Post.User;
 
 namespace DevBridgeAPI.Repository.Dao
 {
@@ -48,7 +50,7 @@ namespace DevBridgeAPI.Repository.Dao
             }
         }
 
-        public void InsertNewUser(User user)
+        public void InsertNewUser(PostUser user)
         {
             using (var db = new DbContext())
             {

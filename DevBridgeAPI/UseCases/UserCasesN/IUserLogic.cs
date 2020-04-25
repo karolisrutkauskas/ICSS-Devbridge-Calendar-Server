@@ -1,4 +1,4 @@
-﻿using DevBridgeAPI.Models;
+﻿using DevBridgeAPI.Models.Post;
 using DevBridgeAPI.Models.Complex;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace DevBridgeAPI.UseCases.UserCasesN
 {
     public interface IUserLogic
     {
-        void RegisterNewUser(int registeredById, Models.User newUser);
+        void RegisterNewUser(int registeredById, User newUser);
         TeamTreeNode GetTeamTree(int rootUserId);
     }
 }
