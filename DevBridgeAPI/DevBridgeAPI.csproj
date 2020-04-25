@@ -54,6 +54,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net-Next, Version=4.0.0.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net-Next.4.0.0\lib\net472\BCrypt.Net-Next.dll</HintPath>
     <Reference Include="Azure.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>..\packages\Azure.Core.1.2.0\lib\netstandard2.0\Azure.Core.dll</HintPath>
     </Reference>
@@ -292,10 +294,10 @@
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Abstractions, Version=5.11.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.11.5\lib\net47\Unity.Abstractions.dll</HintPath>
+      <HintPath>..\packages\Unity.5.11.6\lib\net47\Unity.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Container, Version=5.11.6.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\Unity.5.11.5\lib\net47\Unity.Container.dll</HintPath>
+    <Reference Include="Unity.Container, Version=5.11.7.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.11.6\lib\net47\Unity.Container.dll</HintPath>
     </Reference>
     <Reference Include="Unity.WebApi, Version=5.4.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.WebAPI.5.4.0\lib\net45\Unity.WebApi.dll</HintPath>
@@ -375,6 +377,7 @@
     </Compile>
     <Compile Include="UseCases\AssignmentLogic.cs" />
     <Compile Include="UseCases\IAssignmentLogic.cs" />
+    <Compile Include="UseCases\Util\HashingUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\XmlDocument.xml" />
@@ -541,6 +544,8 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Scripts\jquery-3.5.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.5.0.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
