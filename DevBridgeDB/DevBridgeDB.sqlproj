@@ -79,6 +79,8 @@
     <None Include="dbo\Scripts\AssignmentStates.sql" />
     <PostDeploy Include="dbo\Scripts\PostDeployment.sql" />
     <None Include="DevBridgeDB-TestData.publish.xml" />
+    <None Include="DevBridgeDB-Deploy.publish.xml" />
+    <None Include="DeployCompare.scmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DevBridgeDB.publish.xml" />
