@@ -27,6 +27,7 @@ namespace DevBridgeAPI.Controllers
         /// Gets a complete list of assignment data
         /// </summary>
         /// <returns>A full list of assignments</returns>
+        [Authorize]
         [Route("api/assignments")]
         [HttpGet]
         [ResponseType(typeof(IEnumerable<Assignment>))]
@@ -42,6 +43,7 @@ namespace DevBridgeAPI.Controllers
             }
         }
 
+        [Authorize]
         [Route("api/assignments/user/{userId}")]
         [HttpGet]
         [ResponseType(typeof(IEnumerable<Assignment>))]
@@ -58,6 +60,7 @@ namespace DevBridgeAPI.Controllers
             }
         }
 
+        [Authorize]
         [Route("api/assignments/manager/{managerId}")]
         [HttpGet]
         [ResponseType(typeof(IEnumerable<Assignment>))]

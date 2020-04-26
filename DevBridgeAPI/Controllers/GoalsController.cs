@@ -15,7 +15,7 @@ namespace DevBridgeAPI.Controllers
             this.selector = selector;
         }
 
-        // GET api/users
+        [Authorize]
         public IHttpActionResult Get()
         {
             return Ok(selector.SelectAllRows().Cast<Goal>());
