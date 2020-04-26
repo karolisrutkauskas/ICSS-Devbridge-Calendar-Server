@@ -111,6 +111,9 @@
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper.Contrib, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.Contrib.2.0.35\lib\net461\Dapper.Contrib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -358,19 +361,21 @@
     </Compile>
     <Compile Include="Helpers\AuthorizationServerProvider.cs" />
     <Compile Include="Models\Assignment.cs" />
+    <Compile Include="Models\Complex\TeamTreeNode.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\IModel.cs" />
+    <Compile Include="Models\Post\User.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\DbContext.cs" />
-    <Compile Include="Repository\Selector\IAssignmentsSelector.cs" />
-    <Compile Include="Repository\Selector\IModelSelector.cs" />
-    <Compile Include="Repository\Selector\IUsersSelector.cs" />
-    <Compile Include="Repository\Selector\AssignmentsSelector.cs" />
-    <Compile Include="Repository\Selector\GoalsSelector.cs" />
-    <Compile Include="Repository\Selector\TopicsSelector.cs" />
-    <Compile Include="Repository\Selector\UsersSelector.cs" />
+    <Compile Include="Repository\Dao\IAssignmentsDao.cs" />
+    <Compile Include="Repository\Dao\IModelSelector.cs" />
+    <Compile Include="Repository\Dao\IUsersDao.cs" />
+    <Compile Include="Repository\Dao\AssignmentsDao.cs" />
+    <Compile Include="Repository\Dao\GoalsDao.cs" />
+    <Compile Include="Repository\Dao\TopicsDao.cs" />
+    <Compile Include="Repository\Dao\UsersDao.cs" />
     <Compile Include="Resources\Strings1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -378,6 +383,10 @@
     </Compile>
     <Compile Include="UseCases\AssignmentLogic.cs" />
     <Compile Include="UseCases\IAssignmentLogic.cs" />
+    <Compile Include="UseCases\UserCasesN\ITeamTreeNodeFactory.cs" />
+    <Compile Include="UseCases\UserCasesN\IUserLogic.cs" />
+    <Compile Include="UseCases\UserCasesN\TeamTreeNodeFactory.cs" />
+    <Compile Include="UseCases\UserCasesN\UserLogic.cs" />
     <Compile Include="UseCases\Util\HashingUtil.cs" />
   </ItemGroup>
   <ItemGroup>

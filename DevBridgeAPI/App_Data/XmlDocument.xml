@@ -487,6 +487,14 @@
             </summary>
             <returns>A full list of assignments</returns>
         </member>
+        <member name="M:DevBridgeAPI.Controllers.UsersController.GetTeamTree(System.Int32)">
+            <summary>
+            Gets a tree represantation of team hierarchy
+            starting from the specified root user
+            </summary>
+            <param name="rootUserId">Root user's ID that will be at the top of team hierarchy</param>
+            <returns></returns>
+        </member>
         <member name="T:DevBridgeAPI.Models.Assignment">
             <summary>
             Entity that shows a relationship between user topic that was assigned to them.
@@ -523,6 +531,121 @@
         <member name="P:DevBridgeAPI.Models.Assignment.Date">
             <summary>
             Date of this assignment, may be used for calendar.
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Complex.TeamTreeNode.This">
+            <summary>
+            Information about user in the current node
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Complex.TeamTreeNode.Children">
+            <summary>
+            A list of this user's subordinates. Will be null if empty
+            </summary>
+        </member>
+        <member name="T:DevBridgeAPI.Models.Post.User">
+            <summary>
+            Entity that has information about the main user of this system
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.FirstName">
+            <summary>
+            Person's first name
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.LastName">
+            <summary>
+            Person's last name
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.Email">
+            <summary>
+            Persons email address. Must be unique among other users.
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.Role">
+            <summary>
+            Person's role, for example: Junior Developer, Human Resources etc...
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.Password">
+            <summary>
+            Person's password
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.ManagerId">
+            <summary>
+            Unique identifier of this user's manager. If user has no manager, this field is null.
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.ConsecLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take for consecutive days
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.MonthlyLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take per month
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Post.User.YearlyLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take per year
+            </summary>
+        </member>
+        <member name="T:DevBridgeAPI.Models.User">
+            <summary>
+            Entity that has information about the main user of this system
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.UserId">
+            <summary>
+            Unique identifier
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.FirstName">
+            <summary>
+            Person's first name
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.LastName">
+            <summary>
+            Person's last name
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.Email">
+            <summary>
+            Persons email address. Must be unique among other users.
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.Role">
+            <summary>
+            Person's role, for example: Junior Developer, Human Resources etc...
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.Password">
+            <summary>
+            Person's password
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.ManagerId">
+            <summary>
+            Unique identifier of this user's manager. If user has no manager, this field is null.
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.ConsecLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take for consecutive days
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.MonthlyLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take per month
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.User.YearlyLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take per year
             </summary>
         </member>
         <member name="T:DevBridgeAPI.Resources.Strings">

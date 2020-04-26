@@ -1,6 +1,6 @@
 ﻿using DevBridgeAPI.Models;
 using DevBridgeAPI.Repository;
-using DevBridgeAPI.Repository.Selector;
+using DevBridgeAPI.Repository.Dao;
 using System.Linq;
 using System.Web.Http;
 

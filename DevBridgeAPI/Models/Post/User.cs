@@ -5,17 +5,13 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace DevBridgeAPI.Models
+namespace DevBridgeAPI.Models.Post
 {
     /// <summary>
     /// Entity that has information about the main user of this system
     /// </summary>
     public class User : IModel
     {
-        /// <summary>
-        /// Unique identifier
-        /// </summary>
-        public int UserId { get; set; }
         /// <summary>
         /// Person's first name
         /// </summary>
@@ -35,7 +31,6 @@ namespace DevBridgeAPI.Models
         /// <summary>
         /// Person's password
         /// </summary>
-        [IgnoreDataMember]
         public string Password { get; set; }
         /// <summary>
         /// Unique identifier of this user's manager. If user has no manager, this field is null.
