@@ -8,9 +8,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
-using DevBridgeAPI.UseCases.UserCasesN;
+using DevBridgeAPI.UseCases.UserLogicN;
 using System.Net.Http;
 using System.Net;
+using DevBridgeAPI.UseCases.Exceptions;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -41,14 +42,18 @@ namespace DevBridgeAPI.Controllers
             {
                 if (newUser == null)
                 {
-                    throw new HttpException(400, "Request body is empty");
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Request body is empty");
                 }
                 if (newUser.ManagerId == null)
                 {
-                    throw new HttpException(400, "Manager ID should be provided");
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Manager ID should be provided");
                 }
                 userLogic.RegisterNewUser(newUser.ManagerId.Value, newUser);
                 return Request.CreateResponse(HttpStatusCode.NoContent);
+            }
+            catch(UniqueFieldException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, value: ex.Message);
             }
             catch (SystemException ex)
             {

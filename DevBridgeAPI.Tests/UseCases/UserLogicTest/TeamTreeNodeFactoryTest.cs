@@ -4,7 +4,7 @@ using System.Linq;
 using DevBridgeAPI.Models;
 using DevBridgeAPI.Models.Complex;
 using DevBridgeAPI.Repository.Dao;
-using DevBridgeAPI.UseCases.UserCasesN;
+using DevBridgeAPI.UseCases.UserLogicN;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 

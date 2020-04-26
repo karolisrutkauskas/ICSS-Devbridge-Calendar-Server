@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevBridgeAPI.UseCases.UserCasesN
+namespace DevBridgeAPI.UseCases.UserLogicN
 {
     public interface IUserLogic
     {

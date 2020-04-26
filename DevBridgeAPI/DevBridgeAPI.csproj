@@ -382,11 +382,12 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="UseCases\AssignmentLogic.cs" />
+    <Compile Include="UseCases\Exceptions\UniqueFieldException.cs" />
     <Compile Include="UseCases\IAssignmentLogic.cs" />
-    <Compile Include="UseCases\UserCasesN\ITeamTreeNodeFactory.cs" />
-    <Compile Include="UseCases\UserCasesN\IUserLogic.cs" />
-    <Compile Include="UseCases\UserCasesN\TeamTreeNodeFactory.cs" />
-    <Compile Include="UseCases\UserCasesN\UserLogic.cs" />
+    <Compile Include="UseCases\UserLogicN\ITeamTreeNodeFactory.cs" />
+    <Compile Include="UseCases\UserLogicN\IUserLogic.cs" />
+    <Compile Include="UseCases\UserLogicN\TeamTreeNodeFactory.cs" />
+    <Compile Include="UseCases\UserLogicN\UserLogic.cs" />
     <Compile Include="UseCases\Util\HashingUtil.cs" />
   </ItemGroup>
   <ItemGroup>
