@@ -1,5 +1,5 @@
 ﻿using DevBridgeAPI.Models;
-using DevBridgeAPI.Repository.Selector;
+using DevBridgeAPI.Repository.Dao;
 using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
@@ -10,10 +10,10 @@ namespace DevBridgeAPI.UseCases
 {
     public class AssignmentLogic : IAssignmentLogic
     {
-        private readonly IAssignmentsSelector asgnSelector;
-        private readonly IUsersSelector usersSelector;
+        private readonly IAssignmentsDao asgnSelector;
+        private readonly IUsersDao usersSelector;
 
-        public AssignmentLogic(IAssignmentsSelector asgnSelector, IUsersSelector usersSelector)
+        public AssignmentLogic(IAssignmentsDao asgnSelector, IUsersDao usersSelector)
         {
             this.asgnSelector = asgnSelector;
             this.usersSelector = usersSelector;

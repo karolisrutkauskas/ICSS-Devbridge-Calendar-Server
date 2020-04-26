@@ -1,6 +1,6 @@
 ﻿using DevBridgeAPI.Models;
 using DevBridgeAPI.Repository;
-using DevBridgeAPI.Repository.Selector;
+using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.Resources;
 using DevBridgeAPI.UseCases;
 using System;
@@ -45,7 +45,6 @@ namespace DevBridgeAPI.Controllers
         [Route("api/assignments/user/{userId}")]
         [HttpGet]
         [ResponseType(typeof(IEnumerable<Assignment>))]
-
         public IHttpActionResult GetUsersAssignments(int userId)
         {
             try { return Ok(asignLogic.FindAssignments(userId)); }

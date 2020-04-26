@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace DevBridgeAPI.Repository.Selector
+namespace DevBridgeAPI.Repository.Dao
 {
-    public class TopicsSelector : IModelSelector
+    public class TopicsDao : IModelSelector
     {
         public IEnumerable<IModel> SelectAllRows()
         {

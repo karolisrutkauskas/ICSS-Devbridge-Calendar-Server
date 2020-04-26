@@ -4,10 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Dapper.Contrib.Extensions;
+using User = DevBridgeAPI.Models.User;
+using PostUser = DevBridgeAPI.Models.Post.User;
 
-namespace DevBridgeAPI.Repository.Selector
+namespace DevBridgeAPI.Repository.Dao
 {
-    public class UsersSelector : IModelSelector, IUsersSelector
+    public class UsersDao : IModelSelector, IUsersDao
     {
         public IEnumerable<IModel> SelectAllRows()
         {
@@ -44,6 +47,14 @@ namespace DevBridgeAPI.Repository.Selector
             using (var db = new DbContext())
             {
                 return db.Connection.Query<User>(sql, new { ManagerId = managerId });
+            }
+        }
+
+        public void InsertNewUser(PostUser user)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Insert(user);
             }
         }
     }
