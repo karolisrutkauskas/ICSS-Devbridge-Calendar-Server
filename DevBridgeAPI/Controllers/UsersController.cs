@@ -12,6 +12,7 @@ using DevBridgeAPI.UseCases.UserLogicN;
 using System.Net.Http;
 using System.Net;
 using DevBridgeAPI.UseCases.Exceptions;
+using DevBridgeAPI.Helpers;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -34,26 +35,49 @@ namespace DevBridgeAPI.Controllers
             return Ok(selector.SelectAllRows().Cast<User>());
         }
 
+        /// <summary>
+        /// Will register a new user with already assigned manager.
+        /// FirstName, Las
+        /// </summary>
+        /// <param name="newUser"></param>
+        /// <returns></returns>
         [Route("api/users")]
         [HttpPost]
-        public HttpResponseMessage RegisterUser([FromBody] User newUser)
+        [ValidateRequest]
+        public IHttpActionResult RegisterUser([FromBody] User newUser)
         {
             try
             {
-                if (newUser == null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Request body is empty");
-                }
-                if (newUser.ManagerId == null)
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Manager ID should be provided");
-                }
-                userLogic.RegisterNewUser(newUser.ManagerId.Value, newUser);
-                return Request.CreateResponse(HttpStatusCode.NoContent);
+                //if (!ModelState.IsValid)
+                //{
+                //    return BadRequest(ModelState);
+                //}
+                //if (newUser.FirstName == null)
+                //{
+                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Email should be provided");
+                //}
+                //if (newUser.Email == null)
+                //{
+                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Email should be provided");
+                //}
+                //if (newUser == null)
+                //{
+                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Request body is empty");
+                //}
+                //if (newUser.ManagerId == null)
+                //{
+                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Manager ID should be provided");
+                //}
+                //if (newUser.Email == null)
+                //{
+                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Email should be provided");
+                //}
+                userLogic.RegisterNewUser(newUser);
+                return Ok();
             }
             catch(UniqueFieldException ex)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, value: ex.Message);
+                return BadRequest(ex.Message);
             }
             catch (SystemException ex)
             {

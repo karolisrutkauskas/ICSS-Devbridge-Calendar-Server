@@ -10,7 +10,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
 {
     public interface IUserLogic
     {
-        void RegisterNewUser(int registeredById, User newUser);
+        void RegisterNewUser(User newUser);
         TeamTreeNode GetTeamTree(int rootUserId);
     }
 }

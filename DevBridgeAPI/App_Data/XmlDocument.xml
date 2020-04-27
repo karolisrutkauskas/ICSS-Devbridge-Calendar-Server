@@ -487,6 +487,14 @@
             </summary>
             <returns>A full list of assignments</returns>
         </member>
+        <member name="M:DevBridgeAPI.Controllers.UsersController.RegisterUser(DevBridgeAPI.Models.Post.User)">
+            <summary>
+            Will register a new user with already assigned manager.
+            FirstName, Las
+            </summary>
+            <param name="newUser"></param>
+            <returns></returns>
+        </member>
         <member name="M:DevBridgeAPI.Controllers.UsersController.GetTeamTree(System.Int32)">
             <summary>
             Gets a tree represantation of team hierarchy

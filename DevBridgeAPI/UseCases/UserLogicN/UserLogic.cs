@@ -22,10 +22,8 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             this.tmTreeFactory = tmTreeFactory;
         }
 
-        public void RegisterNewUser(int registeredById, User newUser)
+        public void RegisterNewUser(User newUser)
         {
-            // TODO: Validate request objects (don't allow null for example)
-            newUser.ManagerId = registeredById;
             newUser.Password = HashingUtil.HashPasswordWithSalt(newUser.Password);
             try
             {

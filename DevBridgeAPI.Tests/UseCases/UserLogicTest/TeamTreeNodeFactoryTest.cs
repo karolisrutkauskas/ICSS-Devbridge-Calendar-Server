@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using DevBridgeAPI.Models;
 using DevBridgeAPI.Models.Complex;
 using DevBridgeAPI.Repository.Dao;
+using DevBridgeAPI.Tests.Helpers;
+using DevBridgeAPI.UseCases.Exceptions;
 using DevBridgeAPI.UseCases.UserLogicN;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using PostUser = DevBridgeAPI.Models.Post.User;
 
 namespace DevBridgeAPI.Tests.UseCases.UserLogicTest
 {
@@ -111,10 +117,27 @@ namespace DevBridgeAPI.Tests.UseCases.UserLogicTest
             daoMock.Setup(x => x.SelectSubordinates(It.IsAny<int>()))
                    .Returns<int>(param => GetSubordinates(param));
 
-            var sot = new UserLogic(daoMock.Object, new TeamTreeNodeFactory(daoMock.Object));
-            var actual = sot.GetTeamTree(rootUserId);
+            var sut = new UserLogic(daoMock.Object, new TeamTreeNodeFactory(daoMock.Object));
+            var actual = sut.GetTeamTree(rootUserId);
 
             Assert.IsTrue(TreesAreEqual(expected, actual));
+        }
+
+        [TestMethod]
+        [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
+        public void RegisterNewUser_ShouldCatchSQLException()
+        {
+            var sqlException = SQLExceptionBuilder.CreateInstance()
+                .Message("Some SQL text with UQ_Users_Email keyword")
+                .Number(2627).Build();
+            var fakeUser = new PostUser { Password = "pass" };
+            var daoMock = new Mock<IUsersDao>();
+            daoMock.Setup(x => x.InsertNewUser(It.IsAny<PostUser>()))
+                .Throws(sqlException);
+
+            var sut = new UserLogic(daoMock.Object, null);
+
+            Assert.ThrowsException<UniqueFieldException>(() => sut.RegisterNewUser(fakeUser));
         }
         private bool TreesAreEqual(TeamTreeNode tree1, TeamTreeNode tree2)
         {

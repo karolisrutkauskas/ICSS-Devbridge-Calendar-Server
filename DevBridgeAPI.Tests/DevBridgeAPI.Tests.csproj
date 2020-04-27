@@ -138,6 +138,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\SQLExceptionBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UseCases\Util\HashingUtilTest.cs" />
     <Compile Include="UseCases\UserLogicTest\TeamTreeNodeFactoryTest.cs" />

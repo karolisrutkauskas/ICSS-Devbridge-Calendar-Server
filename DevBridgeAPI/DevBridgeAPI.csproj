@@ -360,6 +360,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AuthorizationServerProvider.cs" />
+    <Compile Include="Helpers\ExtensionMethods.cs" />
+    <Compile Include="Helpers\ValidateRequestAttribute.cs" />
     <Compile Include="Models\Assignment.cs" />
     <Compile Include="Models\Complex\TeamTreeNode.cs" />
     <Compile Include="Models\Goal.cs" />
