@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using DevBridgeAPI.Models;
 using DevBridgeAPI.Models.Complex;
+using DevBridgeAPI.Models.Patch;
 using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.Tests.Helpers;
 using DevBridgeAPI.UseCases.Exceptions;
@@ -17,7 +18,7 @@ using PostUser = DevBridgeAPI.Models.Post.User;
 namespace DevBridgeAPI.Tests.UseCases.UserLogicTest
 {
     [TestClass]
-    public class TeamTreeNodeFactoryTest
+    public class UserLogicTest
     {
         IEnumerable<User> _database;
 
@@ -139,6 +140,30 @@ namespace DevBridgeAPI.Tests.UseCases.UserLogicTest
 
             Assert.ThrowsException<UniqueFieldException>(() => sut.RegisterNewUser(fakeUser));
         }
+
+        [TestMethod]
+        [DataRow(1, 5, 6, 7)]
+        [DataRow(6, 2, 6, 7)]
+        [DataRow(9, 1, 2, 4)]
+        public void ChangeRestrictions_ShouldReturnUpdatedUser(int userId, int consecLimit, int monthlyLimit, int yearlyLimit)
+        {
+            var expectedUser = GetUserById(userId);
+            expectedUser.ConsecLimit = consecLimit;
+            expectedUser.MonthlyLimit = monthlyLimit;
+            expectedUser.YearlyLimit = yearlyLimit;
+            var daoMock = new Mock<IUsersDao>(MockBehavior.Strict);
+            var newUserRestrictions = new UserRestrictions { ConsecLimit = consecLimit, MonthlyLimit = monthlyLimit, YearlyLimit = yearlyLimit };
+
+            daoMock.Setup(x => x.UpdateUserAsync(expectedUser))
+                .Verifiable("UpdateUserAsync method was not called with expected arguments");
+            daoMock.Setup(x => x.SelectByID(It.IsAny<int>()))
+                .Returns<int>(id => GetUserById(id));
+            var sut = new UserLogic(daoMock.Object, null);
+            var actual = sut.ChangeRestrictions(newUserRestrictions, userId);
+
+            Assert.IsTrue(UsersAreEqual(expectedUser, actual));
+            daoMock.Verify(x => x.UpdateUserAsync(expectedUser), Times.Once);
+        }
         private bool TreesAreEqual(TeamTreeNode tree1, TeamTreeNode tree2)
         {
             if (tree1 == tree2) return true;
@@ -164,7 +189,10 @@ namespace DevBridgeAPI.Tests.UseCases.UserLogicTest
         {
             if (user1 == user2) return true;
 
-            if (user1.UserId == user2.UserId) return true;
+            if (user1.UserId == user2.UserId
+                && user1.ConsecLimit == user2.ConsecLimit
+                && user1.MonthlyLimit == user2.MonthlyLimit
+                && user1.YearlyLimit == user2.YearlyLimit) return true;
 
             return false;
         }

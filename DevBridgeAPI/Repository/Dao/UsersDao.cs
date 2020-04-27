@@ -57,5 +57,20 @@ namespace DevBridgeAPI.Repository.Dao
                 db.Connection.Insert(user);
             }
         }
+
+        public void UpdateUser(User updatedUser)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Update(updatedUser);
+            }
+        }
+        public void UpdateUserAsync(User updatedUser)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.UpdateAsync(updatedUser);
+            }
+        }
     }
 }

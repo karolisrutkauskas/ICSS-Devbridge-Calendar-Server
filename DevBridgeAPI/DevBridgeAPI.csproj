@@ -366,6 +366,7 @@
     <Compile Include="Models\Complex\TeamTreeNode.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\IModel.cs" />
+    <Compile Include="Models\Patch\UserRestrictions.cs" />
     <Compile Include="Models\Post\User.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\User.cs" />
@@ -384,6 +385,7 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="UseCases\AssignmentLogic.cs" />
+    <Compile Include="UseCases\Exceptions\EntityNotFoundException.cs" />
     <Compile Include="UseCases\Exceptions\UniqueFieldException.cs" />
     <Compile Include="UseCases\IAssignmentLogic.cs" />
     <Compile Include="UseCases\UserLogicN\ITeamTreeNodeFactory.cs" />

@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net;
 using DevBridgeAPI.UseCases.Exceptions;
 using DevBridgeAPI.Helpers;
+using DevBridgeAPI.Models.Patch;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -104,6 +105,24 @@ namespace DevBridgeAPI.Controllers
                 return Ok(userLogic.GetTeamTree(rootUserId));
             }
             catch(SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
+        }
+
+        [Route("api/users/restrictions/{userId}")]
+        [HttpPatch]
+        [ValidateRequest]
+        public IHttpActionResult ChangeRestrictions([FromBody] UserRestrictions userRestrictions, int userId)
+        {
+            try
+            {
+                return Ok(userLogic.ChangeRestrictions(userRestrictions, userId));
+            }
+            catch (SystemException ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace);
                 System.Diagnostics.Debug.WriteLine(ex.Message);

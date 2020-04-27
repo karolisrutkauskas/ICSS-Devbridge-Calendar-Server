@@ -13,5 +13,7 @@ namespace DevBridgeAPI.Repository.Dao
         IModel SelectOneRow(string username, string password);
         IEnumerable<User> SelectSubordinates(int managerId);
         void InsertNewUser(PostUser user);
+        void UpdateUser(User updatedUser);
+        void UpdateUserAsync(User updatedUser);
     }
 }
