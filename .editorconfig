@@ -11,3 +11,9 @@ dotnet_diagnostic.CA5372.severity = warning
 
 # CS1591: Missing XML comment for publicly visible type or member
 dotnet_diagnostic.CS1591.severity = silent
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = silent
+
+# CA1822: Member CreateErrorCollection does not access instance data and can be marked as static (Shared in VisualBasic)
+dotnet_diagnostic.CA1822.severity = silent

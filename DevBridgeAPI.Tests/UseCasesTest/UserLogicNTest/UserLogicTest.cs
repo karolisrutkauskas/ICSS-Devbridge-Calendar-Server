@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using DevBridgeAPI.Models;
 using DevBridgeAPI.Models.Complex;
+using DevBridgeAPI.Models.Patch;
 using DevBridgeAPI.Repository.Dao;
-using DevBridgeAPI.UseCases.UserCasesN;
+using DevBridgeAPI.Tests.Helpers;
+using DevBridgeAPI.UseCases.Exceptions;
+using DevBridgeAPI.UseCases.UserLogicN;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using PostUser = DevBridgeAPI.Models.Post.User;
 
-namespace DevBridgeAPI.Tests.UseCases.UserLogicTest
+namespace DevBridgeAPI.Tests.UseCasesTest.UserLogicNTest
 {
     [TestClass]
-    public class TeamTreeNodeFactoryTest
+    public class UserLogicTest
     {
         IEnumerable<User> _database;
 
@@ -111,10 +118,51 @@ namespace DevBridgeAPI.Tests.UseCases.UserLogicTest
             daoMock.Setup(x => x.SelectSubordinates(It.IsAny<int>()))
                    .Returns<int>(param => GetSubordinates(param));
 
-            var sot = new UserLogic(daoMock.Object, new TeamTreeNodeFactory(daoMock.Object));
-            var actual = sot.GetTeamTree(rootUserId);
+            var sut = new UserLogic(daoMock.Object, new TeamTreeNodeFactory(daoMock.Object));
+            var actual = sut.GetTeamTree(rootUserId);
 
             Assert.IsTrue(TreesAreEqual(expected, actual));
+        }
+
+        [TestMethod]
+        [SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
+        public void RegisterNewUser_ShouldCatchSQLException()
+        {
+            var sqlException = SQLExceptionBuilder.CreateInstance()
+                .Message("Some SQL text with UQ_Users_Email keyword")
+                .Number(2627).Build();
+            var fakeUser = new PostUser { Password = "pass" };
+            var daoMock = new Mock<IUsersDao>();
+            daoMock.Setup(x => x.InsertNewUser(It.IsAny<PostUser>()))
+                .Throws(sqlException);
+
+            var sut = new UserLogic(daoMock.Object, null);
+
+            Assert.ThrowsException<UniqueFieldException>(() => sut.RegisterNewUser(fakeUser));
+        }
+
+        [TestMethod]
+        [DataRow(1, 5, 6, 7)]
+        [DataRow(6, 2, 6, 7)]
+        [DataRow(9, 1, 2, 4)]
+        public void ChangeRestrictions_ShouldReturnUpdatedUser(int userId, int consecLimit, int monthlyLimit, int yearlyLimit)
+        {
+            var expectedUser = GetUserById(userId);
+            expectedUser.ConsecLimit = consecLimit;
+            expectedUser.MonthlyLimit = monthlyLimit;
+            expectedUser.YearlyLimit = yearlyLimit;
+            var daoMock = new Mock<IUsersDao>(MockBehavior.Strict);
+            var newUserRestrictions = new UserRestrictions { ConsecLimit = consecLimit, MonthlyLimit = monthlyLimit, YearlyLimit = yearlyLimit };
+
+            daoMock.Setup(x => x.UpdateUserAsync(expectedUser))
+                .Verifiable("UpdateUserAsync method was not called with expected arguments");
+            daoMock.Setup(x => x.SelectByID(It.IsAny<int>()))
+                .Returns<int>(id => GetUserById(id));
+            var sut = new UserLogic(daoMock.Object, null);
+            var actual = sut.ChangeRestrictions(newUserRestrictions, userId);
+
+            Assert.IsTrue(UsersAreEqual(expectedUser, actual));
+            daoMock.Verify(x => x.UpdateUserAsync(expectedUser), Times.Once);
         }
         private bool TreesAreEqual(TeamTreeNode tree1, TeamTreeNode tree2)
         {
@@ -141,7 +189,10 @@ namespace DevBridgeAPI.Tests.UseCases.UserLogicTest
         {
             if (user1 == user2) return true;
 
-            if (user1.UserId == user2.UserId) return true;
+            if (user1.UserId == user2.UserId
+                && user1.ConsecLimit == user2.ConsecLimit
+                && user1.MonthlyLimit == user2.MonthlyLimit
+                && user1.YearlyLimit == user2.YearlyLimit) return true;
 
             return false;
         }
