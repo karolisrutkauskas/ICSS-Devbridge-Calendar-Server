@@ -3,6 +3,7 @@ using DevBridgeAPI.Models.Post;
 using System.Collections.Generic;
 using User = DevBridgeAPI.Models.User;
 using PostUser = DevBridgeAPI.Models.Post.User;
+using DevBridgeAPI.Models.Patch;
 
 namespace DevBridgeAPI.Repository.Dao
 {
@@ -15,5 +16,7 @@ namespace DevBridgeAPI.Repository.Dao
         void InsertNewUser(PostUser user);
         void UpdateUser(User updatedUser);
         void UpdateUserAsync(User updatedUser);
+        void UpdateGlobalRestrictions(UserRestrictions restrictions);
+        void UpdateTeamRestrictions(UserRestrictions restrictions, int managerId);
     }
 }

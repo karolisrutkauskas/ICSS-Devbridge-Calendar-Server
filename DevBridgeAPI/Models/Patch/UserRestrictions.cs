@@ -11,17 +11,17 @@ namespace DevBridgeAPI.Models.Patch
         /// <summary>
         /// Constraint on user that limits how many assignments they can take for consecutive days
         /// </summary>
-        [Required]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "Consecutive days limit cannot be lower than 0")]
         public int? ConsecLimit { get; set; }
         /// <summary>
         /// Constraint on user that limits how many assignments they can take per month
         /// </summary>
-        [Required]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "Monthly limit cannot be lower than 0")]
         public int? MonthlyLimit { get; set; }
         /// <summary>
         /// Constraint on user that limits how many assignments they can take per year
         /// </summary>
-        [Required]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "Yearly limit cannot be lower than 0")]
         public int? YearlyLimit { get; set; }
     }
 }

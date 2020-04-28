@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using PostUser = DevBridgeAPI.Models.Post.User;
 
-namespace DevBridgeAPI.Tests.UseCases.UserLogicTest
+namespace DevBridgeAPI.Tests.UseCasesTest.UserLogicNTest
 {
     [TestClass]
     public class UserLogicTest

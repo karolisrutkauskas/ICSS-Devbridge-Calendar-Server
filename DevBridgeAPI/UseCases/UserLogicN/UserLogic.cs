@@ -75,5 +75,21 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             usersDao.UpdateUserAsync(userToUpdate);
             return userToUpdate;
         }
+
+        public void ChangeGlobalRestrictions(UserRestrictions userRestrictions)
+        {
+            usersDao.UpdateGlobalRestrictions(userRestrictions);
+        }
+
+        public void ChangeTeamRestrictions(UserRestrictions userRestrictions, int managerId)
+        {
+            User teamManager = usersDao.SelectByID(managerId);
+            if (teamManager == null)
+            {
+                throw new EntityNotFoundException($"User with ID {managerId} was not found");
+            }
+
+            usersDao.UpdateTeamRestrictions(userRestrictions, managerId);
+        }
     }
 }

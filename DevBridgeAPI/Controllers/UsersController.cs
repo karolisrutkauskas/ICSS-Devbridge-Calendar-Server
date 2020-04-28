@@ -36,6 +36,7 @@ namespace DevBridgeAPI.Controllers
             return Ok(selector.SelectAllRows().Cast<User>());
         }
 
+        //TODO: add ModelStateDictionary as swagger return type
         /// <summary>
         /// Will register a new user with already assigned manager.
         /// FirstName, Las
@@ -121,6 +122,54 @@ namespace DevBridgeAPI.Controllers
             try
             {
                 return Ok(userLogic.ChangeRestrictions(userRestrictions, userId));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                using (var response = Request.CreateResponse((HttpStatusCode.NotFound, ex.Message)))
+                    return ResponseMessage(response);
+            }
+            catch (SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
+        }
+
+        [Route("api/users/restrictions/global")]
+        [HttpPatch]
+        [ValidateRequest]
+        public IHttpActionResult ChangeGlobalRestrictions([FromBody] UserRestrictions userRestrictions)
+        {
+            try
+            {
+                userLogic.ChangeGlobalRestrictions(userRestrictions);
+                return Ok();
+            }
+            catch (SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
+        }
+
+        [Route("api/users/restrictions/team/{managerId}")]
+        [HttpPatch]
+        [ValidateRequest]
+        public IHttpActionResult ChangeTeamRestrictions([FromBody] UserRestrictions userRestrictions, int managerId)
+        {
+            try
+            {
+                userLogic.ChangeTeamRestrictions(userRestrictions, managerId);
+                return Ok();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                using (var response = Request.CreateResponse((HttpStatusCode.NotFound, ex.Message)))
+                    return ResponseMessage(response);
             }
             catch (SystemException ex)
             {
