@@ -14,6 +14,7 @@ using System.Net;
 using DevBridgeAPI.UseCases.Exceptions;
 using DevBridgeAPI.Helpers;
 using DevBridgeAPI.Models.Patch;
+using Swashbuckle.Swagger.Annotations;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -39,41 +40,19 @@ namespace DevBridgeAPI.Controllers
         //TODO: add ModelStateDictionary as swagger return type
         /// <summary>
         /// Will register a new user with already assigned manager.
-        /// FirstName, Las
         /// </summary>
-        /// <param name="newUser"></param>
-        /// <returns></returns>
+        /// <param name="newUser">New user to be inserted into database</param>
+        /// <returns>Described at responses</returns>
         [Route("api/users")]
         [HttpPost]
+        [SwaggerResponse(HttpStatusCode.NoContent, Description = "Successful request, no body content in response")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "User was not posted, request failed validations", Type = typeof(string))]
+        [SwaggerResponseRemoveDefaults]
         [ValidateRequest]
         public IHttpActionResult RegisterUser([FromBody] User newUser)
         {
             try
             {
-                //if (!ModelState.IsValid)
-                //{
-                //    return BadRequest(ModelState);
-                //}
-                //if (newUser.FirstName == null)
-                //{
-                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Email should be provided");
-                //}
-                //if (newUser.Email == null)
-                //{
-                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Email should be provided");
-                //}
-                //if (newUser == null)
-                //{
-                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Request body is empty");
-                //}
-                //if (newUser.ManagerId == null)
-                //{
-                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Manager ID should be provided");
-                //}
-                //if (newUser.Email == null)
-                //{
-                //    return Request.CreateResponse(HttpStatusCode.BadRequest, value: "Email should be provided");
-                //}
                 userLogic.RegisterNewUser(newUser);
                 return Ok();
             }
@@ -95,7 +74,7 @@ namespace DevBridgeAPI.Controllers
         /// starting from the specified root user
         /// </summary>
         /// <param name="rootUserId">Root user's ID that will be at the top of team hierarchy</param>
-        /// <returns></returns>
+        /// <returns>A tree of users with subordinates as children starting from rootUser</returns>
         [Route("api/users/teamTree/{rootUserId}")]
         [HttpGet]
         [ResponseType(typeof(TeamTreeNode))]
