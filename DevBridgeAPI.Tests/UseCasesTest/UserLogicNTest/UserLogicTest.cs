@@ -118,7 +118,7 @@ namespace DevBridgeAPI.Tests.UseCasesTest.UserLogicNTest
             daoMock.Setup(x => x.SelectSubordinates(It.IsAny<int>()))
                    .Returns<int>(param => GetSubordinates(param));
 
-            var sut = new UserLogic(daoMock.Object, new TeamTreeNodeFactory(daoMock.Object));
+            var sut = new UserLogic(daoMock.Object, new TeamTreeNodeFactory(daoMock.Object), null);
             var actual = sut.GetTeamTree(rootUserId);
 
             Assert.IsTrue(TreesAreEqual(expected, actual));
@@ -136,7 +136,7 @@ namespace DevBridgeAPI.Tests.UseCasesTest.UserLogicNTest
             daoMock.Setup(x => x.InsertNewUser(It.IsAny<PostUser>()))
                 .Throws(sqlException);
 
-            var sut = new UserLogic(daoMock.Object, null);
+            var sut = new UserLogic(daoMock.Object, null, null);
 
             Assert.ThrowsException<UniqueFieldException>(() => sut.RegisterNewUser(fakeUser));
         }
@@ -158,7 +158,7 @@ namespace DevBridgeAPI.Tests.UseCasesTest.UserLogicNTest
                 .Verifiable("UpdateUserAsync method was not called with expected arguments");
             daoMock.Setup(x => x.SelectByID(It.IsAny<int>()))
                 .Returns<int>(id => GetUserById(id));
-            var sut = new UserLogic(daoMock.Object, null);
+            var sut = new UserLogic(daoMock.Object, null, null);
             var actual = sut.ChangeRestrictions(newUserRestrictions, userId);
 
             Assert.IsTrue(UsersAreEqual(expectedUser, actual));

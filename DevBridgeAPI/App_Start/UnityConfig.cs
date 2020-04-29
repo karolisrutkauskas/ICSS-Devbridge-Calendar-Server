@@ -45,11 +45,16 @@ namespace DevBridgeAPI
 
             container.RegisterFactory<UserLogic>(
                 c => new UserLogic(c.Resolve<UsersDao>(),
-                                   c.Resolve<TeamTreeNodeFactory>())
+                                   c.Resolve<TeamTreeNodeFactory>(),
+                                   c.Resolve<UserValidator>())
             );
 
             container.RegisterFactory<TeamTreeNodeFactory>(
                 c => new TeamTreeNodeFactory(c.Resolve<UsersDao>())
+            );
+
+            container.RegisterFactory<UserValidator>(
+                c => new UserValidator(c.Resolve<UsersDao>())
             );
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);

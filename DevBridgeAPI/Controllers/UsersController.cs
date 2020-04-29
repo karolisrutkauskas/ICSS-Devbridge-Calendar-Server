@@ -14,9 +14,12 @@ using System.Net;
 using DevBridgeAPI.UseCases.Exceptions;
 using DevBridgeAPI.Helpers;
 using DevBridgeAPI.Models.Patch;
+using DevBridgeAPI.Models.Misc;
 
 namespace DevBridgeAPI.Controllers
 {
+#pragma warning disable CA2000 // Dispose objects before losing scope
+
     public class UsersController : ApiController
     {
         private readonly IModelSelector selector;
@@ -168,8 +171,35 @@ namespace DevBridgeAPI.Controllers
             }
             catch (EntityNotFoundException ex)
             {
-                using (var response = Request.CreateResponse((HttpStatusCode.NotFound, ex.Message)))
-                    return ResponseMessage(response);
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.NotFound, ex.Message));
+            }
+            catch (SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
+        }
+
+        [Route("api/users/manager/{userId}")]
+        [HttpPatch]
+        [ValidateRequest]
+        public IHttpActionResult ChangeTeamManager([FromBody] UserManagerId newManagerId, int userId)
+        {
+            try
+            {
+                return Ok(userLogic.ChangeTeamMember(newManagerId.ManagerId.Value, userId));
+            }
+            catch (ValidationFailedException ex)
+            {
+                int i = 1;
+                ModelState.Clear();
+                foreach (var errorMessage in ex.ValidationInfo.ErrorMessages)
+                {
+                    ModelState.AddModelError($"error {i++}", errorMessage);
+                }
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, ex.ValidationInfo));
             }
             catch (SystemException ex)
             {
@@ -180,4 +210,5 @@ namespace DevBridgeAPI.Controllers
             }
         }
     }
+#pragma warning restore CA2000 // Dispose objects before losing scope
 }
