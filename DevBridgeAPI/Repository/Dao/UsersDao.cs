@@ -7,6 +7,7 @@ using System.Web;
 using Dapper.Contrib.Extensions;
 using User = DevBridgeAPI.Models.User;
 using PostUser = DevBridgeAPI.Models.Post.User;
+using DevBridgeAPI.Models.Patch;
 
 namespace DevBridgeAPI.Repository.Dao
 {
@@ -57,5 +58,51 @@ namespace DevBridgeAPI.Repository.Dao
                 db.Connection.Insert(user);
             }
         }
+
+        public void UpdateUser(User updatedUser)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Update(updatedUser);
+            }
+        }
+        public void UpdateUserAsync(User updatedUser)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.UpdateAsync(updatedUser);
+            }
+        }
+
+        public void UpdateGlobalRestrictions(UserRestrictions restrictions)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Execute("UPDATE Users SET " +
+                                      "ConsecLimit = @Consec, " +
+                                      "MonthlyLimit = @Monthly, " +
+                                      "YearlyLimit = @Yearly",
+                                      new { Consec = restrictions.ConsecLimit,
+                                            Monthly = restrictions.MonthlyLimit,
+                                            Yearly = restrictions.YearlyLimit });
+            }
+        }
+
+        public void UpdateTeamRestrictions(UserRestrictions restrictions, int managerId)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Execute("UPDATE Users SET " +
+                                      "ConsecLimit = @Consec, " +
+                                      "MonthlyLimit = @Monthly, " +
+                                      "YearlyLimit = @Yearly " +
+                                      "WHERE ManagerId = @ManagerId",
+                                      new { Consec = restrictions.ConsecLimit,
+                                            Monthly = restrictions.MonthlyLimit,
+                                            Yearly = restrictions.YearlyLimit,
+                                            ManagerId = managerId });
+            }
+        }
+
     }
 }
