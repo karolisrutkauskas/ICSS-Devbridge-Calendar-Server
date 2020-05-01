@@ -10,7 +10,7 @@ namespace DevBridgeAPI.UseCases
     public interface IAssignmentLogic
     {
         IEnumerable<Assignment> SelectAllAssignments();
-        IEnumerable<Assignment> FindAssignments(int userId);
+        IEnumerable<Assignment> SelectAllAssignmentsByUser(string email);
         IEnumerable<Assignment> FindSubordinatesAssignments(int managerId);
         void AddAssignment(Assignment assignment);
     }

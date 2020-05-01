@@ -33,7 +33,11 @@ namespace DevBridgeAPI.Controllers
         [ResponseType(typeof(IEnumerable<Assignment>))]
         public IHttpActionResult Get()
         {
-            try { return Ok(asignLogic.SelectAllAssignments()); }
+            try {
+                var identity = User.Identity;
+
+                return Ok(asignLogic.SelectAllAssignmentsByUser(identity.Name)); 
+            }
             catch (SystemException ex) 
             {
                 System.Diagnostics.Trace.TraceError(ex.StackTrace);
@@ -43,21 +47,21 @@ namespace DevBridgeAPI.Controllers
             }
         }
 
-        [Authorize]
-        [Route("api/assignments/user/{userId}")]
-        [HttpGet]
-        [ResponseType(typeof(IEnumerable<Assignment>))]
-        public IHttpActionResult GetUsersAssignments(int userId)
-        {
-            try { return Ok(asignLogic.FindAssignments(userId)); }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.StackTrace);
-                System.Diagnostics.Trace.TraceError(ex.Message);
-                System.Diagnostics.Trace.TraceError(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
-        }
+        //[Authorize]
+        //[Route("api/assignments/user/{userId}")]
+        //[HttpGet]
+        //[ResponseType(typeof(IEnumerable<Assignment>))]
+        //public IHttpActionResult GetUsersAssignments(int userId)
+        //{
+        //    try { return Ok(asignLogic.s(userId)); }
+        //    catch (SystemException ex)
+        //    {
+        //        System.Diagnostics.Trace.TraceError(ex.StackTrace);
+        //        System.Diagnostics.Trace.TraceError(ex.Message);
+        //        System.Diagnostics.Trace.TraceError(ex.Source);
+        //        throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+        //    }
+        //}
 
         [Authorize]
         [Route("api/assignments/manager/{managerId}")]
