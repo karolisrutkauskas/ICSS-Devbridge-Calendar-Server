@@ -487,6 +487,14 @@
             </summary>
             <returns>A full list of assignments</returns>
         </member>
+        <member name="M:DevBridgeAPI.Controllers.UsersController.RegisterUser(DevBridgeAPI.Models.Post.User)">
+            <summary>
+            Will register a new user with already assigned manager.
+            FirstName, Las
+            </summary>
+            <param name="newUser"></param>
+            <returns></returns>
+        </member>
         <member name="M:DevBridgeAPI.Controllers.UsersController.GetTeamTree(System.Int32)">
             <summary>
             Gets a tree represantation of team hierarchy
@@ -541,6 +549,21 @@
         <member name="P:DevBridgeAPI.Models.Complex.TeamTreeNode.Children">
             <summary>
             A list of this user's subordinates. Will be null if empty
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Patch.UserRestrictions.ConsecLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take for consecutive days
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Patch.UserRestrictions.MonthlyLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take per month
+            </summary>
+        </member>
+        <member name="P:DevBridgeAPI.Models.Patch.UserRestrictions.YearlyLimit">
+            <summary>
+            Constraint on user that limits how many assignments they can take per year
             </summary>
         </member>
         <member name="T:DevBridgeAPI.Models.Post.User">
@@ -668,6 +691,28 @@
             <summary>
               Looks up a localized string similar to Unexpected Error.
             </summary>
+        </member>
+        <member name="M:DevBridgeAPI.UseCases.UserLogicN.UserLogic.RegisterNewUser(DevBridgeAPI.Models.Post.User)">
+            <summary>
+            Inserts a new user entity. Assumes that User's password is plain as it will be
+            hashed in this method before insertion to database.
+            </summary>
+            <param name="newUser">New user to be inserted. Password property must not be hashed yet</param>
+        </member>
+        <member name="M:DevBridgeAPI.UseCases.UserLogicN.UserLogic.GetTeamTree(System.Int32)">
+            <summary>
+            Constructs a TeamTreeNode hierarchical structure starting at User with <paramref name="rootUserId"/>
+            </summary>
+            <param name="rootUserId">Id of root user</param>
+            <returns>Constructed user team hierachy tree</returns>
+        </member>
+        <member name="M:DevBridgeAPI.UseCases.UserLogicN.UserLogic.ChangeRestrictions(DevBridgeAPI.Models.Patch.UserRestrictions,System.Int32)">
+            <summary>
+            Calls data access to update user's restrictions
+            </summary>
+            <param name="userRestrictions">Modified user restrictions</param>
+            <param name="userId">ID to lookup a user and modify</param>
+            <returns>User instance with updated restrictions</returns>
         </member>
     </members>
 </doc>

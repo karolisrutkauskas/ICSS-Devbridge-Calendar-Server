@@ -8,9 +8,13 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
-using DevBridgeAPI.UseCases.UserCasesN;
+using DevBridgeAPI.UseCases.UserLogicN;
 using System.Net.Http;
 using System.Net;
+using DevBridgeAPI.UseCases.Exceptions;
+using DevBridgeAPI.Helpers;
+using DevBridgeAPI.Models.Patch;
+using Swashbuckle.Swagger.Annotations;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -33,22 +37,28 @@ namespace DevBridgeAPI.Controllers
             return Ok(selector.SelectAllRows().Cast<User>());
         }
 
+        //TODO: add ModelStateDictionary as swagger return type
+        /// <summary>
+        /// Will register a new user with already assigned manager.
+        /// </summary>
+        /// <param name="newUser">New user to be inserted into database</param>
+        /// <returns>Described at responses</returns>
         [Route("api/users")]
         [HttpPost]
-        public HttpResponseMessage RegisterUser([FromBody] User newUser)
+        [SwaggerResponse(HttpStatusCode.NoContent, Description = "Successful request, no body content in response")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "User was not posted, request failed validations", Type = typeof(string))]
+        [SwaggerResponseRemoveDefaults]
+        [ValidateRequest]
+        public IHttpActionResult RegisterUser([FromBody] User newUser)
         {
             try
             {
-                if (newUser == null)
-                {
-                    throw new HttpException(400, "Request body is empty");
-                }
-                if (newUser.ManagerId == null)
-                {
-                    throw new HttpException(400, "Manager ID should be provided");
-                }
-                userLogic.RegisterNewUser(newUser.ManagerId.Value, newUser);
-                return Request.CreateResponse(HttpStatusCode.NoContent);
+                userLogic.RegisterNewUser(newUser);
+                return Ok();
+            }
+            catch(UniqueFieldException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (SystemException ex)
             {
@@ -64,7 +74,7 @@ namespace DevBridgeAPI.Controllers
         /// starting from the specified root user
         /// </summary>
         /// <param name="rootUserId">Root user's ID that will be at the top of team hierarchy</param>
-        /// <returns></returns>
+        /// <returns>A tree of users with subordinates as children starting from rootUser</returns>
         [Route("api/users/teamTree/{rootUserId}")]
         [HttpGet]
         [ResponseType(typeof(TeamTreeNode))]
@@ -75,6 +85,72 @@ namespace DevBridgeAPI.Controllers
                 return Ok(userLogic.GetTeamTree(rootUserId));
             }
             catch(SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
+        }
+
+        [Route("api/users/restrictions/{userId}")]
+        [HttpPatch]
+        [ValidateRequest]
+        public IHttpActionResult ChangeRestrictions([FromBody] UserRestrictions userRestrictions, int userId)
+        {
+            try
+            {
+                return Ok(userLogic.ChangeRestrictions(userRestrictions, userId));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                using (var response = Request.CreateResponse((HttpStatusCode.NotFound, ex.Message)))
+                    return ResponseMessage(response);
+            }
+            catch (SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
+        }
+
+        [Route("api/users/restrictions/global")]
+        [HttpPatch]
+        [ValidateRequest]
+        public IHttpActionResult ChangeGlobalRestrictions([FromBody] UserRestrictions userRestrictions)
+        {
+            try
+            {
+                userLogic.ChangeGlobalRestrictions(userRestrictions);
+                return Ok();
+            }
+            catch (SystemException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Source);
+                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            }
+        }
+
+        [Route("api/users/restrictions/team/{managerId}")]
+        [HttpPatch]
+        [ValidateRequest]
+        public IHttpActionResult ChangeTeamRestrictions([FromBody] UserRestrictions userRestrictions, int managerId)
+        {
+            try
+            {
+                userLogic.ChangeTeamRestrictions(userRestrictions, managerId);
+                return Ok();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                using (var response = Request.CreateResponse((HttpStatusCode.NotFound, ex.Message)))
+                    return ResponseMessage(response);
+            }
+            catch (SystemException ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace);
                 System.Diagnostics.Debug.WriteLine(ex.Message);

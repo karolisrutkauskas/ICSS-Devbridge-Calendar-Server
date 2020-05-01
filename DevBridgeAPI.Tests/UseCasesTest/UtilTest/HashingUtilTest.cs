@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevBridgeAPI.Tests.UseCases.Util
+namespace DevBridgeAPI.Tests.UseCasesTest.UtilTest
 {
     [TestClass]
     public class HashingUtilTest

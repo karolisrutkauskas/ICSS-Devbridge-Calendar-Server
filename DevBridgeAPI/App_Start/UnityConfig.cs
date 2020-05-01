@@ -1,7 +1,7 @@
 using DevBridgeAPI.Controllers;
 using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.UseCases;
-using DevBridgeAPI.UseCases.UserCasesN;
+using DevBridgeAPI.UseCases.UserLogicN;
 using System.Web.Http;
 using Unity;
 using Unity.Lifetime;

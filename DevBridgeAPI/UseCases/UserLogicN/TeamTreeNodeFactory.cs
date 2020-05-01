@@ -1,12 +1,13 @@
 ﻿using DevBridgeAPI.Models;
 using DevBridgeAPI.Models.Complex;
 using DevBridgeAPI.Repository.Dao;
+using DevBridgeAPI.UseCases.UserLogicN;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace DevBridgeAPI.UseCases.UserCasesN
+namespace DevBridgeAPI.UseCases.UserLogicN
 {
     public class TeamTreeNodeFactory : ITeamTreeNodeFactory
     {
@@ -18,9 +19,11 @@ namespace DevBridgeAPI.UseCases.UserCasesN
         }
         public TeamTreeNode ConstructFromRoot(User user)
         {
-            var result = new TeamTreeNode();
-            result.This = user;
-            result.Children = FindAndGenerateChildren(user.UserId);
+            var result = new TeamTreeNode
+            {
+                This = user,
+                Children = FindAndGenerateChildren(user.UserId)
+            };
             return result;
         }
 

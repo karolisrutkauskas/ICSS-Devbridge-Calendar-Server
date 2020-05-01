@@ -1,7 +1,7 @@
 ﻿using DevBridgeAPI.Models;
 using DevBridgeAPI.Models.Complex;
 
-namespace DevBridgeAPI.UseCases.UserCasesN
+namespace DevBridgeAPI.UseCases.UserLogicN
 {
     public interface ITeamTreeNodeFactory
     {
