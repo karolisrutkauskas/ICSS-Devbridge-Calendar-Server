@@ -11,7 +11,7 @@ namespace DevBridgeAPI.UseCases
     {
         IEnumerable<Assignment> SelectAllAssignments();
         IEnumerable<Assignment> SelectAllAssignmentsByUser(string email);
-        IEnumerable<Assignment> FindSubordinatesAssignments(int managerId);
+        IEnumerable<Assignment> FindSubordinatesAssignments(string managerEmail);
         void AddAssignment(Assignment assignment);
     }
 }

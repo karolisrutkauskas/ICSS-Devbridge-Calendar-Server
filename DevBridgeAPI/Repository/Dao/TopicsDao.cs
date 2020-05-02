@@ -7,7 +7,7 @@ using System.Web;
 
 namespace DevBridgeAPI.Repository.Dao
 {
-    public class TopicsDao : IModelSelector
+    public class TopicsDao : IModelSelector, ITopicsDao
     {
         public IEnumerable<IModel> SelectAllRows()
         {

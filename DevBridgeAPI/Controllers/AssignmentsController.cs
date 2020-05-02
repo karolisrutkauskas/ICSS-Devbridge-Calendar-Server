@@ -35,7 +35,6 @@ namespace DevBridgeAPI.Controllers
         {
             try {
                 var identity = User.Identity;
-
                 return Ok(asignLogic.SelectAllAssignmentsByUser(identity.Name)); 
             }
             catch (SystemException ex) 
@@ -47,30 +46,17 @@ namespace DevBridgeAPI.Controllers
             }
         }
 
-        //[Authorize]
-        //[Route("api/assignments/user/{userId}")]
-        //[HttpGet]
-        //[ResponseType(typeof(IEnumerable<Assignment>))]
-        //public IHttpActionResult GetUsersAssignments(int userId)
-        //{
-        //    try { return Ok(asignLogic.s(userId)); }
-        //    catch (SystemException ex)
-        //    {
-        //        System.Diagnostics.Trace.TraceError(ex.StackTrace);
-        //        System.Diagnostics.Trace.TraceError(ex.Message);
-        //        System.Diagnostics.Trace.TraceError(ex.Source);
-        //        throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-        //    }
-        //}
-
         [Authorize]
-        [Route("api/assignments/manager/{managerId}")]
+        [Route("api/assignments/manager")]
         [HttpGet]
         [ResponseType(typeof(IEnumerable<Assignment>))]
 
-        public IHttpActionResult GetSubordinatesAssignments(int managerId)
+        public IHttpActionResult GetSubordinatesAssignments()
         {
-            try { return Ok(asignLogic.FindSubordinatesAssignments(managerId)); }
+            try {
+                var identity = User.Identity;
+                return Ok(asignLogic.FindSubordinatesAssignments(identity.Name)); 
+            }
             catch (SystemException ex)
             {
                 System.Diagnostics.Trace.TraceError(ex.StackTrace);

@@ -19,9 +19,10 @@ namespace DevBridgeAPI.UseCases
             this.usersSelector = usersSelector;
         }
 
-        public IEnumerable<Assignment> FindSubordinatesAssignments(int managerId)
+        public IEnumerable<Assignment> FindSubordinatesAssignments(string managerEmail)
         {
-            IEnumerable<User> subordinates = usersSelector.SelectSubordinates(managerId);
+            var manager = usersSelector.SelectByEmail(managerEmail);
+            IEnumerable<User> subordinates = usersSelector.SelectSubordinates(manager.UserId);
             List<Assignment> assignments = new List<Assignment>();
             foreach(var user in subordinates)
             {
