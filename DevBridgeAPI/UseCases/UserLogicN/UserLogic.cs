@@ -15,11 +15,13 @@ namespace DevBridgeAPI.UseCases.UserLogicN
     {
         private readonly IUsersDao usersDao;
         private readonly ITeamTreeNodeFactory tmTreeFactory;
+        private readonly IUserValidator userValidator;
 
-        public UserLogic(IUsersDao usersDao, ITeamTreeNodeFactory tmTreeFactory)
+        public UserLogic(IUsersDao usersDao, ITeamTreeNodeFactory tmTreeFactory, IUserValidator userValidator)
         {
             this.usersDao = usersDao;
             this.tmTreeFactory = tmTreeFactory;
+            this.userValidator = userValidator;
         }
 
         /// <summary>
@@ -91,5 +93,20 @@ namespace DevBridgeAPI.UseCases.UserLogicN
 
             usersDao.UpdateTeamRestrictions(userRestrictions, managerId);
         }
+
+        public User ChangeTeamMember(int newManagerId, int userId)
+        {
+            var validationInfo = userValidator.ValidataManagerReassignment(newManagerId, userId);
+            if (!validationInfo.IsValid)
+            {
+                throw new ValidationFailedException(validationInfo);
+            }
+
+            var userForUpdate = usersDao.SelectByID(userId);
+            userForUpdate.ManagerId = newManagerId;
+
+            return userForUpdate;
+        }
+
     }
 }

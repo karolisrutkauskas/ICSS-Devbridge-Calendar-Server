@@ -374,6 +374,7 @@
     <Compile Include="Models\Complex\TeamTreeNode.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\IModel.cs" />
+    <Compile Include="Models\Patch\UserManagerId.cs" />
     <Compile Include="Models\Patch\UserRestrictions.cs" />
     <Compile Include="Models\Post\User.cs" />
     <Compile Include="Models\Topic.cs" />
@@ -396,14 +397,18 @@
     </Compile>
     <Compile Include="UseCases\AssignmentLogic.cs" />
     <Compile Include="UseCases\Exceptions\EntityNotFoundException.cs" />
+    <Compile Include="UseCases\Exceptions\ValidationFailedException.cs" />
     <Compile Include="UseCases\Exceptions\UniqueFieldException.cs" />
     <Compile Include="UseCases\GoalsLogic.cs" />
     <Compile Include="UseCases\IAssignmentLogic.cs" />
     <Compile Include="UseCases\IGoalsLogic.cs" />
     <Compile Include="UseCases\UserLogicN\ITeamTreeNodeFactory.cs" />
     <Compile Include="UseCases\UserLogicN\IUserLogic.cs" />
+    <Compile Include="UseCases\UserLogicN\IUserValidator.cs" />
     <Compile Include="UseCases\UserLogicN\TeamTreeNodeFactory.cs" />
     <Compile Include="UseCases\UserLogicN\UserLogic.cs" />
+    <Compile Include="UseCases\UserLogicN\UserValidator.cs" />
+    <Compile Include="Models\Misc\ValidationInfo.cs" />
     <Compile Include="UseCases\Util\HashingUtil.cs" />
   </ItemGroup>
   <ItemGroup>
