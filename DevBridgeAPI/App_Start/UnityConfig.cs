@@ -22,11 +22,11 @@ namespace DevBridgeAPI
             // e.g. container.RegisterType<ITestService, TestService>();
 
             container.RegisterFactory<AssignmentsController>(
-                c => new AssignmentsController(c.Resolve<AssignmentLogic>())
+                c => new AssignmentsController(c.Resolve<IAssignmentLogic>())
             );
 
             container.RegisterFactory<GoalsController>(
-                c => new GoalsController(c.Resolve<GoalsDao>())
+                c => new GoalsController(c.Resolve<IGoalsLogic>())
             );
 
             container.RegisterFactory<TopicsController>(
@@ -34,23 +34,34 @@ namespace DevBridgeAPI
             );
 
             container.RegisterFactory<UsersController>(
-                c => new UsersController(c.Resolve<UsersDao>(),
-                                         c.Resolve<UserLogic>())
+                c => new UsersController(c.Resolve<IUserLogic>())
             );
 
-            container.RegisterFactory<AssignmentLogic>(
-                c => new AssignmentLogic(c.Resolve<AssignmentsDao>(),
-                                         c.Resolve<UsersDao>())
+            container.RegisterFactory<IAssignmentLogic>(
+                c => new AssignmentLogic(c.Resolve<IAssignmentsDao>(),
+                                         c.Resolve<IUsersDao>())
             );
 
-            container.RegisterFactory<UserLogic>(
-                c => new UserLogic(c.Resolve<UsersDao>(),
-                                   c.Resolve<TeamTreeNodeFactory>(),
+            container.RegisterFactory<IUserLogic>(
+                c => new UserLogic(c.Resolve<IUsersDao>(),
+                                   c.Resolve<ITeamTreeNodeFactory>(),
                                    c.Resolve<UserValidator>())
             );
 
-            container.RegisterFactory<TeamTreeNodeFactory>(
-                c => new TeamTreeNodeFactory(c.Resolve<UsersDao>())
+            container.RegisterFactory<IGoalsLogic>(
+                c => new GoalsLogic(
+                    c.Resolve<IGoalsDao>(),
+                    c.Resolve<IUsersDao>())
+                );
+
+            container.RegisterFactory<IGoalsDao>(c => new GoalsDao());
+
+            container.RegisterFactory<IUsersDao>(c => new UsersDao());
+
+            container.RegisterFactory<IAssignmentsDao>(c => new AssignmentsDao());
+
+            container.RegisterFactory<ITeamTreeNodeFactory>(
+                c => new TeamTreeNodeFactory(c.Resolve<IUsersDao>())
             );
 
             container.RegisterFactory<UserValidator>(

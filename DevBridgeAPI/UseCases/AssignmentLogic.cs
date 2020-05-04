@@ -19,14 +19,10 @@ namespace DevBridgeAPI.UseCases
             this.usersSelector = usersSelector;
         }
 
-        public IEnumerable<Assignment> FindAssignments(int userId)
+        public IEnumerable<Assignment> FindSubordinatesAssignments(string managerEmail)
         {
-            return asgnSelector.SelectByUserId(userId);
-        }
-
-        public IEnumerable<Assignment> FindSubordinatesAssignments(int managerId)
-        {
-            IEnumerable<User> subordinates = usersSelector.SelectSubordinates(managerId);
+            var manager = usersSelector.SelectByEmail(managerEmail);
+            IEnumerable<User> subordinates = usersSelector.SelectSubordinates(manager.UserId);
             List<Assignment> assignments = new List<Assignment>();
             foreach(var user in subordinates)
             {
@@ -38,6 +34,12 @@ namespace DevBridgeAPI.UseCases
         public IEnumerable<Assignment> SelectAllAssignments()
         {
             return asgnSelector.SelectAllRows().Cast<Assignment>();
+        }
+
+        public IEnumerable<Assignment> SelectAllAssignmentsByUser(string email)
+        {
+            var user = usersSelector.SelectByEmail(email);
+            return asgnSelector.SelectByUserId(user.UserId);
         }
 
         public void AddAssignment(Assignment assignment)

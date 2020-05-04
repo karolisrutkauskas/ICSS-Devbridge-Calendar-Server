@@ -41,6 +41,16 @@ namespace DevBridgeAPI.Repository.Dao
             }
         }
 
+        public User SelectByEmail(string email)
+        {
+            string sql = "SELECT * FROM Users " +
+                        "WHERE Email = @Email";
+            using (var db = new DbContext())
+            {
+                return db.Connection.Query<User>(sql, new { Email = email }).FirstOrDefault();
+            }
+        }
+
         public IEnumerable<User> SelectSubordinates(int managerId)
         {
             string sql = "SELECT * FROM Users " +
