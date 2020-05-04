@@ -20,21 +20,11 @@ namespace DevBridgeAPI.Controllers
 {
     public class UsersController : ApiController
     {
-        private readonly IModelSelector selector;
         private readonly IUserLogic userLogic;
 
-        public UsersController(IModelSelector selector, IUserLogic userLogic)
+        public UsersController(IUserLogic userLogic)
         {
-            this.selector = selector;
             this.userLogic = userLogic;
-        }
-
-        [Authorize]
-        [Route("api/users")]
-        [HttpGet]
-        public IHttpActionResult Get()
-        {
-            return Ok(selector.SelectAllRows().Cast<User>());
         }
 
         //TODO: add ModelStateDictionary as swagger return type
@@ -43,6 +33,7 @@ namespace DevBridgeAPI.Controllers
         /// </summary>
         /// <param name="newUser">New user to be inserted into database</param>
         /// <returns>Described at responses</returns>
+        [Authorize]
         [Route("api/users")]
         [HttpPost]
         [SwaggerResponse(HttpStatusCode.NoContent, Description = "Successful request, no body content in response")]
@@ -75,6 +66,7 @@ namespace DevBridgeAPI.Controllers
         /// </summary>
         /// <param name="rootUserId">Root user's ID that will be at the top of team hierarchy</param>
         /// <returns>A tree of users with subordinates as children starting from rootUser</returns>
+        [Authorize]
         [Route("api/users/teamTree/{rootUserId}")]
         [HttpGet]
         [ResponseType(typeof(TeamTreeNode))]

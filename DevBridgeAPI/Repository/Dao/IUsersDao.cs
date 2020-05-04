@@ -11,6 +11,7 @@ namespace DevBridgeAPI.Repository.Dao
     {
         IEnumerable<IModel> SelectAllRows();
         User SelectByID(int userId);
+        User SelectByEmail(string email);
         IModel SelectOneRow(string username, string password);
         IEnumerable<User> SelectSubordinates(int managerId);
         void InsertNewUser(PostUser user);

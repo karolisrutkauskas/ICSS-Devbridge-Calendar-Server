@@ -27,12 +27,16 @@ namespace DevBridgeAPI.Controllers
         /// Gets a complete list of assignment data
         /// </summary>
         /// <returns>A full list of assignments</returns>
+        [Authorize]
         [Route("api/assignments")]
         [HttpGet]
         [ResponseType(typeof(IEnumerable<Assignment>))]
         public IHttpActionResult Get()
         {
-            try { return Ok(asignLogic.SelectAllAssignments()); }
+            try {
+                var identity = User.Identity;
+                return Ok(asignLogic.SelectAllAssignmentsByUser(identity.Name)); 
+            }
             catch (SystemException ex) 
             {
                 System.Diagnostics.Trace.TraceError(ex.StackTrace);
@@ -42,28 +46,17 @@ namespace DevBridgeAPI.Controllers
             }
         }
 
-        [Route("api/assignments/user/{userId}")]
+        [Authorize]
+        [Route("api/assignments/manager")]
         [HttpGet]
         [ResponseType(typeof(IEnumerable<Assignment>))]
-        public IHttpActionResult GetUsersAssignments(int userId)
+
+        public IHttpActionResult GetSubordinatesAssignments()
         {
-            try { return Ok(asignLogic.FindAssignments(userId)); }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.StackTrace);
-                System.Diagnostics.Trace.TraceError(ex.Message);
-                System.Diagnostics.Trace.TraceError(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
+            try {
+                var identity = User.Identity;
+                return Ok(asignLogic.FindSubordinatesAssignments(identity.Name)); 
             }
-        }
-
-        [Route("api/assignments/manager/{managerId}")]
-        [HttpGet]
-        [ResponseType(typeof(IEnumerable<Assignment>))]
-
-        public IHttpActionResult GetSubordinatesAssignments(int managerId)
-        {
-            try { return Ok(asignLogic.FindSubordinatesAssignments(managerId)); }
             catch (SystemException ex)
             {
                 System.Diagnostics.Trace.TraceError(ex.StackTrace);
