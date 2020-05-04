@@ -45,22 +45,8 @@ namespace DevBridgeAPI.Controllers
         [ValidateRequest]
         public IHttpActionResult RegisterUser([FromBody] User newUser)
         {
-            try
-            {
-                userLogic.RegisterNewUser(newUser);
-                return Ok();
-            }
-            catch(UniqueFieldException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            userLogic.RegisterNewUser(newUser);
+            return Ok();
         }
 
         /// <summary>
@@ -75,17 +61,7 @@ namespace DevBridgeAPI.Controllers
         [ResponseType(typeof(TeamTreeNode))]
         public IHttpActionResult GetTeamTree(int rootUserId)
         {
-            try
-            {
-                return Ok(userLogic.GetTeamTree(rootUserId));
-            }
-            catch(SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            return Ok(userLogic.GetTeamTree(rootUserId));
         }
 
         [Route("api/users/restrictions/{userId}")]
@@ -93,22 +69,7 @@ namespace DevBridgeAPI.Controllers
         [ValidateRequest]
         public IHttpActionResult ChangeRestrictions([FromBody] UserRestrictions userRestrictions, int userId)
         {
-            try
-            {
-                return Ok(userLogic.ChangeRestrictions(userRestrictions, userId));
-            }
-            catch (EntityNotFoundException ex)
-            {
-                using (var response = Request.CreateResponse((HttpStatusCode.NotFound, ex.Message)))
-                    return ResponseMessage(response);
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            return Ok(userLogic.ChangeRestrictions(userRestrictions, userId));
         }
 
         [Route("api/users/restrictions/global")]
@@ -116,18 +77,8 @@ namespace DevBridgeAPI.Controllers
         [ValidateRequest]
         public IHttpActionResult ChangeGlobalRestrictions([FromBody] UserRestrictions userRestrictions)
         {
-            try
-            {
-                userLogic.ChangeGlobalRestrictions(userRestrictions);
-                return Ok();
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            userLogic.ChangeGlobalRestrictions(userRestrictions);
+            return Ok();
         }
 
         [Route("api/users/restrictions/team/{managerId}")]
@@ -135,22 +86,8 @@ namespace DevBridgeAPI.Controllers
         [ValidateRequest]
         public IHttpActionResult ChangeTeamRestrictions([FromBody] UserRestrictions userRestrictions, int managerId)
         {
-            try
-            {
-                userLogic.ChangeTeamRestrictions(userRestrictions, managerId);
-                return Ok();
-            }
-            catch (EntityNotFoundException ex)
-            {
-                return ResponseMessage(Request.CreateResponse(HttpStatusCode.NotFound, ex.Message));
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            userLogic.ChangeTeamRestrictions(userRestrictions, managerId);
+            return Ok();
         }
 
         [Route("api/users/manager/{userId}")]
@@ -158,27 +95,7 @@ namespace DevBridgeAPI.Controllers
         [ValidateRequest]
         public IHttpActionResult ChangeTeamManager([FromBody] UserManagerId newManagerId, int userId)
         {
-            try
-            {
-                return Ok(userLogic.ChangeTeamMember(newManagerId.ManagerId.Value, userId));
-            }
-            catch (ValidationFailedException ex)
-            {
-                int i = 1;
-                ModelState.Clear();
-                foreach (var errorMessage in ex.ValidationInfo.ErrorMessages)
-                {
-                    ModelState.AddModelError($"error {i++}", errorMessage);
-                }
-                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, ex.ValidationInfo));
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            return Ok(userLogic.ChangeTeamMember(newManagerId.ManagerId.Value, userId));  
         }
     }
 #pragma warning restore CA2000 // Dispose objects before losing scope

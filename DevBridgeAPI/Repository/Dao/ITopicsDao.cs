@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevBridgeAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace DevBridgeAPI.Repository.Dao
 {
     public interface ITopicsDao
     {
+        IEnumerable<Topic> SelectAllRows();
     }
 }

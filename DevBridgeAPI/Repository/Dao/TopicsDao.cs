@@ -7,9 +7,9 @@ using System.Web;
 
 namespace DevBridgeAPI.Repository.Dao
 {
-    public class TopicsDao : IModelSelector, ITopicsDao
+    public class TopicsDao : ITopicsDao
     {
-        public IEnumerable<IModel> SelectAllRows()
+        public IEnumerable<Topic> SelectAllRows()
         {
             string sql = "SELECT * FROM Topics";
             using (var db = new DbContext())

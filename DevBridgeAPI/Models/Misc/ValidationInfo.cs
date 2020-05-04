@@ -6,9 +6,9 @@ namespace DevBridgeAPI.Models.Misc
 {
     public class ValidationInfo
     {
-        public IEnumerable<string> ErrorMessages { get; set; }
+        public IEnumerable<ErrorMessage> ErrorMessages { get; }
         public bool IsValid { get; }
-        public ValidationInfo(IEnumerable<string> errorMessages)
+        public ValidationInfo(IEnumerable<ErrorMessage> errorMessages)
         {
             ErrorMessages = errorMessages;
             if (errorMessages == null || !errorMessages.Any())

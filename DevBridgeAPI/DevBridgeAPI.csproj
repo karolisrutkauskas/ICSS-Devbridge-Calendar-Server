@@ -369,11 +369,13 @@
     </Compile>
     <Compile Include="Helpers\AuthorizationServerProvider.cs" />
     <Compile Include="Helpers\ExtensionMethods.cs" />
+    <Compile Include="Helpers\Filters\GeneralExceptionAttribute.cs" />
     <Compile Include="Helpers\ValidateRequestAttribute.cs" />
     <Compile Include="Models\Assignment.cs" />
     <Compile Include="Models\Complex\TeamTreeNode.cs" />
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\IModel.cs" />
+    <Compile Include="Models\Misc\ErrorMessage.cs" />
     <Compile Include="Models\Patch\UserManagerId.cs" />
     <Compile Include="Models\Patch\UserRestrictions.cs" />
     <Compile Include="Models\Post\User.cs" />
@@ -390,6 +392,7 @@
     <Compile Include="Repository\Dao\GoalsDao.cs" />
     <Compile Include="Repository\Dao\TopicsDao.cs" />
     <Compile Include="Repository\Dao\UsersDao.cs" />
+    <Compile Include="Resources\Errors.cs" />
     <Compile Include="Resources\Strings1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -397,8 +400,9 @@
     </Compile>
     <Compile Include="UseCases\AssignmentLogic.cs" />
     <Compile Include="UseCases\Exceptions\EntityNotFoundException.cs" />
-    <Compile Include="UseCases\Exceptions\ValidationFailedException.cs" />
+    <Compile Include="UseCases\Exceptions\ApiException.cs" />
     <Compile Include="UseCases\Exceptions\UniqueFieldException.cs" />
+    <Compile Include="UseCases\Exceptions\ValidationFailedException.cs" />
     <Compile Include="UseCases\GoalsLogic.cs" />
     <Compile Include="UseCases\IAssignmentLogic.cs" />
     <Compile Include="UseCases\IGoalsLogic.cs" />

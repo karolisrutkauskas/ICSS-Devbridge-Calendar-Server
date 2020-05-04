@@ -30,7 +30,7 @@ namespace DevBridgeAPI
             );
 
             container.RegisterFactory<TopicsController>(
-                c => new TopicsController(c.Resolve<TopicsDao>())
+                c => new TopicsController(c.Resolve<ITopicsDao>())
             );
 
             container.RegisterFactory<UsersController>(
@@ -42,20 +42,14 @@ namespace DevBridgeAPI
                                          c.Resolve<IUsersDao>())
             );
 
-            container.RegisterFactory<AssignmentLogic>(
-                c => new AssignmentLogic(c.Resolve<AssignmentsDao>(),
-                                         c.Resolve<UsersDao>())
-            );
-
             container.RegisterFactory<IUserLogic>(
                 c => new UserLogic(c.Resolve<IUsersDao>(),
                                    c.Resolve<ITeamTreeNodeFactory>(),
                                    c.Resolve<IUserValidator>())
             );
             container.RegisterFactory<IGoalsLogic>(
-                c => new GoalsLogic(
-                    c.Resolve<IGoalsDao>(),
-                    c.Resolve<IUsersDao>())
+                c => new GoalsLogic(c.Resolve<IGoalsDao>(),
+                                    c.Resolve<IUsersDao>())
                 );
 
             container.RegisterFactory<IGoalsDao>(c => new GoalsDao());
@@ -64,12 +58,14 @@ namespace DevBridgeAPI
 
             container.RegisterFactory<IAssignmentsDao>(c => new AssignmentsDao());
 
+            container.RegisterFactory<ITopicsDao>(c => new TopicsDao());
+
             container.RegisterFactory<ITeamTreeNodeFactory>(
                 c => new TeamTreeNodeFactory(c.Resolve<IUsersDao>())
             );
 
-            container.RegisterFactory<UserValidator>(
-                c => new UserValidator(c.Resolve<UsersDao>())
+            container.RegisterFactory<IUserValidator>(
+                c => new UserValidator(c.Resolve<IUsersDao>())
             );
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);

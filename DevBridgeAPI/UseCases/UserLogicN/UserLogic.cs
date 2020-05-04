@@ -39,7 +39,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             {
                 if (ex.Message.Contains("UQ_Users_Email") && ex.Number == 2627) // 2627 - violated unique constraint
                 {
-                    throw new UniqueFieldException("Email address is already taken!", ex);
+                    throw new UniqueFieldException(ex.Message, nameof(PostUser.Email));
                 }
                 throw;
             }
@@ -67,7 +67,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             User userToUpdate = usersDao.SelectByID(userId);
             if (userToUpdate == null)
             {
-                throw new EntityNotFoundException($"User with ID {userId} was not found");
+                throw new EntityNotFoundException($"User with ID {userId} was not found", typeof(User));
             }
 
             userToUpdate.ConsecLimit = userRestrictions.ConsecLimit;
@@ -88,7 +88,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             User teamManager = usersDao.SelectByID(managerId);
             if (teamManager == null)
             {
-                throw new EntityNotFoundException($"User with ID {managerId} was not found");
+                throw new EntityNotFoundException($"User with ID {managerId} was not found", typeof(User));
             }
 
             usersDao.UpdateTeamRestrictions(userRestrictions, managerId);

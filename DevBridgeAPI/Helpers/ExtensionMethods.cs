@@ -12,10 +12,10 @@ namespace DevBridgeAPI.Helpers
         {
             return modelState.Values
                     .SelectMany(x => x.Errors)
-                    .Select(x => '`' + (x.Exception != null
-                                      ? x.Exception.Message
-                                      : x.ErrorMessage)
-                                      .Replace("`", "\\`") + '`');
+                    .Select(x => '\'' + (x.Exception != null
+                                       ? x.Exception.Message
+                                       : x.ErrorMessage)
+                                       .Replace("'", "\\'") + '\'');
         }
     }
 }
