@@ -27,19 +27,8 @@ namespace DevBridgeAPI.Controllers
         [ResponseType(typeof(IEnumerable<Goal>))]
         public IHttpActionResult Get()
         {
-            try
-            {
-                var identity = User.Identity;
-                return Ok(goalsLogic.SelectAllGoalsByUser(identity.Name));
-            }
-
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Trace.TraceError(ex.StackTrace);
-                System.Diagnostics.Trace.TraceError(ex.Message);
-                System.Diagnostics.Trace.TraceError(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            var identity = User.Identity;
+            return Ok(goalsLogic.SelectAllGoalsByUser(identity.Name));
         }
     }
 }

@@ -14,7 +14,6 @@ namespace DevBridgeAPI.App_Start
 {
     public class Startup
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
         public void Configuration(IAppBuilder app)
         {
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
@@ -32,6 +31,9 @@ namespace DevBridgeAPI.App_Start
 
             HttpConfiguration config = new HttpConfiguration();
             WebApiConfig.Register(config);
+
+            GlobalConfiguration.Configuration.Filters
+                .Add(new Helpers.Filters.GeneralExceptionAttribute());
         }
     }
 }

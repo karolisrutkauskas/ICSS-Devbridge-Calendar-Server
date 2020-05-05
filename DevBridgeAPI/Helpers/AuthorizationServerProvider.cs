@@ -9,21 +9,18 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
 namespace DevBridgeAPI.Helpers
 {
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             context.Validated();
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
 
@@ -44,3 +41,4 @@ namespace DevBridgeAPI.Helpers
         }
     }
 }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously

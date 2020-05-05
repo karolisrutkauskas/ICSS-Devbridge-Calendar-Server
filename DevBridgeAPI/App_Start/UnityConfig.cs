@@ -30,7 +30,7 @@ namespace DevBridgeAPI
             );
 
             container.RegisterFactory<TopicsController>(
-                c => new TopicsController(c.Resolve<TopicsDao>())
+                c => new TopicsController(c.Resolve<ITopicsDao>())
             );
 
             container.RegisterFactory<UsersController>(
@@ -47,11 +47,9 @@ namespace DevBridgeAPI
                                    c.Resolve<ITeamTreeNodeFactory>(),
                                    c.Resolve<IUserValidator>())
             );
-
             container.RegisterFactory<IGoalsLogic>(
-                c => new GoalsLogic(
-                    c.Resolve<IGoalsDao>(),
-                    c.Resolve<IUsersDao>())
+                c => new GoalsLogic(c.Resolve<IGoalsDao>(),
+                                    c.Resolve<IUsersDao>())
                 );
 
             container.RegisterFactory<IGoalsDao>(c => new GoalsDao());
@@ -59,6 +57,8 @@ namespace DevBridgeAPI
             container.RegisterFactory<IUsersDao>(c => new UsersDao());
 
             container.RegisterFactory<IAssignmentsDao>(c => new AssignmentsDao());
+
+            container.RegisterFactory<ITopicsDao>(c => new TopicsDao());
 
             container.RegisterFactory<ITeamTreeNodeFactory>(
                 c => new TeamTreeNodeFactory(c.Resolve<IUsersDao>())
