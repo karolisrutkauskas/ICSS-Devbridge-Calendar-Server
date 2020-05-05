@@ -114,5 +114,13 @@ namespace DevBridgeAPI.Repository.Dao
             }
         }
 
+        public bool IsAncestorOf(int ancestor, int descendant)
+        {
+            using (var db = new DbContext())
+            {
+                return db.Connection.ExecuteScalar<bool>("SELECT dbo.UserIsDescendantOf(@Ancestor, @Descendant) as isDesc",
+                                                         new { Ancestor = ancestor, Descendant = descendant });
+            }
+        }
     }
 }

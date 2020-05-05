@@ -19,5 +19,6 @@ namespace DevBridgeAPI.Repository.Dao
         void UpdateUserAsync(User updatedUser);
         void UpdateGlobalRestrictions(UserRestrictions restrictions);
         void UpdateTeamRestrictions(UserRestrictions restrictions, int managerId);
+        bool IsAncestorOf(int ancestor, int descendant);
     }
 }

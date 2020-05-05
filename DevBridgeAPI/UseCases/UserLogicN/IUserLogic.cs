@@ -17,5 +17,6 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         User ChangeRestrictions(UserRestrictions userRestrictions, int userId);
         void ChangeGlobalRestrictions(UserRestrictions userRestrictions);
         void ChangeTeamRestrictions(UserRestrictions userRestrictions, int managerId);
+        User ChangeTeamMember(int newManagerId, int userId);
     }
 }

@@ -44,7 +44,8 @@ namespace DevBridgeAPI
 
             container.RegisterFactory<IUserLogic>(
                 c => new UserLogic(c.Resolve<IUsersDao>(),
-                                   c.Resolve<ITeamTreeNodeFactory>())
+                                   c.Resolve<ITeamTreeNodeFactory>(),
+                                   c.Resolve<IUserValidator>())
             );
 
             container.RegisterFactory<IGoalsLogic>(
@@ -61,6 +62,10 @@ namespace DevBridgeAPI
 
             container.RegisterFactory<ITeamTreeNodeFactory>(
                 c => new TeamTreeNodeFactory(c.Resolve<IUsersDao>())
+            );
+
+            container.RegisterFactory<IUserValidator>(
+                c => new UserValidator(c.Resolve<IUsersDao>())
             );
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);

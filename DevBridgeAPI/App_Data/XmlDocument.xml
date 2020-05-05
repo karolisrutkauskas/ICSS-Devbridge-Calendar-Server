@@ -551,6 +551,11 @@
             A list of this user's subordinates. Will be null if empty
             </summary>
         </member>
+        <member name="P:DevBridgeAPI.Models.Patch.UserManagerId.ManagerId">
+            <summary>
+            Unique identifier of this user's manager. If user has no manager, this field is null.
+            </summary>
+        </member>
         <member name="P:DevBridgeAPI.Models.Patch.UserRestrictions.ConsecLimit">
             <summary>
             Constraint on user that limits how many assignments they can take for consecutive days
