@@ -133,7 +133,7 @@ namespace DevBridgeAPI.Tests.UseCasesTest.UserLogicNTest
                 .Number(2627).Build();
             var fakeUser = new PostUser { Password = "pass" };
             var daoMock = new Mock<IUsersDao>();
-            daoMock.Setup(x => x.InsertNewUser(It.IsAny<PostUser>()))
+            daoMock.Setup(x => x.InsertAndReturnNewUser(It.IsAny<PostUser>()))
                 .Throws(sqlException);
 
             var sut = new UserLogic(daoMock.Object, null, null);

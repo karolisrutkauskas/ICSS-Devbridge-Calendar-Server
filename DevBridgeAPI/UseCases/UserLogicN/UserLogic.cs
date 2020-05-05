@@ -29,12 +29,12 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         /// hashed in this method before insertion to database.
         /// </summary>
         /// <param name="newUser">New user to be inserted. Password property must not be hashed yet</param>
-        public void RegisterNewUser(PostUser newUser)
+        public User RegisterNewUser(PostUser newUser)
         {
             newUser.Password = HashingUtil.HashPasswordWithSalt(newUser.Password);
             try
             {
-                usersDao.InsertNewUser(newUser);
+                return usersDao.InsertAndReturnNewUser(newUser);
             } catch (SqlException ex)
             {
                 if (ex.Message.Contains("UQ_Users_Email") && ex.Number == 2627) // 2627 - violated unique constraint

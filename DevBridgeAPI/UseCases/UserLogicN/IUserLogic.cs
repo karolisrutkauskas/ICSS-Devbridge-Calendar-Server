@@ -12,7 +12,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
 {
     public interface IUserLogic
     {
-        void RegisterNewUser(PostUser newUser);
+        User RegisterNewUser(PostUser newUser);
         TeamTreeNode GetTeamTree(int rootUserId);
         User ChangeRestrictions(UserRestrictions userRestrictions, int userId);
         void ChangeGlobalRestrictions(UserRestrictions userRestrictions);

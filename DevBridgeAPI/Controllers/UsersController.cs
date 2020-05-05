@@ -16,7 +16,7 @@ using DevBridgeAPI.Helpers;
 using DevBridgeAPI.Models.Patch;
 using DevBridgeAPI.Models.Misc;
 using Swashbuckle.Swagger.Annotations;
-using DevBridgeAPI.Models.Misc;
+using System.Collections.Generic;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -31,7 +31,6 @@ namespace DevBridgeAPI.Controllers
             this.userLogic = userLogic;
         }
 
-        //TODO: add ModelStateDictionary as swagger return type
         /// <summary>
         /// Will register a new user with already assigned manager.
         /// </summary>
@@ -40,14 +39,14 @@ namespace DevBridgeAPI.Controllers
         [Authorize]
         [Route("api/users")]
         [HttpPost]
-        [SwaggerResponse(HttpStatusCode.NoContent, Description = "Successful request, no body content in response")]
-        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "User was not posted, request failed validations", Type = typeof(string))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return posted user", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(IEnumerable<ErrorMessage>))]
+        [SwaggerResponse(HttpStatusCode.Conflict, Description = "Provided email already exists", Type = typeof(IEnumerable<ErrorMessage>))]
         [SwaggerResponseRemoveDefaults]
         [ValidateRequest]
         public IHttpActionResult RegisterUser([FromBody] User newUser)
         {
-            userLogic.RegisterNewUser(newUser);
-            return Ok();
+            return Ok(userLogic.RegisterNewUser(newUser));
         }
 
         /// <summary>
@@ -59,7 +58,8 @@ namespace DevBridgeAPI.Controllers
         [Authorize]
         [Route("api/users/teamTree/{rootUserId}")]
         [HttpGet]
-        [ResponseType(typeof(TeamTreeNode))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return team tree", Type = typeof(TeamTreeNode))]
+
         public IHttpActionResult GetTeamTree(int rootUserId)
         {
             return Ok(userLogic.GetTeamTree(rootUserId));
@@ -79,7 +79,7 @@ namespace DevBridgeAPI.Controllers
         public IHttpActionResult ChangeGlobalRestrictions([FromBody] UserRestrictions userRestrictions)
         {
             userLogic.ChangeGlobalRestrictions(userRestrictions);
-            return Ok();
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
         }
 
         [Route("api/users/restrictions/team/{managerId}")]
@@ -88,7 +88,7 @@ namespace DevBridgeAPI.Controllers
         public IHttpActionResult ChangeTeamRestrictions([FromBody] UserRestrictions userRestrictions, int managerId)
         {
             userLogic.ChangeTeamRestrictions(userRestrictions, managerId);
-            return Ok();
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
         }
 
         [Route("api/users/manager/{userId}")]
