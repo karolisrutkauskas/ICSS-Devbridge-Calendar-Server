@@ -1,4 +1,4 @@
-﻿using DevBridgeAPI.Models.Misc;
+using DevBridgeAPI.Models.Misc;
 using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.Resources;
 using System;

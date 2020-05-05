@@ -14,6 +14,7 @@ using System.Net;
 using DevBridgeAPI.UseCases.Exceptions;
 using DevBridgeAPI.Helpers;
 using DevBridgeAPI.Models.Patch;
+using DevBridgeAPI.Models.Misc;
 using Swashbuckle.Swagger.Annotations;
 using DevBridgeAPI.Models.Misc;
 
