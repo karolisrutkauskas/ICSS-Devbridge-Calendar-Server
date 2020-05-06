@@ -406,6 +406,10 @@
     <Compile Include="UseCases\GoalsLogic.cs" />
     <Compile Include="UseCases\IAssignmentLogic.cs" />
     <Compile Include="UseCases\IGoalsLogic.cs" />
+    <Compile Include="UseCases\Integrations\EmailService\EmailClient.cs" />
+    <Compile Include="Resources\EmailCredentials.cs" />
+    <Compile Include="UseCases\Integrations\IUserIntegrations.cs" />
+    <Compile Include="UseCases\Integrations\UserIntegrations.cs" />
     <Compile Include="UseCases\UserLogicN\ITeamTreeNodeFactory.cs" />
     <Compile Include="UseCases\UserLogicN\IUserLogic.cs" />
     <Compile Include="UseCases\UserLogicN\IUserValidator.cs" />
@@ -471,6 +475,7 @@
     <Content Include="Connected Services\Key Vault\ConnectedService.json" />
     <Content Include="Connected Services\Application Insights\ConnectedService.json" />
     <Content Include="ApplicationInsights.config" />
+    <Content Include="AppSettings.config" />
     <None Include="Properties\PublishProfiles\DevBridgeAPI - Test.pubxml" />
     <None Include="Properties\PublishProfiles\DevBridgeAPI.pubxml" />
     <None Include="Scripts\jquery-3.5.0.intellisense.js" />

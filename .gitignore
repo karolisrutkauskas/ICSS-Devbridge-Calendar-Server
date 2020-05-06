@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Manually excluded files
 /Data.xlsx
+/DevBridgeAPI/AppSettings.config

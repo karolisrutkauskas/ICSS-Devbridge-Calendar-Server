@@ -121,4 +121,8 @@
     <value>Unexpected Error</value>
     <comment>Used for runtime unchecked exceptions as response message (along with 500 status code)</comment>
   </data>
+  <data name="UserInvitationSubject" xml:space="preserve">
+    <value>You are invited to DevBridge learning platform</value>
+    <comment>Used for email subject when inviting new user</comment>
+  </data>
 </root>

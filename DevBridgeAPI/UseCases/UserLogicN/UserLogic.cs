@@ -8,6 +8,10 @@ using DevBridgeAPI.Models.Patch;
 using System;
 using User = DevBridgeAPI.Models.User;
 using PostUser = DevBridgeAPI.Models.Post.User;
+using DevBridgeAPI.UseCases.Integrations;
+using DevBridgeAPI.UseCases.Integrations.EmailService;
+using DevBridgeAPI.Resources;
+using System.Configuration;
 
 namespace DevBridgeAPI.UseCases.UserLogicN
 {
@@ -16,24 +20,29 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         private readonly IUsersDao usersDao;
         private readonly ITeamTreeNodeFactory tmTreeFactory;
         private readonly IUserValidator userValidator;
+        private readonly IUserIntegrations userIntegrations;
 
-        public UserLogic(IUsersDao usersDao, ITeamTreeNodeFactory tmTreeFactory, IUserValidator userValidator)
+        public UserLogic(IUsersDao usersDao, ITeamTreeNodeFactory tmTreeFactory, IUserValidator userValidator, IUserIntegrations userIntegrations)
         {
             this.usersDao = usersDao;
             this.tmTreeFactory = tmTreeFactory;
             this.userValidator = userValidator;
+            this.userIntegrations = userIntegrations;
         }
 
         /// <summary>
-        /// Inserts a new user entity. Assumes that User's password is plain as it will be
-        /// hashed in this method before insertion to database.
+        /// Inserts a new user entity to database. User entity will
+        /// be marked as unregistered by assigning RegistrationToken
         /// </summary>
-        /// <param name="newUser">New user to be inserted. Password property must not be hashed yet</param>
+        /// <param name="newUser">New user to be inserted</param>
         public User RegisterNewUser(PostUser newUser)
         {
             try
             {
-                return usersDao.InsertAndReturnNewUser(newUser);
+                newUser.RegistrationToken = HashingUtil.GenerateToken();
+                var registeredUser = usersDao.InsertAndReturnNewUser(newUser);
+                userIntegrations.CreateInvitation(newUser);
+                return registeredUser;
             } catch (SqlException ex)
             {
                 if (ex.Message.Contains("UQ_Users_Email") && ex.Number == 2627) // 2627 - violated unique constraint
