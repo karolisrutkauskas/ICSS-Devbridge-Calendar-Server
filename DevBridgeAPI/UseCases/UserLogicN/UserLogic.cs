@@ -29,11 +29,11 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         /// hashed in this method before insertion to database.
         /// </summary>
         /// <param name="newUser">New user to be inserted. Password property must not be hashed yet</param>
-        public void RegisterNewUser(PostUser newUser)
+        public User RegisterNewUser(PostUser newUser)
         {
             try
             {
-                usersDao.InsertNewUser(newUser);
+                return usersDao.InsertAndReturnNewUser(newUser);
             } catch (SqlException ex)
             {
                 if (ex.Message.Contains("UQ_Users_Email") && ex.Number == 2627) // 2627 - violated unique constraint
@@ -61,6 +61,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         /// <param name="userRestrictions">Modified user restrictions</param>
         /// <param name="userId">ID to lookup a user and modify</param>
         /// <returns>User instance with updated restrictions</returns>
+        /// <exception cref="EntityNotFoundException">When user with ID <paramref name="userId"/> is not found</exception>
         public User ChangeRestrictions(UserRestrictions userRestrictions, int userId)
         {
             User userToUpdate = usersDao.SelectByID(userId);
@@ -77,11 +78,21 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             return userToUpdate;
         }
 
+        /// <summary>
+        /// Changes restrictions for every user
+        /// </summary>
+        /// <param name="userRestrictions">New user restrictions</param>
         public void ChangeGlobalRestrictions(UserRestrictions userRestrictions)
         {
             usersDao.UpdateGlobalRestrictions(userRestrictions);
         }
 
+        /// <summary>
+        /// Changes restrictions for every member in team (excluding manager)
+        /// </summary>
+        /// <param name="userRestrictions">New user restrictions</param>
+        /// <param name="managerId">ID of manager whose team will have restrictions changed</param>
+        /// <exception cref="EntityNotFoundException">When user with <paramref name="managerId"/> ID is not found</exception>
         public void ChangeTeamRestrictions(UserRestrictions userRestrictions, int managerId)
         {
             User teamManager = usersDao.SelectByID(managerId);
@@ -93,6 +104,13 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             usersDao.UpdateTeamRestrictions(userRestrictions, managerId);
         }
 
+        /// <summary>
+        /// Changes manager for the specified user
+        /// </summary>
+        /// <param name="newManagerId">ID of new user's manager</param>
+        /// <param name="userId">ID of user that will have their manager changed</param>
+        /// <returns>User with reassigned manager</returns>
+        /// <exception cref="ValidationFailedException">When manager reassignment does not meet business requirements</exception>
         public User ChangeTeamMember(int newManagerId, int userId)
         {
             var validationInfo = userValidator.ValidataManagerReassignment(newManagerId, userId);

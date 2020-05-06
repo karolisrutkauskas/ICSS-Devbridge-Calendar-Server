@@ -61,11 +61,12 @@ namespace DevBridgeAPI.Repository.Dao
             }
         }
 
-        public void InsertNewUser(PostUser user)
+        public User InsertAndReturnNewUser(PostUser user)
         {
             using (var db = new DbContext())
             {
-                db.Connection.Insert(user);
+                var insertedUserId = (int)db.Connection.Insert(user);
+                return SelectByID(insertedUserId);
             }
         }
 
