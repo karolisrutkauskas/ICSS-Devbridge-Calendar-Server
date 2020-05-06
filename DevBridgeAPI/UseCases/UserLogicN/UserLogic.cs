@@ -31,7 +31,6 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         /// <param name="newUser">New user to be inserted. Password property must not be hashed yet</param>
         public void RegisterNewUser(PostUser newUser)
         {
-            newUser.Password = HashingUtil.HashPasswordWithSalt(newUser.Password);
             try
             {
                 usersDao.InsertNewUser(newUser);
