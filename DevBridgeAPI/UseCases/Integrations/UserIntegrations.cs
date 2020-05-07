@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web;
 
 namespace DevBridgeAPI.UseCases.Integrations
@@ -29,15 +30,18 @@ namespace DevBridgeAPI.UseCases.Integrations
 
         public void CreateInvitation(User invitedUser)
         {
-            using (var client = new EmailClient(sender: EmailCredentials.Email,
-                                                senderPassword: EmailCredentials.Password,
-                                                host: ConfigurationManager.AppSettings["appSettings--emailHost"]))
-            {
-                string emailBody = string.Format(provider: CultureInfo.CurrentCulture,
-                                                 format: _htmlString, invitedUser.FirstName, invitedUser.RegistrationToken);
-                string subject = Strings.UserInvitationSubject;
-                client.SendEmailInBackground(subject, emailBody, invitedUser.Email);
-            }
+            var client = new EmailClient(sender: EmailCredentials.Email,
+                                         senderPassword: EmailCredentials.Password,
+                                         host: ConfigurationManager.AppSettings["appSettings--emailHost"]);
+            var registrationTokenUrlEnc = WebUtility.UrlEncode(invitedUser.RegistrationToken);
+            var emailUrlEnc = WebUtility.UrlEncode(invitedUser.Email);
+            var invitationUrl = string.Format(provider: CultureInfo.GetCultureInfo("en-US"),
+                                                format: Strings.UserInvitationUrl, registrationTokenUrlEnc, emailUrlEnc);
+
+            var emailBody = string.Format(provider: CultureInfo.GetCultureInfo("en-US"),
+                                            format: _htmlString, invitedUser.FirstName, invitationUrl);
+            var subject = Strings.UserInvitationSubject;
+            client.SendEmailInBackground(subject, emailBody, invitedUser.Email);
         }
     }
 }

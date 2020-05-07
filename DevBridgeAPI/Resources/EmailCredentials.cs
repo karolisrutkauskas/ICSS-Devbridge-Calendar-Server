@@ -8,7 +8,7 @@ namespace DevBridgeAPI.Resources
 {
     public static class EmailCredentials
     {
-        public static string Email => "devbridgeapitest@gmail.com";
+        public static string Email => ConfigurationManager.AppSettings["appSettings--emailName"];
         public static string Password => ConfigurationManager.AppSettings["appSettings--emailPassword"];
     }
 }

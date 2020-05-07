@@ -77,5 +77,14 @@ namespace DevBridgeAPI.Resources {
                 return ResourceManager.GetString("UserInvitationSubject", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://www.google.com/search?q={0}&amp;email={1}.
+        /// </summary>
+        public static string UserInvitationUrl {
+            get {
+                return ResourceManager.GetString("UserInvitationUrl", resourceCulture);
+            }
+        }
     }
 }

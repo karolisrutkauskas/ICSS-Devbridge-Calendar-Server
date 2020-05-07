@@ -29,7 +29,6 @@ namespace DevBridgeAPI.Helpers.Filters
                 var singletonError = Enumerable.Repeat(Errors.GenericError(), 1);
                 response = actionExecutedContext.Request.CreateResponse(HttpStatusCode.InternalServerError, singletonError);
             }
-
             throw new HttpResponseException(response);
         }
 

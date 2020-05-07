@@ -6,9 +6,9 @@ using System.Web.Hosting;
 
 namespace DevBridgeAPI.UseCases.Integrations.EmailService
 {
-    public class EmailClient : IDisposable
+    public class EmailClient
     {
-        private readonly SmtpClient _client;
+        private readonly string _senderPassword;
         public string Sender { get; }
         public string Host { get; }
 
@@ -16,38 +16,44 @@ namespace DevBridgeAPI.UseCases.Integrations.EmailService
         {
             Sender = sender;
             Host = host;
-            _client = new SmtpClient(host)
+            _senderPassword = senderPassword;
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Disposed in lambda")]
+        public void SendEmailInBackground(string subject, string htmlString, string receiver)
+        {
+            SmtpClient client = new SmtpClient(Host)
             {
                 Port = 587,
                 EnableSsl = true,
                 UseDefaultCredentials = false,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
-                Credentials = new NetworkCredential(sender, senderPassword)
+                Credentials = new NetworkCredential(Sender, _senderPassword)
             };
-        }
-        public void SendEmailInBackground(string subject, string htmlString, string receiver)
-        {
-            using (var message = new MailMessage())
+            var message = new MailMessage
             {
-                message.From = new MailAddress(Sender);
-                message.To.Add(new MailAddress(receiver));
-                message.Subject = subject;
-                message.IsBodyHtml = true;
-                message.Body = htmlString;
+                From = new MailAddress(Sender),
+                Subject = subject,
+                IsBodyHtml = true,
+                Body = htmlString
+            };
+            message.To.Add(new MailAddress(receiver));
 
-                _client.Send(message);
-                //HostingEnvironment.QueueBackgroundWorkItem(x => _client.Send(message));
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        protected virtual void Dispose(bool cleanManagedResources)
-        {
-            _client.Dispose();
+            HostingEnvironment.QueueBackgroundWorkItem(x =>
+            {
+                try
+                {
+                    client.Send(message);
+                } catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                } finally
+                {
+                    message.Dispose();
+                    client.Dispose();
+                }
+            });
         }
     }
 }
