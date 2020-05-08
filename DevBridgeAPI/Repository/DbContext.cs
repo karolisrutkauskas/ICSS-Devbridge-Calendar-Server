@@ -11,7 +11,7 @@ namespace DevBridgeAPI.Repository
 {
     public sealed class DbContext : IDisposable
     {
-        public SqlConnection Connection { get; } = new SqlConnection(ConfigurationManager.ConnectionStrings["DevBridgeDB"].ConnectionString);
+        public SqlConnection Connection { get; } = new SqlConnection(ConfigurationManager.AppSettings["appSettings--connectionStrings--DevBridgeDB"]);
         public void Dispose()
         {
             Connection.Dispose();
