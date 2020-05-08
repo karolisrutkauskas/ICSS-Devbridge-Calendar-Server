@@ -43,6 +43,7 @@ namespace DevBridgeAPI
                                          c.Resolve<IUsersDao>())
             );
 
+            //TODO try decorator pattern for validations and/or authorizations
             container.RegisterFactory<IUserLogic>(
                 c => new UserLogic(c.Resolve<IUsersDao>(),
                                    c.Resolve<ITeamTreeNodeFactory>(),
