@@ -132,6 +132,22 @@ namespace DevBridgeAPI.Controllers
         {
             return Ok(userLogic.ChangeTeamMember(newManagerId.ManagerId.Value, userId));  
         }
+
+        /// <summary>
+        /// Will update unregistered user's credentials. Used for finishing registration
+        /// </summary>
+        /// <param name="regCredentials">Credentials supplied for validation and setting user's password</param>
+        /// <returns>Updated User model after registering</returns>
+        [Route("api/users/finishReg")]
+        [HttpPatch]
+        [ValidateRequest]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return registered user", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "User with provided email not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult FinishRegistration([FromBody] RegCredentials regCredentials)
+        {
+            return Ok(userLogic.FinishRegistration(regCredentials));
+        }
     }
 #pragma warning restore CA2000 // Dispose objects before losing scope
 }

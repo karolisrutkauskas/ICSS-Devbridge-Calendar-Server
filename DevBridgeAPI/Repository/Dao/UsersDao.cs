@@ -8,6 +8,7 @@ using Dapper.Contrib.Extensions;
 using User = DevBridgeAPI.Models.User;
 using PostUser = DevBridgeAPI.Models.Post.User;
 using DevBridgeAPI.Models.Patch;
+using System.Data.SqlClient;
 
 namespace DevBridgeAPI.Repository.Dao
 {
@@ -77,13 +78,6 @@ namespace DevBridgeAPI.Repository.Dao
                 db.Connection.Update(updatedUser);
             }
         }
-        public void UpdateUserAsync(User updatedUser)
-        {
-            using (var db = new DbContext())
-            {
-                db.Connection.UpdateAsync(updatedUser);
-            }
-        }
 
         public void UpdateGlobalRestrictions(UserRestrictions restrictions)
         {
@@ -121,6 +115,19 @@ namespace DevBridgeAPI.Repository.Dao
             {
                 return db.Connection.ExecuteScalar<bool>("SELECT dbo.UserIsDescendantOf(@Ancestor, @Descendant) as isDesc",
                                                          new { Ancestor = ancestor, Descendant = descendant });
+            }
+        }
+
+        public void UpdatePasswordClearToken(string hashedPassword, int userId)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Execute("UPDATE dbo.Users SET " +
+                                      "Password = @Password, " +
+                                      "RegistrationToken = NULL " +
+                                      "WHERE UserId = @UserId",
+                                      new { Password = hashedPassword,
+                                            UserId = userId });
             }
         }
     }

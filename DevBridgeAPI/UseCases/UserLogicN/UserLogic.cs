@@ -12,6 +12,7 @@ using DevBridgeAPI.UseCases.Integrations;
 using DevBridgeAPI.UseCases.Integrations.EmailService;
 using DevBridgeAPI.Resources;
 using System.Configuration;
+using System.Transactions;
 
 namespace DevBridgeAPI.UseCases.UserLogicN
 {
@@ -47,6 +48,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             {
                 if (ex.Message.Contains("UQ_Users_Email") && ex.Number == 2627) // 2627 - violated unique constraint
                 {
+
                     throw new UniqueFieldException(ex.Message, nameof(PostUser.Email));
                 }
                 throw;
@@ -83,7 +85,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             userToUpdate.MonthlyLimit = userRestrictions.MonthlyLimit;
             userToUpdate.YearlyLimit = userRestrictions.YearlyLimit;
 
-            usersDao.UpdateUserAsync(userToUpdate);
+            usersDao.UpdateUser(userToUpdate);
             return userToUpdate;
         }
 
@@ -134,5 +136,36 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             return userForUpdate;
         }
 
+        /// <summary>
+        /// Finalizes registration for user with provided email.
+        /// Will perform validations and test if user is not already registered,
+        /// if provided token is not expired and if user exists at all
+        /// </summary>
+        /// <param name="regCredentials">Credentials used to finish registration, also used for validation</param>
+        /// <returns>Updated user entity after successfulregistration</returns>
+        /// <exception cref="ValidationFailedException">When user registration fails described validations</exception>
+        /// <exception cref="EntityNotFoundException">When user with provided email was not found</exception>
+        public User FinishRegistration(RegCredentials regCredentials)
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var userToUpdate = usersDao.SelectByEmail(regCredentials.Email);
+                if (userToUpdate == null)
+                {
+                    throw new EntityNotFoundException($"User with email {regCredentials.Email} was not found", typeof(User));
+                }
+                var validationInfo = userValidator.ValidateFinishReg(userToUpdate, regCredentials);
+                if (!validationInfo.IsValid)
+                {
+                    throw new ValidationFailedException(validationInfo);
+                }
+
+                usersDao.UpdatePasswordClearToken(HashingUtil.HashPasswordWithSalt(regCredentials.PlainPassword), userToUpdate.UserId);
+                transaction.Complete();
+
+                userToUpdate.RegistrationToken = null;
+                return userToUpdate;
+            }
+        }
     }
 }
