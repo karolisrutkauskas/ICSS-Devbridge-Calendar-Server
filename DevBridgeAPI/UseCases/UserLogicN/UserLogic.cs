@@ -38,20 +38,26 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         /// <param name="newUser">New user to be inserted</param>
         public User RegisterNewUser(PostUser newUser)
         {
-            try
+            using (var transaction = new TransactionScope())
             {
                 newUser.RegistrationToken = HashingUtil.GenerateToken();
-                var registeredUser = usersDao.InsertAndReturnNewUser(newUser);
-                userIntegrations.CreateInvitation(newUser);
-                return registeredUser;
-            } catch (SqlException ex)
-            {
-                if (ex.Message.Contains("UQ_Users_Email") && ex.Number == 2627) // 2627 - violated unique constraint
+                var userInRespository = usersDao.SelectByEmail(newUser.Email);
+                if (userInRespository != null)
                 {
-
-                    throw new UniqueFieldException(ex.Message, nameof(PostUser.Email));
+                    if (userInRespository.RegistrationToken == null)
+                    {
+                        throw new UniqueFieldException($"User with email {newUser.Email} is already registered", nameof(PostUser.Email));
+                    }
+                    // If user exists but has not yet finished registration, renew their registration token
+                    userInRespository.RegistrationToken = newUser.RegistrationToken;
+                    usersDao.UpdateUser(userInRespository);
+                } else
+                {
+                    userInRespository = usersDao.InsertAndReturnNewUser(newUser);
                 }
-                throw;
+                userIntegrations.CreateInvitation(newUser);
+                transaction.Complete();
+                return userInRespository;
             }
         }
 

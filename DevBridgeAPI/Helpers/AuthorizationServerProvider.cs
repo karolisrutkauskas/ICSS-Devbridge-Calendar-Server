@@ -30,9 +30,10 @@ namespace DevBridgeAPI.Helpers
             //var userData = (User) userSelector.SelectOneRow(context.UserName, context.Password);
             var userData = (User)userSelector.SelectByEmail(context.UserName);
             
-            if (userData != null && HashingUtil.VerifyPassword(context.Password, userData.Password))
+            if (userData != null && userData.Password != null && HashingUtil.VerifyPassword(context.Password, userData.Password))
             {
                 //identity.AddClaim(new Claim(ClaimTypes.
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userData.UserId.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.Name, userData.Email));
                 context.Validated(identity);
             }

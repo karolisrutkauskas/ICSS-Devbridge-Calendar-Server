@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Dapper.Contrib.Extensions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace DevBridgeAPI.Models
         /// <summary>
         /// Unique identifier
         /// </summary>
+        [Key]
         public int UserId { get; set; }
         /// <summary>
         /// Person's first name

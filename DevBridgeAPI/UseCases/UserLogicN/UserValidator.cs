@@ -60,7 +60,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
                 errorMessages.Add(Errors.InvalidRegistrationToken());
             }
 
-            if(HashingUtil.IsTokenExpired(userForUpdate.RegistrationToken, hoursToExpire: 336))
+            if(userForUpdate.RegistrationToken != null && HashingUtil.IsTokenExpired(userForUpdate.RegistrationToken, hoursToExpire: 336))
             {
                 errorMessages.Add(Errors.ExpiredRegistrationToken());
             }
