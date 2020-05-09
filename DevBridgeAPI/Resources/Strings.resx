@@ -121,4 +121,12 @@
     <value>Unexpected Error</value>
     <comment>Used for runtime unchecked exceptions as response message (along with 500 status code)</comment>
   </data>
+  <data name="UserInvitationSubject" xml:space="preserve">
+    <value>You are invited to DevBridge learning platform</value>
+    <comment>Used for email subject when inviting new user</comment>
+  </data>
+  <data name="UserInvitationUrl" xml:space="preserve">
+    <value>https://www.google.com/search?q={0}&amp;email={1}</value>
+    <comment>Invitation URL template with registration token in query parameters</comment>
+  </data>
 </root>

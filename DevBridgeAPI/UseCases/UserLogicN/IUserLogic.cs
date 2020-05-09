@@ -48,5 +48,15 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         /// <returns>User with reassigned manager</returns>
         /// <exception cref="ValidationFailedException">When manager reassignment does not meet business requirements</exception>
         User ChangeTeamMember(int newManagerId, int userId);
+        /// <summary>
+        /// Finalizes registration for user with provided email.
+        /// Will perform validations and test if user is not already registered,
+        /// if provided token is not expired and if user exists at all
+        /// </summary>
+        /// <param name="regCredentials">Credentials used to finish registration, also used for validation</param>
+        /// <returns>Updated user entity after successfulregistration</returns>
+        /// <exception cref="ValidationFailedException">When user registration fails described validations</exception>
+        /// <exception cref="EntityNotFoundException">When user with provided email was not found</exception>
+        User FinishRegistration(RegCredentials regCredentials);
     }
 }

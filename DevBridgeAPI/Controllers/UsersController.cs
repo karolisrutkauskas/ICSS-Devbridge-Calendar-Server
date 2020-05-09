@@ -34,6 +34,11 @@ namespace DevBridgeAPI.Controllers
         /// <summary>
         /// Will register a new user with already assigned manager.
         /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 5: User with specified email has already completed registration<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
         /// <param name="newUser">New user to be inserted into database</param>
         /// <returns>Described at responses</returns>
         [Authorize]
@@ -67,6 +72,11 @@ namespace DevBridgeAPI.Controllers
         /// <summary>
         /// Changes restrictions for a specific user
         /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: User not found<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
         /// <param name="userRestrictions">New restrictions, if ommited in request - will be set to null</param>
         /// <param name="userId">ID of user that is undergoing restriction changes</param>
         /// <returns>An updated user with changed restrictions</returns>
@@ -84,6 +94,10 @@ namespace DevBridgeAPI.Controllers
         /// <summary>
         /// Changes restrictions for every user
         /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
         /// <param name="userRestrictions">New restrictions, if ommited in request - will be set to null</param>
         /// <returns>Nothing</returns>
         [Route("api/users/restrictions/global")]
@@ -101,6 +115,11 @@ namespace DevBridgeAPI.Controllers
         /// <summary>
         /// Changes restrictions for every subordinate of a manager with ID = <paramref name="managerId"/>
         /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: Manager not found<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
         /// <param name="userRestrictions">New restrictions, if ommited in request - will be set to null</param>
         /// <param name="managerId">ID of manager whose subordinates will have restrictions updated</param>
         /// <returns>Nothing</returns>
@@ -120,6 +139,13 @@ namespace DevBridgeAPI.Controllers
         /// <summary>
         /// User with ID = <paramref name="userId"/> will be assigned a new manager with ID = <paramref name="newManagerId"/>
         /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 1: Attempted self manager assignment<br/>
+        /// 2: User not found<br/>
+        /// 3: Manager not found<br/>
+        /// 4: Manager reassignment would cause cycles in relationships
+        /// </remarks>
         /// <param name="newManagerId">ID of a new manager</param>
         /// <param name="userId">ID of a user that will be assigned a specified manager</param>
         /// <returns>Updated User model with newly assigned manager</returns>
@@ -131,6 +157,29 @@ namespace DevBridgeAPI.Controllers
         public IHttpActionResult ChangeTeamManager([FromBody] UserManagerId newManagerId, int userId)
         {
             return Ok(userLogic.ChangeTeamMember(newManagerId.ManagerId.Value, userId));  
+        }
+
+        /// <summary>
+        /// Will update unregistered user's credentials. Used for finishing registration
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: User with provided email not found<br/>
+        /// 9: Invalid RegistrationToken (could be replaced by consecutive invitations)<br/>
+        /// 10: RegistrationToken is expired<br/>
+        /// 11: User is already registered
+        /// </remarks>
+        /// <param name="regCredentials">Credentials supplied for validation and setting user's password</param>
+        /// <returns>Updated User model after registering</returns>
+        [Route("api/users/finishReg")]
+        [HttpPatch]
+        [ValidateRequest]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return registered user", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "User with provided email not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult FinishRegistration([FromBody] RegCredentials regCredentials)
+        {
+            return Ok(userLogic.FinishRegistration(regCredentials));
         }
     }
 #pragma warning restore CA2000 // Dispose objects before losing scope

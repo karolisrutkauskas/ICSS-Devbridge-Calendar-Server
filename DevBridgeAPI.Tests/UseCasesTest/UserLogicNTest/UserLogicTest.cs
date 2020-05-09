@@ -154,7 +154,7 @@ namespace DevBridgeAPI.Tests.UseCasesTest.UserLogicNTest
             var daoMock = new Mock<IUsersDao>(MockBehavior.Strict);
             var newUserRestrictions = new UserRestrictions { ConsecLimit = consecLimit, MonthlyLimit = monthlyLimit, YearlyLimit = yearlyLimit };
 
-            daoMock.Setup(x => x.UpdateUserAsync(expectedUser))
+            daoMock.Setup(x => x.UpdateUser(expectedUser))
                 .Verifiable("UpdateUserAsync method was not called with expected arguments");
             daoMock.Setup(x => x.SelectByID(It.IsAny<int>()))
                 .Returns<int>(id => GetUserById(id));
@@ -162,7 +162,7 @@ namespace DevBridgeAPI.Tests.UseCasesTest.UserLogicNTest
             var actual = sut.ChangeRestrictions(newUserRestrictions, userId);
 
             Assert.IsTrue(UsersAreEqual(expectedUser, actual));
-            daoMock.Verify(x => x.UpdateUserAsync(expectedUser), Times.Once);
+            daoMock.Verify(x => x.UpdateUser(expectedUser), Times.Once);
         }
         private bool TreesAreEqual(TeamTreeNode tree1, TeamTreeNode tree2)
         {

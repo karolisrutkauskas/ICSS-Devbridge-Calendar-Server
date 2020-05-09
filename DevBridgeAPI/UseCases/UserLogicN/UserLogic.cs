@@ -8,6 +8,11 @@ using DevBridgeAPI.Models.Patch;
 using System;
 using User = DevBridgeAPI.Models.User;
 using PostUser = DevBridgeAPI.Models.Post.User;
+using DevBridgeAPI.UseCases.Integrations;
+using DevBridgeAPI.UseCases.Integrations.EmailService;
+using DevBridgeAPI.Resources;
+using System.Configuration;
+using System.Transactions;
 
 namespace DevBridgeAPI.UseCases.UserLogicN
 {
@@ -16,32 +21,43 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         private readonly IUsersDao usersDao;
         private readonly ITeamTreeNodeFactory tmTreeFactory;
         private readonly IUserValidator userValidator;
+        private readonly IUserIntegrations userIntegrations;
 
-        public UserLogic(IUsersDao usersDao, ITeamTreeNodeFactory tmTreeFactory, IUserValidator userValidator)
+        public UserLogic(IUsersDao usersDao, ITeamTreeNodeFactory tmTreeFactory, IUserValidator userValidator, IUserIntegrations userIntegrations)
         {
             this.usersDao = usersDao;
             this.tmTreeFactory = tmTreeFactory;
             this.userValidator = userValidator;
+            this.userIntegrations = userIntegrations;
         }
 
         /// <summary>
-        /// Inserts a new user entity. Assumes that User's password is plain as it will be
-        /// hashed in this method before insertion to database.
+        /// Inserts a new user entity to database. User entity will
+        /// be marked as unregistered by assigning RegistrationToken
         /// </summary>
-        /// <param name="newUser">New user to be inserted. Password property must not be hashed yet</param>
+        /// <param name="newUser">New user to be inserted</param>
         public User RegisterNewUser(PostUser newUser)
         {
-            newUser.Password = HashingUtil.HashPasswordWithSalt(newUser.Password);
-            try
+            using (var transaction = new TransactionScope())
             {
-                return usersDao.InsertAndReturnNewUser(newUser);
-            } catch (SqlException ex)
-            {
-                if (ex.Message.Contains("UQ_Users_Email") && ex.Number == 2627) // 2627 - violated unique constraint
+                newUser.RegistrationToken = HashingUtil.GenerateToken();
+                var userInRespository = usersDao.SelectByEmail(newUser.Email);
+                if (userInRespository != null)
                 {
-                    throw new UniqueFieldException(ex.Message, nameof(PostUser.Email));
+                    if (userInRespository.RegistrationToken == null)
+                    {
+                        throw new UniqueFieldException($"User with email {newUser.Email} is already registered", nameof(PostUser.Email));
+                    }
+                    // If user exists but has not yet finished registration, renew their registration token
+                    userInRespository.RegistrationToken = newUser.RegistrationToken;
+                    usersDao.UpdateUser(userInRespository);
+                } else
+                {
+                    userInRespository = usersDao.InsertAndReturnNewUser(newUser);
                 }
-                throw;
+                userIntegrations.CreateInvitation(newUser);
+                transaction.Complete();
+                return userInRespository;
             }
         }
 
@@ -75,7 +91,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             userToUpdate.MonthlyLimit = userRestrictions.MonthlyLimit;
             userToUpdate.YearlyLimit = userRestrictions.YearlyLimit;
 
-            usersDao.UpdateUserAsync(userToUpdate);
+            usersDao.UpdateUser(userToUpdate);
             return userToUpdate;
         }
 
@@ -126,5 +142,36 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             return userForUpdate;
         }
 
+        /// <summary>
+        /// Finalizes registration for user with provided email.
+        /// Will perform validations and test if user is not already registered,
+        /// if provided token is not expired and if user exists at all
+        /// </summary>
+        /// <param name="regCredentials">Credentials used to finish registration, also used for validation</param>
+        /// <returns>Updated user entity after successfulregistration</returns>
+        /// <exception cref="ValidationFailedException">When user registration fails described validations</exception>
+        /// <exception cref="EntityNotFoundException">When user with provided email was not found</exception>
+        public User FinishRegistration(RegCredentials regCredentials)
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var userToUpdate = usersDao.SelectByEmail(regCredentials.Email);
+                if (userToUpdate == null)
+                {
+                    throw new EntityNotFoundException($"User with email {regCredentials.Email} was not found", typeof(User));
+                }
+                var validationInfo = userValidator.ValidateFinishReg(userToUpdate, regCredentials);
+                if (!validationInfo.IsValid)
+                {
+                    throw new ValidationFailedException(validationInfo);
+                }
+
+                usersDao.UpdatePasswordClearToken(HashingUtil.HashPasswordWithSalt(regCredentials.PlainPassword), userToUpdate.UserId);
+                transaction.Complete();
+
+                userToUpdate.RegistrationToken = null;
+                return userToUpdate;
+            }
+        }
     }
 }

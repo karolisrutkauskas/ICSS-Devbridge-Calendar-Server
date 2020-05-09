@@ -1,6 +1,9 @@
+using DevBridgeAPI.Models;
 using DevBridgeAPI.Models.Misc;
+using DevBridgeAPI.Models.Patch;
 using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.Resources;
+using DevBridgeAPI.UseCases.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +41,28 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             if (IsAncestorOf(ancestor: userId, descendant: newManagerId))
             {
                 errorMessages.Add(Errors.UserRelationshipCycle());
+            }
+
+            return new ValidationInfo(errorMessages);
+        }
+
+        public ValidationInfo ValidateFinishReg(User userForUpdate, RegCredentials regCredentials)
+        {
+            var errorMessages = new List<ErrorMessage>();
+
+            if (userForUpdate.RegistrationToken == null)
+            {
+                errorMessages.Add(Errors.UserAlreadyRegistered());
+            }
+
+            if (userForUpdate.RegistrationToken != regCredentials.RegistrationToken)
+            {
+                errorMessages.Add(Errors.InvalidRegistrationToken());
+            }
+
+            if(userForUpdate.RegistrationToken != null && HashingUtil.IsTokenExpired(userForUpdate.RegistrationToken, hoursToExpire: 336))
+            {
+                errorMessages.Add(Errors.ExpiredRegistrationToken());
             }
 
             return new ValidationInfo(errorMessages);

@@ -1,6 +1,7 @@
 using DevBridgeAPI.Controllers;
 using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.UseCases;
+using DevBridgeAPI.UseCases.Integrations;
 using DevBridgeAPI.UseCases.UserLogicN;
 using System.Web.Http;
 using Unity;
@@ -42,10 +43,12 @@ namespace DevBridgeAPI
                                          c.Resolve<IUsersDao>())
             );
 
+            //TODO try decorator pattern for validations and/or authorizations
             container.RegisterFactory<IUserLogic>(
                 c => new UserLogic(c.Resolve<IUsersDao>(),
                                    c.Resolve<ITeamTreeNodeFactory>(),
-                                   c.Resolve<IUserValidator>())
+                                   c.Resolve<IUserValidator>(),
+                                   c.Resolve<IUserIntegrations>())
             );
             container.RegisterFactory<IGoalsLogic>(
                 c => new GoalsLogic(c.Resolve<IGoalsDao>(),
@@ -67,6 +70,8 @@ namespace DevBridgeAPI
             container.RegisterFactory<IUserValidator>(
                 c => new UserValidator(c.Resolve<IUsersDao>())
             );
+
+            container.RegisterFactory<IUserIntegrations>(c => new UserIntegrations());
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }
