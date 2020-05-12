@@ -14,6 +14,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
     {
         void RegisterNewUser(PostUser newUser);
         TeamTreeNode GetTeamTree(int rootUserId);
+        TeamTreeNode GetTeamTree(string rootEmail);
         User ChangeRestrictions(UserRestrictions userRestrictions, int userId);
         void ChangeGlobalRestrictions(UserRestrictions userRestrictions);
         void ChangeTeamRestrictions(UserRestrictions userRestrictions, int managerId);

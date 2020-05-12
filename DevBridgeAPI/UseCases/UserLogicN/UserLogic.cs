@@ -56,6 +56,12 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             return tmTreeFactory.ConstructFromRoot(user);
         }
 
+        public TeamTreeNode GetTeamTree(string rootEmail)
+        {
+            var user = usersDao.SelectByEmail(rootEmail);
+            return tmTreeFactory.ConstructFromRoot(user);
+        }
+
         /// <summary>
         /// Calls data access to update user's restrictions
         /// </summary>
