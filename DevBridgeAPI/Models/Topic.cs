@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper.Contrib.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,6 +8,7 @@ namespace DevBridgeAPI.Models
 {
     public class Topic : IModel
     {
+        [Key]
         public int TopicId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

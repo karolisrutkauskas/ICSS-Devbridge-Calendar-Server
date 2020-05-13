@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Dapper.Contrib.Extensions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace DevBridgeAPI.Models
         /// <summary>
         /// Unique identifier
         /// </summary>
+        [Key]
         public int UserId { get; set; }
         /// <summary>
         /// Person's first name
@@ -53,5 +55,10 @@ namespace DevBridgeAPI.Models
         /// Constraint on user that limits how many assignments they can take per year
         /// </summary>
         public int? YearlyLimit { get; set; }
+        /// <summary>
+        /// A generated token to be used with new user invitation URL
+        /// </summary>
+        [IgnoreDataMember]
+        public string RegistrationToken { get; set; }
     }
 }

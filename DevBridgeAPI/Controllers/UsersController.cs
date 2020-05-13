@@ -16,6 +16,7 @@ using DevBridgeAPI.Helpers;
 using DevBridgeAPI.Models.Patch;
 using DevBridgeAPI.Models.Misc;
 using Swashbuckle.Swagger.Annotations;
+using System.Collections.Generic;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -30,37 +31,26 @@ namespace DevBridgeAPI.Controllers
             this.userLogic = userLogic;
         }
 
-        //TODO: add ModelStateDictionary as swagger return type
         /// <summary>
         /// Will register a new user with already assigned manager.
         /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 5: User with specified email has already completed registration<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
         /// <param name="newUser">New user to be inserted into database</param>
         /// <returns>Described at responses</returns>
         [Authorize]
         [Route("api/users")]
         [HttpPost]
-        [SwaggerResponse(HttpStatusCode.NoContent, Description = "Successful request, no body content in response")]
-        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "User was not posted, request failed validations", Type = typeof(string))]
-        [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return posted user", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        [SwaggerResponse(HttpStatusCode.Conflict, Description = "Provided email already exists", Type = typeof(ErrorMessage))]
         [ValidateRequest]
         public IHttpActionResult RegisterUser([FromBody] User newUser)
         {
-            try
-            {
-                userLogic.RegisterNewUser(newUser);
-                return Ok();
-            }
-            catch(UniqueFieldException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            return Ok(userLogic.RegisterNewUser(newUser));
         }
 
         /// <summary>
@@ -73,19 +63,10 @@ namespace DevBridgeAPI.Controllers
         [Route("api/users/teamTree/{rootUserId}")]
         [HttpGet]
         [ResponseType(typeof(TeamTreeNode))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return team tree", Type = typeof(TeamTreeNode))]
         public IHttpActionResult GetTeamTree(int rootUserId)
         {
-            try
-            {
-                return Ok(userLogic.GetTeamTree(rootUserId));
-            }
-            catch(SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            return Ok(userLogic.GetTeamTree(rootUserId));
         }
 
         [Authorize]
@@ -98,97 +79,117 @@ namespace DevBridgeAPI.Controllers
             return Ok(userLogic.GetTeamTree(identity.Name));
         }
 
+        /// <summary>
+        /// Changes restrictions for a specific user
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: User not found<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
+        /// <param name="userRestrictions">New restrictions, if ommited in request - will be set to null</param>
+        /// <param name="userId">ID of user that is undergoing restriction changes</param>
+        /// <returns>An updated user with changed restrictions</returns>
         [Route("api/users/restrictions/{userId}")]
         [HttpPatch]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return user with changed restrictions", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "User with provided ID not found", Type = typeof(ErrorMessage))]
         [ValidateRequest]
         public IHttpActionResult ChangeRestrictions([FromBody] UserRestrictions userRestrictions, int userId)
         {
-            try
-            {
-                return Ok(userLogic.ChangeRestrictions(userRestrictions, userId));
-            }
-            catch (EntityNotFoundException ex)
-            {
-                using (var response = Request.CreateResponse((HttpStatusCode.NotFound, ex.Message)))
-                    return ResponseMessage(response);
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            return Ok(userLogic.ChangeRestrictions(userRestrictions, userId));
         }
 
+        /// <summary>
+        /// Changes restrictions for every user
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
+        /// <param name="userRestrictions">New restrictions, if ommited in request - will be set to null</param>
+        /// <returns>Nothing</returns>
         [Route("api/users/restrictions/global")]
         [HttpPatch]
+        [SwaggerResponse(HttpStatusCode.NoContent, Description = "Successful request")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        [SwaggerResponseRemoveDefaults]
         [ValidateRequest]
         public IHttpActionResult ChangeGlobalRestrictions([FromBody] UserRestrictions userRestrictions)
         {
-            try
-            {
-                userLogic.ChangeGlobalRestrictions(userRestrictions);
-                return Ok();
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            userLogic.ChangeGlobalRestrictions(userRestrictions);
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
         }
 
+        /// <summary>
+        /// Changes restrictions for every subordinate of a manager with ID = <paramref name="managerId"/>
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: Manager not found<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
+        /// <param name="userRestrictions">New restrictions, if ommited in request - will be set to null</param>
+        /// <param name="managerId">ID of manager whose subordinates will have restrictions updated</param>
+        /// <returns>Nothing</returns>
         [Route("api/users/restrictions/team/{managerId}")]
         [HttpPatch]
+        [SwaggerResponse(HttpStatusCode.NoContent, Description = "Successful request")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "Manager with provided ID not found", Type = typeof(ErrorMessage))]
+        [SwaggerResponseRemoveDefaults]
         [ValidateRequest]
         public IHttpActionResult ChangeTeamRestrictions([FromBody] UserRestrictions userRestrictions, int managerId)
         {
-            try
-            {
-                userLogic.ChangeTeamRestrictions(userRestrictions, managerId);
-                return Ok();
-            }
-            catch (EntityNotFoundException ex)
-            {
-                return ResponseMessage(Request.CreateResponse(HttpStatusCode.NotFound, ex.Message));
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            userLogic.ChangeTeamRestrictions(userRestrictions, managerId);
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
         }
 
+        /// <summary>
+        /// User with ID = <paramref name="userId"/> will be assigned a new manager with ID = <paramref name="newManagerId"/>
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 1: Attempted self manager assignment<br/>
+        /// 2: User not found<br/>
+        /// 3: Manager not found<br/>
+        /// 4: Manager reassignment would cause cycles in relationships
+        /// </remarks>
+        /// <param name="newManagerId">ID of a new manager</param>
+        /// <param name="userId">ID of a user that will be assigned a specified manager</param>
+        /// <returns>Updated User model with newly assigned manager</returns>
         [Route("api/users/manager/{userId}")]
         [HttpPatch]
         [ValidateRequest]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return user with changed manager", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
         public IHttpActionResult ChangeTeamManager([FromBody] UserManagerId newManagerId, int userId)
         {
-            try
-            {
-                return Ok(userLogic.ChangeTeamMember(newManagerId.ManagerId.Value, userId));
-            }
-            catch (ValidationFailedException ex)
-            {
-                int i = 1;
-                ModelState.Clear();
-                foreach (var errorMessage in ex.ValidationInfo.ErrorMessages)
-                {
-                    ModelState.AddModelError($"error {i++}", errorMessage);
-                }
-                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, ex.ValidationInfo));
-            }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            return Ok(userLogic.ChangeTeamMember(newManagerId.ManagerId.Value, userId));  
+        }
+
+        /// <summary>
+        /// Will update unregistered user's credentials. Used for finishing registration
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: User with provided email not found<br/>
+        /// 9: Invalid RegistrationToken (could be replaced by consecutive invitations)<br/>
+        /// 10: RegistrationToken is expired<br/>
+        /// 11: User is already registered
+        /// </remarks>
+        /// <param name="regCredentials">Credentials supplied for validation and setting user's password</param>
+        /// <returns>Updated User model after registering</returns>
+        [Route("api/users/finishReg")]
+        [HttpPatch]
+        [ValidateRequest]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return registered user", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "User with provided email not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult FinishRegistration([FromBody] RegCredentials regCredentials)
+        {
+            return Ok(userLogic.FinishRegistration(regCredentials));
         }
     }
 #pragma warning restore CA2000 // Dispose objects before losing scope

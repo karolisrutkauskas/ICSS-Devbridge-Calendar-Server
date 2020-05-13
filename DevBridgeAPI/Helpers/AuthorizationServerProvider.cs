@@ -2,6 +2,7 @@
 
 using DevBridgeAPI.Models;
 using DevBridgeAPI.Repository.Dao;
+using DevBridgeAPI.UseCases.Util;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
@@ -9,30 +10,30 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
 namespace DevBridgeAPI.Helpers
 {
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             context.Validated();
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
 
             var userSelector = new UsersDao();
 
-            var userData = (User) userSelector.SelectOneRow(context.UserName, context.Password);
-            if (userData != null)
+            //var userData = (User) userSelector.SelectOneRow(context.UserName, context.Password);
+            var userData = (User)userSelector.SelectByEmail(context.UserName);
+            
+            if (userData != null && userData.Password != null && HashingUtil.VerifyPassword(context.Password, userData.Password))
             {
-                identity.AddClaim(new Claim(ClaimTypes.Role, userData.Role));
+                //identity.AddClaim(new Claim(ClaimTypes.
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userData.UserId.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.Name, userData.Email));
                 context.Validated(identity);
             }
@@ -44,3 +45,4 @@ namespace DevBridgeAPI.Helpers
         }
     }
 }
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously

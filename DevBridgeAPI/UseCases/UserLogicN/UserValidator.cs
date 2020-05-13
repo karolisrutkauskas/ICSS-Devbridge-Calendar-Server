@@ -1,5 +1,9 @@
-﻿using DevBridgeAPI.Models.Misc;
+using DevBridgeAPI.Models;
+using DevBridgeAPI.Models.Misc;
+using DevBridgeAPI.Models.Patch;
 using DevBridgeAPI.Repository.Dao;
+using DevBridgeAPI.Resources;
+using DevBridgeAPI.UseCases.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,26 +21,48 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         }
         public ValidationInfo ValidataManagerReassignment(int newManagerId, int userId)
         {
-            var errorMessages = new List<string>();
+            var errorMessages = new List<ErrorMessage>();
 
             if (newManagerId == userId)
             {
-                errorMessages.Add("User can't be their own manager");
+                errorMessages.Add(Errors.UserIsTheirOwnManager());
             }
 
             if (_usersDao.SelectByID(userId) == null)
             {
-                errorMessages.Add($"User with ID {userId} is not found");
+                errorMessages.Add(Errors.UserNotFound(userId));
             }
 
             if (_usersDao.SelectByID(newManagerId) == null)
             {
-                errorMessages.Add($"Manager with ID {newManagerId} is not found");
+                errorMessages.Add(Errors.ManagerNotFound(newManagerId));
             }
 
             if (IsAncestorOf(ancestor: userId, descendant: newManagerId))
             {
-                errorMessages.Add("Cannot reassign user to their descendant subordinate. Cycles in relationships not allowed");
+                errorMessages.Add(Errors.UserRelationshipCycle());
+            }
+
+            return new ValidationInfo(errorMessages);
+        }
+
+        public ValidationInfo ValidateFinishReg(User userForUpdate, RegCredentials regCredentials)
+        {
+            var errorMessages = new List<ErrorMessage>();
+
+            if (userForUpdate.RegistrationToken == null)
+            {
+                errorMessages.Add(Errors.UserAlreadyRegistered());
+            }
+
+            if (userForUpdate.RegistrationToken != regCredentials.RegistrationToken)
+            {
+                errorMessages.Add(Errors.InvalidRegistrationToken());
+            }
+
+            if(userForUpdate.RegistrationToken != null && HashingUtil.IsTokenExpired(userForUpdate.RegistrationToken, hoursToExpire: 336))
+            {
+                errorMessages.Add(Errors.ExpiredRegistrationToken());
             }
 
             return new ValidationInfo(errorMessages);

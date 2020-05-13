@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevBridgeAPI.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -15,14 +16,16 @@ namespace DevBridgeAPI.Helpers
         {
             if (actionContext.ActionArguments.ContainsValue(null))
             {
-                actionContext.Response = actionContext.Request.CreateErrorResponse(
-                HttpStatusCode.BadRequest, "Request body cannot be empty");
+                actionContext.Response = actionContext.Request.CreateResponse(
+                    HttpStatusCode.BadRequest, Errors.EmptyRequestBody());
             }
 
             if (!actionContext.ModelState.IsValid)
             {
-                actionContext.Response = actionContext.Request.CreateErrorResponse(
-                HttpStatusCode.BadRequest, actionContext.ModelState);
+                var errors = actionContext.ModelState.GetErrorsAndExceptions()
+                    .Select(x => Errors.InvalidModelState(x));
+                actionContext.Response = actionContext.Request.CreateResponse(
+                    HttpStatusCode.BadRequest, errors);
             }
         }
     }

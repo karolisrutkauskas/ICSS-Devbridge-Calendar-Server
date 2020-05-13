@@ -1,6 +1,7 @@
 using DevBridgeAPI.Controllers;
 using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.UseCases;
+using DevBridgeAPI.UseCases.Integrations;
 using DevBridgeAPI.UseCases.UserLogicN;
 using System.Web.Http;
 using Unity;
@@ -30,7 +31,7 @@ namespace DevBridgeAPI
             );
 
             container.RegisterFactory<TopicsController>(
-                c => new TopicsController(c.Resolve<TopicsDao>())
+                c => new TopicsController(c.Resolve<ITopicsDao>())
             );
 
             container.RegisterFactory<UsersController>(
@@ -42,16 +43,16 @@ namespace DevBridgeAPI
                                          c.Resolve<IUsersDao>())
             );
 
+            //TODO try decorator pattern for validations and/or authorizations
             container.RegisterFactory<IUserLogic>(
                 c => new UserLogic(c.Resolve<IUsersDao>(),
                                    c.Resolve<ITeamTreeNodeFactory>(),
-                                   c.Resolve<IUserValidator>())
+                                   c.Resolve<IUserValidator>(),
+                                   c.Resolve<IUserIntegrations>())
             );
-
             container.RegisterFactory<IGoalsLogic>(
-                c => new GoalsLogic(
-                    c.Resolve<IGoalsDao>(),
-                    c.Resolve<IUsersDao>())
+                c => new GoalsLogic(c.Resolve<IGoalsDao>(),
+                                    c.Resolve<IUsersDao>())
                 );
 
             container.RegisterFactory<IGoalsDao>(c => new GoalsDao());
@@ -60,6 +61,8 @@ namespace DevBridgeAPI
 
             container.RegisterFactory<IAssignmentsDao>(c => new AssignmentsDao());
 
+            container.RegisterFactory<ITopicsDao>(c => new TopicsDao());
+
             container.RegisterFactory<ITeamTreeNodeFactory>(
                 c => new TeamTreeNodeFactory(c.Resolve<IUsersDao>())
             );
@@ -67,6 +70,8 @@ namespace DevBridgeAPI
             container.RegisterFactory<IUserValidator>(
                 c => new UserValidator(c.Resolve<IUsersDao>())
             );
+
+            container.RegisterFactory<IUserIntegrations>(c => new UserIntegrations());
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }

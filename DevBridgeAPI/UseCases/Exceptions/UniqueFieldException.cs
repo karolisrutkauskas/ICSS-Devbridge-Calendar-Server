@@ -1,4 +1,4 @@
-﻿using DevBridgeAPI.Models.Misc;
+using DevBridgeAPI.Models.Misc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +8,16 @@ using System.Web;
 namespace DevBridgeAPI.UseCases.Exceptions
 {
     [Serializable]
-    public class ValidationFailedException : Exception
+    public class UniqueFieldException : Exception
     {
-        public ValidationInfo ValidationInfo { get; }
-        public ValidationFailedException(string message) : base(message) { }
-        public ValidationFailedException(string message, Exception innerException) : base(message, innerException) { }
-        protected ValidationFailedException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(serializationInfo, streamingContext) { }
-        public ValidationFailedException(ValidationInfo validationInfo) : this(string.Join("; ", validationInfo.ErrorMessages))
+        public string FieldName { get; }
+        public UniqueFieldException(string message, string fieldName) : this(message)
         {
-            ValidationInfo = validationInfo;
+            FieldName = fieldName;
         }
-        public ValidationFailedException() : base() { }
+        public UniqueFieldException(string message) : base(message) { }
+        public UniqueFieldException(string message, Exception innerException) : base(message, innerException) { }
+        protected UniqueFieldException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(serializationInfo, streamingContext) { }
+        public UniqueFieldException() : base() { }
     }
 }

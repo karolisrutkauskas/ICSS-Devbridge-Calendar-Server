@@ -34,11 +34,6 @@ namespace DevBridgeAPI.Models.Post
         /// </summary>
         public string Role { get; set; }
         /// <summary>
-        /// Person's password
-        /// </summary>
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Password must be provided")]
-        public string Password { get; set; }
-        /// <summary>
         /// Unique identifier of this user's manager. If user has no manager, this field is null.
         /// </summary>
         [Required(ErrorMessage = "Manager ID must be provided")]
@@ -55,5 +50,10 @@ namespace DevBridgeAPI.Models.Post
         /// Constraint on user that limits how many assignments they can take per year
         /// </summary>
         public int? YearlyLimit { get; set; }
+        /// <summary>
+        /// A generated token to be used with new user invitation URL
+        /// </summary>
+        [IgnoreDataMember]
+        public string RegistrationToken { get; set; }
     }
 }

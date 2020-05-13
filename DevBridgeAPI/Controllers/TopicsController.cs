@@ -8,18 +8,17 @@ namespace DevBridgeAPI.Controllers
 {
     public class TopicsController : ApiController
     {
-        private readonly IModelSelector selector;
+        private readonly ITopicsDao topicsDao;
 
-        public TopicsController(IModelSelector selector)
+        public TopicsController(ITopicsDao topicsDao)
         {
-            this.selector = selector;
+            this.topicsDao = topicsDao;
         }
 
         [Authorize]
         public IHttpActionResult Get()
         {
-
-            return Ok(selector.SelectAllRows().Cast<Topic>());
+            return Ok(topicsDao.SelectAllRows().Cast<Topic>());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper.Contrib.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,6 +8,7 @@ namespace DevBridgeAPI.Models
 {
     public class Goal : IModel
     {
+        [Key]
         public int GoalId { get; set; }
         public int? UserId { get; set; }
         public int? TeamManagerId { get; set; }

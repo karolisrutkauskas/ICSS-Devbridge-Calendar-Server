@@ -1,4 +1,5 @@
-﻿using DevBridgeAPI.Areas.HelpPage.ModelDescriptions;
+﻿using Dapper.Contrib.Extensions;
+using DevBridgeAPI.Areas.HelpPage.ModelDescriptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,12 @@ namespace DevBridgeAPI.Models
     /// Entity that shows a relationship between user topic that was assigned to them.
     /// It is also known as 'Learning Day' that may be represented at user's calendar.
     /// </summary>
-    [ModelName("Assignment")]
     public class Assignment : IModel
     {
         /// <summary>
         /// Unique identifier
         /// </summary>
+        [Key]
         public int AsgnId { get; set; }
 
         /// <summary>

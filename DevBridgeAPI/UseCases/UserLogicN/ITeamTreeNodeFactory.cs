@@ -5,6 +5,6 @@ namespace DevBridgeAPI.UseCases.UserLogicN
 {
     public interface ITeamTreeNodeFactory
     {
-        TeamTreeNode ConstructFromRoot(Models.User rootUser);
+        TeamTreeNode ConstructFromRoot(User rootUser);
     }
 }
