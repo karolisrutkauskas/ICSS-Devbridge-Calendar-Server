@@ -145,6 +145,8 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             var userForUpdate = usersDao.SelectByID(userId);
             userForUpdate.ManagerId = newManagerId;
 
+            usersDao.UpdateUser(userForUpdate);
+
             return userForUpdate;
         }
 
