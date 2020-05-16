@@ -31,7 +31,7 @@ namespace DevBridgeAPI
             );
 
             container.RegisterFactory<TopicsController>(
-                c => new TopicsController(c.Resolve<ITopicsDao>())
+                c => new TopicsController(c.Resolve<ITopicLogic>())
             );
 
             container.RegisterFactory<UsersController>(
@@ -53,6 +53,11 @@ namespace DevBridgeAPI
             container.RegisterFactory<IGoalsLogic>(
                 c => new GoalsLogic(c.Resolve<IGoalsDao>(),
                                     c.Resolve<IUsersDao>())
+                );
+
+            container.RegisterFactory<ITopicLogic>(
+                c => new TopicLogic(c.Resolve<IUsersDao>(),
+                                    c.Resolve<ITopicsDao>())
                 );
 
             container.RegisterFactory<IGoalsDao>(c => new GoalsDao());

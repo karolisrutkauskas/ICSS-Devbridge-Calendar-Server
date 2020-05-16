@@ -10,5 +10,6 @@ namespace DevBridgeAPI.Repository.Dao
     public interface ITopicsDao
     {
         IEnumerable<Topic> SelectAllRows();
+        IEnumerable<Topic> SelectLearnt(int userId);
     }
 }
