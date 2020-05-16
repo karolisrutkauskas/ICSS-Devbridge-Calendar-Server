@@ -73,6 +73,7 @@
     <Build Include="dbo\Tables\AssignmentStates.sql" />
     <None Include="dbo\Scripts\TestData\TestData.sql" />
     <Build Include="dbo\Functions\UserIsDescendantOf.sql" />
+    <Build Include="dbo\Tables\LearntTopics.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DevBridgeDB.refactorlog" />
@@ -82,6 +83,7 @@
     <PostDeploy Include="dbo\Scripts\PostDeployment.sql" />
     <None Include="DevBridgeDB-Deploy.publish.xml" />
     <None Include="DeployCompare.scmp" />
+    <None Include="dbo\Scripts\TestData\dbo.LearntTopics.data.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DevBridgeDB.publish.xml" />
