@@ -361,6 +361,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Models\Complex\LearntTopicsPerUser.cs" />
+    <Compile Include="Models\Complex\PlannedTopicsPerUser.cs" />
     <Compile Include="Models\Patch\RegCredentials.cs" />
     <Compile Include="Controllers\TopicsController.cs" />
     <Compile Include="Controllers\GoalsController.cs" />

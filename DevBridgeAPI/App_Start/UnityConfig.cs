@@ -57,7 +57,8 @@ namespace DevBridgeAPI
 
             container.RegisterFactory<ITopicLogic>(
                 c => new TopicLogic(c.Resolve<IUsersDao>(),
-                                    c.Resolve<ITopicsDao>())
+                                    c.Resolve<ITopicsDao>(),
+                                    c.Resolve<IAssignmentsDao>())
                 );
 
             container.RegisterFactory<IGoalsDao>(c => new GoalsDao());

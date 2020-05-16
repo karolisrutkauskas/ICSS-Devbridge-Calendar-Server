@@ -18,6 +18,16 @@ namespace DevBridgeAPI.Repository.Dao
             }
         }
 
+        public Topic SelectById(int topicId)
+        {
+            string sql = "SELECT * FROM Topics " +
+                         "WHERE TopicId = @TopicId";
+            using (var db = new DbContext())
+            {
+                return db.Connection.Query<Topic>(sql, new { TopicId = topicId } ).FirstOrDefault();
+            }
+        }
+
         public IEnumerable<Topic> SelectLearnt(int userId)
         {
             string sql = "SELECT * FROM Topics t " +
