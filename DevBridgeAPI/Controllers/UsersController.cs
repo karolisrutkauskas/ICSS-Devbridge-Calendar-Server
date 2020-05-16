@@ -69,6 +69,16 @@ namespace DevBridgeAPI.Controllers
             return Ok(userLogic.GetTeamTree(rootUserId));
         }
 
+        [Authorize]
+        [Route("api/users/teamTree")]
+        [HttpGet]
+        [ResponseType(typeof(TeamTreeNode))]
+        public IHttpActionResult GetTeamTree()
+        {
+            var identity = User.Identity;
+            return Ok(userLogic.GetTeamTree(identity.Name));
+        }
+
         /// <summary>
         /// Changes restrictions for a specific user
         /// </summary>

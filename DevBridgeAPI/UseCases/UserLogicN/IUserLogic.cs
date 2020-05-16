@@ -20,6 +20,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         /// <param name="rootUserId">Id of root user</param>
         /// <returns>Constructed user team hierachy tree</returns>
         TeamTreeNode GetTeamTree(int rootUserId);
+        TeamTreeNode GetTeamTree(string rootEmail);
         /// <summary>
         /// Calls data access to update user's restrictions
         /// </summary>
