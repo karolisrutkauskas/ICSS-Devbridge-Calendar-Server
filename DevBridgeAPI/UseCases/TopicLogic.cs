@@ -67,5 +67,41 @@ namespace DevBridgeAPI.UseCases
             }
             return plannedTopics;
         }
+        public IEnumerable<User> GetUsersWithPastTopicAssignment(int topicId, int managerId)
+        {
+            if (topicsDao.SelectById(topicId) == null)
+            {
+                throw new EntityNotFoundException($"Topic with id {topicId} not found", typeof(Topic));
+            }
+            return usersDao.SelectByPastTopicAssignment(topicId, managerId);
+        }
+
+        public IEnumerable<TeamStatsPerTopic> GetTeamsWithPastTopicAssignment(int topicId, int managerId)
+        {
+            var users = GetUsersWithPastTopicAssignment(topicId, managerId);
+            var teams = new Dictionary<int?, TeamStatsPerTopic>();
+
+            foreach (var u in users)
+            {
+                if (u.ManagerId != null)
+                {
+                    if (teams.ContainsKey(u.ManagerId.Value))
+                    {
+                        teams[u.ManagerId].MemberCount++;
+                    }
+                    else
+                    {
+                        teams.Add(u.ManagerId, new TeamStatsPerTopic()
+                        {
+                            MemberCount = 1,
+                            TeamManager = usersDao.SelectByID(u.ManagerId.Value),
+                        });
+                    }
+                }
+            }
+            return teams.Values;
+        }
+
+
     }
 }

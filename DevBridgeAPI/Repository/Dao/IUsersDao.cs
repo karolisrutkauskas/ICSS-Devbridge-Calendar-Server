@@ -21,5 +21,6 @@ namespace DevBridgeAPI.Repository.Dao
         void UpdateTeamRestrictions(UserRestrictions restrictions, int managerId);
         bool IsAncestorOf(int ancestor, int descendant);
         void UpdatePasswordClearToken(string hashedPassword, int userId);
+        IEnumerable<User> SelectByPastTopicAssignment(int topicId, int ancestorId);
     }
 }
