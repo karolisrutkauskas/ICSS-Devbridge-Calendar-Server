@@ -7,7 +7,7 @@ using System.Web;
 
 namespace DevBridgeAPI.Repository.Dao
 {
-    public class AssignmentsDao : IModelSelector, IAssignmentsDao
+    public class AssignmentsDao : IAssignmentsDao
     {
         public IEnumerable<IModel> SelectAllRows()
         {
@@ -35,6 +35,17 @@ namespace DevBridgeAPI.Repository.Dao
             using (var db = new DbContext())
             {
                 db.Connection.Query<Assignment>(sql, new { assignment.UserId, assignment.TopicId, assignment.StateId, assignment.Comments, assignment.Date });
+            }
+        }
+
+        public IEnumerable<Assignment> SelectPlannedInFuture(int userId)
+        {
+            string sql = "SELECT * FROM Assignments " +
+                         "WHERE UserId = @UserId " +
+                         "AND Date > GETDATE()";
+            using (var db = new DbContext())
+            {
+                return db.Connection.Query<Assignment>(sql, new { UserId = userId });
             }
         }
     }

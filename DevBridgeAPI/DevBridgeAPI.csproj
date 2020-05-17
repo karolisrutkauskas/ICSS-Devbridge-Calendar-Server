@@ -360,6 +360,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\Complex\LearntTopicsPerUser.cs" />
+    <Compile Include="Models\Complex\PlannedTopicsPerUser.cs" />
     <Compile Include="Models\Patch\RegCredentials.cs" />
     <Compile Include="Controllers\TopicsController.cs" />
     <Compile Include="Controllers\GoalsController.cs" />
@@ -412,6 +414,8 @@
     <Compile Include="Resources\EmailCredentials.cs" />
     <Compile Include="UseCases\Integrations\IUserIntegrations.cs" />
     <Compile Include="UseCases\Integrations\UserIntegrations.cs" />
+    <Compile Include="UseCases\ITopicLogic.cs" />
+    <Compile Include="UseCases\TopicLogic.cs" />
     <Compile Include="UseCases\UserLogicN\ITeamTreeNodeFactory.cs" />
     <Compile Include="UseCases\UserLogicN\IUserLogic.cs" />
     <Compile Include="UseCases\UserLogicN\IUserValidator.cs" />

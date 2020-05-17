@@ -8,5 +8,6 @@ namespace DevBridgeAPI.Repository.Dao
         IEnumerable<IModel> SelectAllRows();
         IEnumerable<Assignment> SelectByUserId(int userId);
         void AddRow(Assignment assignment);
+        IEnumerable<Assignment> SelectPlannedInFuture(int userId);
     }
 }

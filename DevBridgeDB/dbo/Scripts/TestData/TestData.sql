@@ -17,3 +17,4 @@ SET IDENTITY_INSERT [dbo].[Goals] OFF
 :r ./dbo.Topics.data.sql
 :r ./dbo.Goals.data.sql
 :r ./dbo.Assignments.data.sql
+:r ./dbo.LearntTopics.data.sql
