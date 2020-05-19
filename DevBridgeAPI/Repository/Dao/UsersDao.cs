@@ -12,7 +12,7 @@ using System.Data.SqlClient;
 
 namespace DevBridgeAPI.Repository.Dao
 {
-    public class UsersDao : IModelSelector, IUsersDao
+    public class UsersDao : IUsersDao
     {
         public IEnumerable<IModel> SelectAllRows()
         {
@@ -128,6 +128,21 @@ namespace DevBridgeAPI.Repository.Dao
                                       "WHERE UserId = @UserId",
                                       new { Password = hashedPassword,
                                             UserId = userId });
+            }
+        }
+
+        public IEnumerable<User> SelectByPastTopicAssignment(int topicId, int ancestorId)
+        {
+            string sql = "SELECT * FROM Users u " +
+                         "JOIN Assignments a " +
+                         "ON a.UserId = u.UserId " +
+                         "WHERE a.Date < GETDATE() " +
+                         "AND a.TopicId = @TopicId " +
+                         "AND (dbo.UserIsDescendantOf(@AncestorId, u.UserId) = 1 " +
+                              "OR u.UserId = @AncestorId)";
+            using (var db = new DbContext())
+            {
+                return db.Connection.Query<User>(sql, new { TopicId = topicId, AncestorId = ancestorId });
             }
         }
     }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Http.ModelBinding;
 
@@ -16,6 +18,11 @@ namespace DevBridgeAPI.Helpers
                                        ? x.Exception.Message
                                        : x.ErrorMessage)
                                        .Replace("'", "\\'") + '\'');
+        }
+
+        public static int GetId (this IIdentity identity)
+        {
+            return int.Parse(((ClaimsIdentity)identity).FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
         }
     }
 }

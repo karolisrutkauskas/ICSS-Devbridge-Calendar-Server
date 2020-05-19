@@ -4,6 +4,9 @@ using Swashbuckle.Swagger.Annotations;
 using System.Net;
 using DevBridgeAPI.Models.Misc;
 using DevBridgeAPI.UseCases;
+using DevBridgeAPI.Models.Complex;
+using System.Security.Claims;
+using DevBridgeAPI.Helpers;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -37,7 +40,7 @@ namespace DevBridgeAPI.Controllers
         [Route("api/topics/teamLearnt/{managerId}")]
         [HttpGet]
         [Authorize]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of learnt topics for each member in team", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of learnt topics for each member in team", Type = typeof(LearntTopicsPerUser))]
         [SwaggerResponse(HttpStatusCode.NotFound, Description = "Manager with provided id not found", Type = typeof(ErrorMessage))]
         public IHttpActionResult GetTeamLearntTopics(int managerId)
         {
@@ -57,11 +60,55 @@ namespace DevBridgeAPI.Controllers
         [Route("api/topics/teamPlanned/{managerId}")]
         [HttpGet]
         [Authorize]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of planned topics for each member in team", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of planned topics for each member in team", Type = typeof(PlannedTopicsPerUser))]
         [SwaggerResponse(HttpStatusCode.NotFound, Description = "Manager with provided id not found", Type = typeof(ErrorMessage))]
         public IHttpActionResult GetTeamPlannedTopics(int managerId)
         {
             return Ok(topicLogic.GetSubordinatesPlannedTopics(managerId));
+        }
+
+        /// <summary>
+        /// Will request for users that have had an appointment for the 
+        /// specified topic sometime in the past. Only lower than requesting 
+        /// user's rank users will be returned.
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: Topic with provided ID not found<br/>
+        /// </remarks>
+        /// <param name="topicId">ID of topic that will be used for checking if user had past assignments</param>
+        /// <returns>A list of users</returns>
+        [Route("api/topics/{topicId}/usersWithPastAssignments")]
+        [HttpGet]
+        [Authorize]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of users that meet the criteria", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "Topic with provided id not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult GetUsersByPastAssignments(int topicId)
+        {
+            int managerId = User.Identity.GetId();
+            return Ok(topicLogic.GetUsersWithPastTopicAssignment(topicId, managerId));
+        }
+
+        /// <summary>
+        /// Will request for teams with counts of users who have had an appointment for the 
+        /// specified topic sometime in the past. Only lower than requesting 
+        /// team's rank users will be returned.
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: Topic with provided ID not found<br/>
+        /// </remarks>
+        /// <param name="topicId">ID of topic that will be used for checking if team had past assignments</param>
+        /// <returns>A list of teams with user counts</returns>
+        [Route("api/topics/{topicId}/teamsWithPastAssignments")]
+        [HttpGet]
+        [Authorize]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of teams with user counts that meet the criteria", Type = typeof(TeamStatsPerTopic))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "Topic with provided id not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult GetTeamsByPastAssignments(int topicId)
+        {
+            int managerId = User.Identity.GetId();
+            return Ok(topicLogic.GetTeamsWithPastTopicAssignment(topicId, managerId));
         }
     }
 }

@@ -9,5 +9,7 @@ namespace DevBridgeAPI.UseCases
         IEnumerable<LearntTopicsPerUser> GetSubordinatesLearntTopics(int managerId);
         IEnumerable<Topic> GetAll();
         IEnumerable<PlannedTopicsPerUser> GetSubordinatesPlannedTopics(int managerId);
+        IEnumerable<User> GetUsersWithPastTopicAssignment(int topicId, int managerId);
+        IEnumerable<TeamStatsPerTopic> GetTeamsWithPastTopicAssignment(int topicId, int managerId);
     }
 }
