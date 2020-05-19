@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using PostTopic = DevBridgeAPI.Models.Post.Topic;
+using Dapper.Contrib.Extensions;
 
 namespace DevBridgeAPI.Repository.Dao
 {
@@ -25,6 +27,22 @@ namespace DevBridgeAPI.Repository.Dao
             using (var db = new DbContext())
             {
                 return db.Connection.Query<Topic>(sql, new { TopicId = topicId } ).FirstOrDefault();
+            }
+        }
+
+        public Topic InsertTopic(PostTopic topic)
+        {
+            using (var db = new DbContext())
+            {
+                var insertedId = (int)db.Connection.Insert(topic);
+                return SelectById(insertedId);
+            }
+        }
+        public void UpdateTopic(Topic topic)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Update(topic);
             }
         }
 

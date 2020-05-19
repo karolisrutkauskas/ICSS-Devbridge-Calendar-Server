@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using PlannedTopic = DevBridgeAPI.Models.Complex.PlannedTopicsPerUser.PlannedTopic;
+using PostTopic = DevBridgeAPI.Models.Post.Topic;
 
 namespace DevBridgeAPI.UseCases
 {
@@ -102,6 +103,30 @@ namespace DevBridgeAPI.UseCases
             return teams.Values;
         }
 
+        public Topic InsertOrUpdateTopic(PostTopic topic, int changeByUserId, int? topicId = null)
+        {
+            topic.ChangeByUserId = changeByUserId;
+            if (topicId == null)
+            {
+                return topicsDao.InsertTopic(topic);
+            }
+            var topicToUpdate = topicsDao.SelectById(topicId.Value);
+            if (topicToUpdate == null)
+            {
+                return topicsDao.InsertTopic(topic);
+            } else
+            {
+                topicToUpdate.UpdateFields(topic);
+                topicsDao.UpdateTopic(topicToUpdate);
+                return topicToUpdate;
+            }
+        }
 
+        public Topic GetById(int topicId)
+        {
+            var topic = topicsDao.SelectById(topicId);
+            if (topic == null) throw new EntityNotFoundException($"Topic with ID {topicId} not found", typeof(Topic));
+            return topic;
+        }
     }
 }

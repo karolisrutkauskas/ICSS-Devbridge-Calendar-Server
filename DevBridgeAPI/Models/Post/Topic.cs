@@ -1,11 +1,12 @@
 ﻿using Dapper.Contrib.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
-using PostTopic = DevBridgeAPI.Models.Post.Topic;
 
-namespace DevBridgeAPI.Models
+namespace DevBridgeAPI.Models.Post
 {
     /// <summary>
     /// Information about a subject that can be taken as assignment and used by users to
@@ -14,13 +15,9 @@ namespace DevBridgeAPI.Models
     public class Topic : IModel
     {
         /// <summary>
-        /// Unique identifier
-        /// </summary>
-        [Key]
-        public int TopicId { get; set; }
-        /// <summary>
         /// Topic name (ex. Javascript basics, Team management basics etc..)
         /// </summary>
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Name must be provided")]
         public string Name { get; set; }
         /// <summary>
         /// A free text field used for detailed description of topic
@@ -35,24 +32,7 @@ namespace DevBridgeAPI.Models
         /// <summary>
         /// ID of user that updated/created this version of topic
         /// </summary>
-        public int ChangeByUserId { get; set; }
-        /// <summary>
-        /// Start date of this topic version
-        /// </summary>
-        [Computed]
-        public DateTime SysStart { get; set; }
-        /// <summary>
-        /// End date of this topic version
-        /// </summary>
-        [Computed]
-        public DateTime SysEnd { get; set; }
-
-        public void UpdateFields (PostTopic updatedTopic)
-        {
-            Name = updatedTopic.Name;
-            Description = updatedTopic.Description;
-            ParentTopicId = updatedTopic.ParentTopicId;
-            ChangeByUserId = updatedTopic.ChangeByUserId.Value; // Can never be null at this point
-        }
+        [IgnoreDataMember]
+        public int? ChangeByUserId { get; set; }
     }
 }
