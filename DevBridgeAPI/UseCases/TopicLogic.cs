@@ -128,5 +128,14 @@ namespace DevBridgeAPI.UseCases
             if (topic == null) throw new EntityNotFoundException($"Topic with ID {topicId} not found", typeof(Topic));
             return topic;
         }
+
+        public IEnumerable<Topic> GetPrevVersions(int topicId, int maxCount)
+        {
+            if (topicsDao.SelectById(topicId) == null)
+            {
+                throw new EntityNotFoundException($"Topic with ID {topicId} not found", typeof(Topic));
+            }
+            return topicsDao.SelectHistory(topicId, maxCount);
+        }
     }
 }

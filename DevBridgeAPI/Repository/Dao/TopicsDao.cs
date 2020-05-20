@@ -57,5 +57,17 @@ namespace DevBridgeAPI.Repository.Dao
                 return db.Connection.Query<Topic>(sql, new { UserId = userId });
             }
         }
+
+        public IEnumerable<Topic> SelectHistory(int topicId, int count)
+        {
+            string sql = "SELECT TOP(@Count) * " +
+                         "FROM Topics_HISTORY " +
+                         "WHERE TopicId = @TopicId " +
+                         "ORDER BY SysStart DESC";
+            using (var db = new DbContext())
+            {
+                return db.Connection.Query<Topic>(sql, new { TopicId = topicId, Count = count });
+            }
+        }
     }
 }

@@ -186,5 +186,27 @@ namespace DevBridgeAPI.Controllers
             int managerId = User.Identity.GetId();
             return Ok(topicLogic.GetTeamsWithPastTopicAssignment(topicId, managerId));
         }
+
+        /// <summary>
+        /// Will request for an descending ordered 
+        /// list of previous topic versions that
+        /// is limited to 1 version by default.
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: Topic with provided ID not found<br/>
+        /// </remarks>
+        /// <param name="topicId">ID of a topic whose previous versions will be selected</param>
+        /// <param name="maxCount">Limit of how many previous versions will be returned</param>
+        /// <returns>A list of previous topic versions for specified topicId</returns>
+        [Route("api/topics/{topicId}/history")]
+        [HttpGet]
+        [Authorize]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of previous topic versions for specified topicId", Type = typeof(Topic))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "Topic with provided id not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult GetTopicHistory(int topicId, int maxCount = 1)
+        {
+            return Ok(topicLogic.GetPrevVersions(topicId, maxCount));
+        }
     }
 }
