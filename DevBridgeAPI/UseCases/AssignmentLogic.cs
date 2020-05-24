@@ -1,4 +1,5 @@
 ﻿using DevBridgeAPI.Models;
+using DevBridgeAPI.Models.Patch;
 using DevBridgeAPI.Repository.Dao;
 using Microsoft.Ajax.Utilities;
 using System;
@@ -45,6 +46,19 @@ namespace DevBridgeAPI.UseCases
         public void AddAssignment(Assignment assignment)
         {
             asgnSelector.AddRow(assignment);
+        }
+
+        public Assignment UpdateAssignment(UpdatedAssignment assignment, int id)
+        {
+            var assignmentToUpdate = asgnSelector.SelectRow(id);
+
+            assignmentToUpdate.TopicId = assignment.TopicId;
+            assignmentToUpdate.Comments = assignment.Comments;
+            assignmentToUpdate.Date = assignment.Date;
+
+            asgnSelector.UpdateRow(assignmentToUpdate);
+
+            return assignmentToUpdate;
         }
     }
 }

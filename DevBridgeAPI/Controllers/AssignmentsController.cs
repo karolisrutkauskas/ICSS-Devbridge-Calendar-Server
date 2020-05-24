@@ -1,4 +1,5 @@
 ﻿using DevBridgeAPI.Models;
+using DevBridgeAPI.Models.Patch;
 using DevBridgeAPI.Repository;
 using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.Resources;
@@ -80,6 +81,14 @@ namespace DevBridgeAPI.Controllers
                 throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
             }
             return Ok();
+        }
+
+        [Authorize]
+        [Route("api/assignments/{id}")]
+        [HttpPatch]
+        public IHttpActionResult Patch([FromBody] UpdatedAssignment assignmentUpdate, int id)
+        {
+            return Ok(asignLogic.UpdateAssignment(assignmentUpdate, id));
         }
     }
 }

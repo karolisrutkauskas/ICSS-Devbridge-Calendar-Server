@@ -31,6 +31,15 @@ namespace DevBridgeAPI.Controllers
             this.userLogic = userLogic;
         }
 
+        [Authorize]
+        [Route("api/users/current")]
+        [HttpGet]
+        public IHttpActionResult GetCurrentUser()
+        {
+            var identity = User.Identity;
+            return Ok(userLogic.GetTeamTree(identity.Name).This);
+        }
+
         /// <summary>
         /// Will register a new user with already assigned manager.
         /// </summary>
