@@ -1,4 +1,5 @@
 ﻿using DevBridgeAPI.Models;
+using DevBridgeAPI.Models.Patch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace DevBridgeAPI.UseCases
         IEnumerable<Assignment> SelectAllAssignmentsByUser(string email);
         IEnumerable<Assignment> FindSubordinatesAssignments(string managerEmail);
         void AddAssignment(Assignment assignment);
+        Assignment UpdateAssignment(UpdatedAssignment assignment, int id);
     }
 }

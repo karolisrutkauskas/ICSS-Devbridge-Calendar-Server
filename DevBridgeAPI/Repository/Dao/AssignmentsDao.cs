@@ -48,5 +48,28 @@ namespace DevBridgeAPI.Repository.Dao
                 return db.Connection.Query<Assignment>(sql, new { UserId = userId });
             }
         }
+
+        public Assignment SelectRow(int assignmentId)
+        {
+            string sql = "SELECT * FROM Assignments " +
+                         "WHERE AsgnId = @Id";
+
+            using (var db = new DbContext())
+            {
+                return db.Connection.Query<Assignment>(sql, new { Id = assignmentId }).First();
+            }
+        }
+
+        public void UpdateRow(Assignment assignment)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Execute("UPDATE Assignments " +
+                    "SET TopicId = @TopicId, Comments = @Comments, Date = @Date " +
+                    "WHERE AsgnId = @Id",
+                    new { Id = assignment.AsgnId, TopicId = assignment.TopicId, Comments = assignment.Comments, Date = assignment.Date }
+                    );
+            }
+        }
     }
 }

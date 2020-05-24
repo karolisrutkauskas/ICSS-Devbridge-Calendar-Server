@@ -380,6 +380,7 @@
     <Compile Include="Models\Goal.cs" />
     <Compile Include="Models\IModel.cs" />
     <Compile Include="Models\Misc\ErrorMessage.cs" />
+    <Compile Include="Models\Patch\UpdatedAssignment.cs" />
     <Compile Include="Models\Patch\UserManagerId.cs" />
     <Compile Include="Models\Patch\UserRestrictions.cs" />
     <Compile Include="Models\Post\User.cs" />
