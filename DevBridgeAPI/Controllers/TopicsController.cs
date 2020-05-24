@@ -7,6 +7,7 @@ using DevBridgeAPI.UseCases;
 using DevBridgeAPI.Models.Complex;
 using System.Security.Claims;
 using DevBridgeAPI.Helpers;
+using PostTopic = DevBridgeAPI.Models.Post.Topic;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -25,6 +26,81 @@ namespace DevBridgeAPI.Controllers
         public IHttpActionResult Get()
         {
             return Ok(topicLogic.GetAll());
+        }
+
+        /// <summary>
+        /// Will request for a single topic entity
+        /// that will be selected by provided ID
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: Topic with provided ID not found<br/>
+        /// </remarks>
+        /// <param name="topicId">ID of topic that will be selected</param>
+        /// <returns>A single topic entity selected by <paramref name="topicId"/></returns>
+        [Route("api/topics/{topicId}")]
+        [HttpGet]
+        [Authorize]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A single topic entity selected by ID", Type = typeof(Topic))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "Topic with provided ID was not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult GetById(int topicId)
+        {
+            return Ok(topicLogic.GetById(topicId));
+        }
+
+        /// <summary>
+        /// Will insert a new topic object
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
+        /// <param name="topic">Topic object that will be inserted</param>
+        /// <returns>Inserted topic entity</returns>
+        /// <response code="201">Inserted topic entity</response>
+        [Route("api/topics")]
+        [HttpPost]
+        [Authorize]
+        [ValidateRequest]
+        [SwaggerResponse(HttpStatusCode.Created, Description = "Inserted topic entity", Type = typeof(Topic))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        public IHttpActionResult PostTopic([FromBody] PostTopic topic)
+        {
+            var currentUserId = User.Identity.GetId();
+            var insertedTopic = topicLogic.InsertOrUpdateTopic(topic, currentUserId);
+            return Created(location: $"api/topics/{insertedTopic.TopicId}", content: insertedTopic);
+        }
+
+        /// <summary>
+        /// Will update a topic specified by
+        /// <paramref name="topicId"/>. If not found
+        /// will insert instead.
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 8: Request model is invalid
+        /// </remarks>
+        /// <param name="topic">Topic object that will be inserted/used for update</param>
+        /// <param name="topicId">ID of topic that will be updated</param>
+        /// <returns>Inserted/Updated topic entity</returns>
+        [Route("api/topics/{topicId}")]
+        [HttpPut]
+        [Authorize]
+        [ValidateRequest]
+        [SwaggerResponse(HttpStatusCode.Created, Description = "Inserted topic entity", Type = typeof(Topic))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Updated topic entity", Type = typeof(Topic))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        public IHttpActionResult PutTopic([FromBody] PostTopic topic, int topicId)
+        {
+            var currentUserId = User.Identity.GetId();
+            var insertedTopic = topicLogic.InsertOrUpdateTopic(topic, currentUserId, topicId);
+            if (insertedTopic.TopicId == topicId)
+            {
+                return Ok(insertedTopic);
+            } else
+            {
+                return Created(location: $"api/topics/{insertedTopic.TopicId}", content: insertedTopic);
+            }
         }
 
         /// <summary>
@@ -109,6 +185,28 @@ namespace DevBridgeAPI.Controllers
         {
             int managerId = User.Identity.GetId();
             return Ok(topicLogic.GetTeamsWithPastTopicAssignment(topicId, managerId));
+        }
+
+        /// <summary>
+        /// Will request for an descending ordered 
+        /// list of previous topic versions that
+        /// is limited to 1 version by default.
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: Topic with provided ID not found<br/>
+        /// </remarks>
+        /// <param name="topicId">ID of a topic whose previous versions will be selected</param>
+        /// <param name="maxCount">Limit of how many previous versions will be returned</param>
+        /// <returns>A list of previous topic versions for specified topicId</returns>
+        [Route("api/topics/{topicId}/history")]
+        [HttpGet]
+        [Authorize]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of previous topic versions for specified topicId", Type = typeof(Topic))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "Topic with provided id not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult GetTopicHistory(int topicId, int maxCount = 1)
+        {
+            return Ok(topicLogic.GetPrevVersions(topicId, maxCount));
         }
     }
 }

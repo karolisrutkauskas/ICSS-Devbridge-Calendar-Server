@@ -396,6 +396,7 @@
     <Compile Include="Models\Misc\ErrorMessage.cs" />
     <Compile Include="Models\Patch\UserManagerId.cs" />
     <Compile Include="Models\Patch\UserRestrictions.cs" />
+    <Compile Include="Models\Post\Topic.cs" />
     <Compile Include="Models\Post\User.cs" />
     <Compile Include="Models\Topic.cs" />
     <Compile Include="Models\User.cs" />
