@@ -13,6 +13,8 @@ using DevBridgeAPI.UseCases.Integrations.EmailService;
 using DevBridgeAPI.Resources;
 using System.Configuration;
 using System.Transactions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DevBridgeAPI.UseCases.UserLogicN
 {
@@ -180,6 +182,17 @@ namespace DevBridgeAPI.UseCases.UserLogicN
                 userToUpdate.RegistrationToken = null;
                 return userToUpdate;
             }
+        }
+
+        public IEnumerable<User> GetDescendantTeamManagers(int ancestorId)
+        {
+            var ancestor = usersDao.SelectByID(ancestorId);
+            if (ancestor == null)
+            {
+                throw new EntityNotFoundException($"User with ID {ancestorId} was not found", typeof(User));
+            }
+            var ttNodes = GetTeamTree(ancestorId).BreadthFirstSearch(x => x.Children != null && x.Children.Any());
+            return ttNodes.Select(x => x.This);
         }
     }
 }

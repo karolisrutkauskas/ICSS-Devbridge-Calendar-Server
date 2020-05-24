@@ -7,6 +7,7 @@ namespace DevBridgeAPI.UseCases
 {
     public interface ITopicLogic
     {
+        LearntTopicsPerUser GetLearntTopics(int userId);
         IEnumerable<LearntTopicsPerUser> GetSubordinatesLearntTopics(int managerId);
         IEnumerable<Topic> GetAll();
         Topic GetById(int topicId);
