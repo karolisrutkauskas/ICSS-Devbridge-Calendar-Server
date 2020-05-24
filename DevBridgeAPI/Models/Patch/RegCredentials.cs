@@ -8,13 +8,6 @@ namespace DevBridgeAPI.Models.Patch
     public class RegCredentials
     {
         /// <summary>
-        /// Email that will be used for user's account
-        /// </summary>
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        /// <summary>
         /// Password created by user sent in plain text
         /// </summary>
         [Required]

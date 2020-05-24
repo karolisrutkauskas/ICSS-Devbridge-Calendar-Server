@@ -79,11 +79,11 @@ namespace DevBridgeAPI.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://www.google.com/search?q={0}&amp;email={1}.
+        ///   Looks up a localized string similar to /Home/Register.
         /// </summary>
-        public static string UserInvitationUrl {
+        public static string UserInvitationUrlPath {
             get {
-                return ResourceManager.GetString("UserInvitationUrl", resourceCulture);
+                return ResourceManager.GetString("UserInvitationUrlPath", resourceCulture);
             }
         }
     }

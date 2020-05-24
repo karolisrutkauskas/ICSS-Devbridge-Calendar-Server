@@ -19,3 +19,9 @@
 GO
 
 CREATE UNIQUE INDEX [IX_Users_Email] ON [dbo].[Users] ([Email])
+
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Users_RegistrationToken]
+ON [Users]([RegistrationToken])
+WHERE [RegistrationToken] IS NOT NULL;

@@ -145,5 +145,15 @@ namespace DevBridgeAPI.Repository.Dao
                 return db.Connection.Query<User>(sql, new { TopicId = topicId, AncestorId = ancestorId });
             }
         }
+
+        public User SelectByRegToken(string token)
+        {
+            string sql = "SELECT * FROM Users " +
+                         "WHERE RegistrationToken = @RegToken";
+            using (var db = new DbContext())
+            {
+                return db.Connection.Query<User>(sql, new { RegToken = token }).FirstOrDefault();
+            }
+        }
     }
 }
