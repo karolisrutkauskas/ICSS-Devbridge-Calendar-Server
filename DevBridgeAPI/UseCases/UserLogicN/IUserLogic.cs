@@ -3,6 +3,7 @@ using DevBridgeAPI.Models.Patch;
 using User = DevBridgeAPI.Models.User;
 using PostUser = DevBridgeAPI.Models.Post.User;
 using DevBridgeAPI.UseCases.Exceptions;
+using System.Collections.Generic;
 
 namespace DevBridgeAPI.UseCases.UserLogicN
 {
@@ -59,5 +60,6 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         /// <exception cref="ValidationFailedException">When user registration fails described validations</exception>
         /// <exception cref="EntityNotFoundException">When user with provided email was not found</exception>
         User FinishRegistration(RegCredentials regCredentials);
+        IEnumerable<User> GetDescendantTeamManagers(int ancestorId);
     }
 }

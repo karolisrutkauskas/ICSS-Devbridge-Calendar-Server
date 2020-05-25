@@ -89,6 +89,23 @@ namespace DevBridgeAPI.Controllers
         }
 
         /// <summary>
+        /// Requests for a descendant user list 
+        /// where users have at least 1 subordinate.
+        /// Authenticated user will be the root user.
+        /// </summary>
+        /// <returns>Return a list of users</returns>
+        [Authorize]
+        [Route("api/users/managers")]
+        [HttpGet]
+        [ResponseType(typeof(TeamTreeNode))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return user list", Type = typeof(IEnumerable<User>))]
+        public IHttpActionResult GetManagers()
+        {
+            var currUserId = User.Identity.GetId();
+            return Ok(userLogic.GetDescendantTeamManagers(currUserId));
+        }
+
+        /// <summary>
         /// Changes restrictions for a specific user
         /// </summary>
         /// <remarks>
@@ -183,7 +200,7 @@ namespace DevBridgeAPI.Controllers
         /// </summary>
         /// <remarks>
         /// Error codes:<br/>
-        /// 6: User with provided email not found<br/>
+        /// 6: User with provided token not found<br/>
         /// 9: Invalid RegistrationToken (could be replaced by consecutive invitations)<br/>
         /// 10: RegistrationToken is expired<br/>
         /// 11: User is already registered

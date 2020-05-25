@@ -39,7 +39,7 @@ namespace DevBridgeAPI.UseCases
             var subordinates = usersDao.SelectSubordinates(managerId);
             foreach (var user in subordinates)
             {
-                var topics = topicsDao.SelectLearnt(managerId);
+                var topics = topicsDao.SelectLearnt(user.UserId);
                 learntTopics.AddLast(new LearntTopicsPerUser { User = user, Topics = topics });
             }
             return learntTopics;
@@ -136,6 +136,16 @@ namespace DevBridgeAPI.UseCases
                 throw new EntityNotFoundException($"Topic with ID {topicId} not found", typeof(Topic));
             }
             return topicsDao.SelectHistory(topicId, maxCount);
+        }
+
+        public LearntTopicsPerUser GetLearntTopics(int userId)
+        {
+            var user = usersDao.SelectByID(userId);
+            if (user == null)
+            {
+                throw new EntityNotFoundException($"User with ID {userId} not found", typeof(User));
+            }
+            return new LearntTopicsPerUser { User = user, Topics = topicsDao.SelectLearnt(userId) } ;
         }
     }
 }

@@ -8,6 +8,7 @@ using DevBridgeAPI.Models.Complex;
 using System.Security.Claims;
 using DevBridgeAPI.Helpers;
 using PostTopic = DevBridgeAPI.Models.Post.Topic;
+using System.Collections.Generic;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -104,6 +105,26 @@ namespace DevBridgeAPI.Controllers
         }
 
         /// <summary>
+        /// Will request for learnt topics for the specified user
+        /// </summary>
+        /// <remarks>
+        /// Learnt topic - a topic that a user has completed learning at some point
+        /// Error codes:<br/>
+        /// 6: User with provided ID not found<br/>
+        /// </remarks>
+        /// <param name="userId">User ID whose learnt topics should be returned</param>
+        /// <returns>A list of learnt topics for the specified user</returns>
+        [Route("api/topics/learnt/{userId}")]
+        [HttpGet]
+        [Authorize]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of learnt topics for a specified user", Type = typeof(IEnumerable<LearntTopicsPerUser>))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "User with provided id not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult GetLearntTopics(int userId)
+        {
+            return Ok(topicLogic.GetLearntTopics(userId));
+        }
+
+        /// <summary>
         /// Will request for learnt topics for each direct subordinate under specified manager
         /// </summary>
         /// <remarks>
@@ -116,7 +137,7 @@ namespace DevBridgeAPI.Controllers
         [Route("api/topics/teamLearnt/{managerId}")]
         [HttpGet]
         [Authorize]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of learnt topics for each member in team", Type = typeof(LearntTopicsPerUser))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of learnt topics for each member in team", Type = typeof(IEnumerable<LearntTopicsPerUser>))]
         [SwaggerResponse(HttpStatusCode.NotFound, Description = "Manager with provided id not found", Type = typeof(ErrorMessage))]
         public IHttpActionResult GetTeamLearntTopics(int managerId)
         {
@@ -136,7 +157,7 @@ namespace DevBridgeAPI.Controllers
         [Route("api/topics/teamPlanned/{managerId}")]
         [HttpGet]
         [Authorize]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of planned topics for each member in team", Type = typeof(PlannedTopicsPerUser))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of planned topics for each member in team", Type = typeof(IEnumerable<PlannedTopicsPerUser>))]
         [SwaggerResponse(HttpStatusCode.NotFound, Description = "Manager with provided id not found", Type = typeof(ErrorMessage))]
         public IHttpActionResult GetTeamPlannedTopics(int managerId)
         {
@@ -157,7 +178,7 @@ namespace DevBridgeAPI.Controllers
         [Route("api/topics/{topicId}/usersWithPastAssignments")]
         [HttpGet]
         [Authorize]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of users that meet the criteria", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of users that meet the criteria", Type = typeof(IEnumerable<User>))]
         [SwaggerResponse(HttpStatusCode.NotFound, Description = "Topic with provided id not found", Type = typeof(ErrorMessage))]
         public IHttpActionResult GetUsersByPastAssignments(int topicId)
         {
@@ -179,7 +200,7 @@ namespace DevBridgeAPI.Controllers
         [Route("api/topics/{topicId}/teamsWithPastAssignments")]
         [HttpGet]
         [Authorize]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of teams with user counts that meet the criteria", Type = typeof(TeamStatsPerTopic))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of teams with user counts that meet the criteria", Type = typeof(IEnumerable<TeamStatsPerTopic>))]
         [SwaggerResponse(HttpStatusCode.NotFound, Description = "Topic with provided id not found", Type = typeof(ErrorMessage))]
         public IHttpActionResult GetTeamsByPastAssignments(int topicId)
         {
@@ -202,7 +223,7 @@ namespace DevBridgeAPI.Controllers
         [Route("api/topics/{topicId}/history")]
         [HttpGet]
         [Authorize]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of previous topic versions for specified topicId", Type = typeof(Topic))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "A list of previous topic versions for specified topicId", Type = typeof(IEnumerable<Topic>))]
         [SwaggerResponse(HttpStatusCode.NotFound, Description = "Topic with provided id not found", Type = typeof(ErrorMessage))]
         public IHttpActionResult GetTopicHistory(int topicId, int maxCount = 1)
         {
