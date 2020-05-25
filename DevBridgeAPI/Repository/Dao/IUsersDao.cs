@@ -22,5 +22,6 @@ namespace DevBridgeAPI.Repository.Dao
         bool IsAncestorOf(int ancestor, int descendant);
         void UpdatePasswordClearToken(string hashedPassword, int userId);
         IEnumerable<User> SelectByPastTopicAssignment(int topicId, int ancestorId);
+        User SelectByRegToken(string token);
     }
 }

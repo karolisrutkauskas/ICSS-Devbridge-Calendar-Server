@@ -125,8 +125,8 @@
     <value>You are invited to DevBridge learning platform</value>
     <comment>Used for email subject when inviting new user</comment>
   </data>
-  <data name="UserInvitationUrl" xml:space="preserve">
-    <value>https://www.google.com/search?q={0}&amp;email={1}</value>
-    <comment>Invitation URL template with registration token in query parameters</comment>
+  <data name="UserInvitationUrlPath" xml:space="preserve">
+    <value>/Home/Register</value>
+    <comment>Invitation URL path that should be appended to base URL</comment>
   </data>
 </root>

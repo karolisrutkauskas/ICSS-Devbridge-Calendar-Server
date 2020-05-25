@@ -163,10 +163,10 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         {
             using (var transaction = new TransactionScope())
             {
-                var userToUpdate = usersDao.SelectByEmail(regCredentials.Email);
+                var userToUpdate = usersDao.SelectByRegToken(regCredentials.RegistrationToken);
                 if (userToUpdate == null)
                 {
-                    throw new EntityNotFoundException($"User with email {regCredentials.Email} was not found", typeof(User));
+                    throw new EntityNotFoundException($"User with token {regCredentials.RegistrationToken} was not found", typeof(User));
                 }
                 var validationInfo = userValidator.ValidateFinishReg(userToUpdate, regCredentials);
                 if (!validationInfo.IsValid)

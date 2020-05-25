@@ -34,12 +34,10 @@ namespace DevBridgeAPI.UseCases.Integrations
                                          senderPassword: EmailCredentials.Password,
                                          host: ConfigurationManager.AppSettings["appSettings--emailHost"]);
             var registrationTokenUrlEnc = WebUtility.UrlEncode(invitedUser.RegistrationToken);
-            var emailUrlEnc = WebUtility.UrlEncode(invitedUser.Email);
-            var invitationUrl = string.Format(provider: CultureInfo.GetCultureInfo("en-US"),
-                                                format: Strings.UserInvitationUrl, registrationTokenUrlEnc, emailUrlEnc);
+            var baseUrl = ConfigurationManager.AppSettings["appSettings--websiteUrl"];
+            var invitationUrl = baseUrl + Strings.UserInvitationUrlPath + "?registrationToken=" + registrationTokenUrlEnc;
 
-            var emailBody = string.Format(provider: CultureInfo.GetCultureInfo("en-US"),
-                                            format: _htmlString, invitedUser.FirstName, invitationUrl);
+            var emailBody = string.Format(format: _htmlString, invitedUser.FirstName, invitationUrl);
             var subject = Strings.UserInvitationSubject;
             client.SendEmailInBackground(subject, emailBody, invitedUser.Email);
         }
