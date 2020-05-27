@@ -8,5 +8,6 @@ namespace DevBridgeAPI.UseCases.UserLogicN
     {
         ValidationInfo ValidataManagerReassignment(int newManagerId, int userId);
         ValidationInfo ValidateFinishReg(User userForUpdate, RegCredentials regCredentials);
+        ValidationInfo ValidateRegToken(string registrationToken);
     }
 }
