@@ -23,5 +23,10 @@ namespace DevBridgeAPI.Models.Patch
         /// </summary>
         [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "Yearly limit cannot be lower than 0")]
         public int? YearlyLimit { get; set; }
+        /// <summary>
+        /// Constraint on user that limits how many assignments they can take per quarter
+        /// </summary>
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "Quarter limit cannot be lower than 0")]
+        public int? QuarterLimit { get; set; }
     }
 }

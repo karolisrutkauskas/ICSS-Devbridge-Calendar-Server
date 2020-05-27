@@ -80,6 +80,12 @@ namespace DevBridgeAPI.Resources
         {
             return new ErrorMessage { Code = 11, Message = "User is already registered" };
         }
+
+        /// <summary>$"User has exceeded assignment limits: {limitType}"</summary>
+        public static ErrorMessage ExceededAssignmentLimits(string limitType)
+        {
+            return new ErrorMessage { Code = 12, Message = $"User has exceeded assignment limits: {limitType}" };
+        }
     }
 }
 #pragma warning restore CA1303 // Do not pass literals as localized parameters

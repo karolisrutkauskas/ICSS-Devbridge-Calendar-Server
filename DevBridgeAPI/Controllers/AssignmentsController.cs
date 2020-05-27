@@ -23,7 +23,6 @@ namespace DevBridgeAPI.Controllers
             this.asignLogic = asignLogic;
         }
 
-
         /// <summary>
         /// Gets a complete list of assignment data
         /// </summary>
@@ -72,14 +71,7 @@ namespace DevBridgeAPI.Controllers
         [HttpPost]
         public IHttpActionResult Post([FromBody] Assignment assignment)
         {
-            try { asignLogic.AddAssignment(assignment); }
-            catch (SystemException ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Source);
-                throw new HttpException(httpCode: 500, message: Strings.GenericHttpError);
-            }
+            asignLogic.AddAssignment(assignment);
             return Ok();
         }
 

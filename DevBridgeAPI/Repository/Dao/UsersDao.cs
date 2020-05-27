@@ -86,10 +86,12 @@ namespace DevBridgeAPI.Repository.Dao
                 db.Connection.Execute("UPDATE Users SET " +
                                       "ConsecLimit = @Consec, " +
                                       "MonthlyLimit = @Monthly, " +
-                                      "YearlyLimit = @Yearly",
+                                      "YearlyLimit = @Yearly, " +
+                                      "QuarterLimit = @Quarter",
                                       new { Consec = restrictions.ConsecLimit,
                                             Monthly = restrictions.MonthlyLimit,
-                                            Yearly = restrictions.YearlyLimit });
+                                            Yearly = restrictions.YearlyLimit,
+                                            Quarter = restrictions.QuarterLimit });
             }
         }
 
@@ -100,11 +102,13 @@ namespace DevBridgeAPI.Repository.Dao
                 db.Connection.Execute("UPDATE Users SET " +
                                       "ConsecLimit = @Consec, " +
                                       "MonthlyLimit = @Monthly, " +
-                                      "YearlyLimit = @Yearly " +
+                                      "YearlyLimit = @Yearly, " +
+                                      "QuarterLimit = @Quarter " +
                                       "WHERE ManagerId = @ManagerId",
                                       new { Consec = restrictions.ConsecLimit,
                                             Monthly = restrictions.MonthlyLimit,
                                             Yearly = restrictions.YearlyLimit,
+                                            Quarter = restrictions.QuarterLimit,
                                             ManagerId = managerId });
             }
         }
