@@ -74,6 +74,7 @@
     <None Include="dbo\Scripts\TestData\TestData.sql" />
     <Build Include="dbo\Functions\UserIsDescendantOf.sql" />
     <Build Include="dbo\Tables\LearntTopics.sql" />
+    <Build Include="dbo\Tables\ErrorLog.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DevBridgeDB.refactorlog" />
