@@ -61,5 +61,6 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         /// <exception cref="EntityNotFoundException">When user with provided email was not found</exception>
         User FinishRegistration(RegCredentials regCredentials);
         IEnumerable<User> GetDescendantTeamManagers(int ancestorId);
+        User GetByRegistrationToken(string registrationToken);
     }
 }

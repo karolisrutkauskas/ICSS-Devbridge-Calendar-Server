@@ -68,6 +68,18 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             return new ValidationInfo(errorMessages);
         }
 
+        public ValidationInfo ValidateRegToken(string registrationToken)
+        {
+            var errorMessages = new LinkedList<ErrorMessage>();
+
+            if (HashingUtil.IsTokenExpired(registrationToken, hoursToExpire: 336))
+            {
+                errorMessages.AddLast(Errors.ExpiredRegistrationToken());
+            }
+
+            return new ValidationInfo(errorMessages);
+        }
+
         private bool IsAncestorOf(int ancestor, int descendant)
         {
             return _usersDao.IsAncestorOf(ancestor, descendant);

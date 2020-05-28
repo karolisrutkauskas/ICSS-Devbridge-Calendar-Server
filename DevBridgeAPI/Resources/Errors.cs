@@ -86,6 +86,12 @@ namespace DevBridgeAPI.Resources
         {
             return new ErrorMessage { Code = 12, Message = $"User has exceeded assignment limits: {limitType}" };
         }
+      
+        /// <summary>$"Missing mandatory query parameter: {paramName}"</summary>
+        public static ErrorMessage MissingMandatoryQueryParameter(string paramName)
+        {
+            return new ErrorMessage { Code = 13, Message = $"Missing mandatory query parameter: {paramName}" };
+        }
     }
 }
 #pragma warning restore CA1303 // Do not pass literals as localized parameters
