@@ -28,6 +28,17 @@ namespace DevBridgeAPI.Repository.Dao
             }
         }
 
+        public IEnumerable<Assignment> SelectByUserId(int userId, DateTime minDate, DateTime maxDate)
+        {
+            string sql = "SELECT * FROM Assignments " +
+                         "WHERE UserId = @UserId " +
+                         "AND Date BETWEEN @MinDate AND @MaxDate";
+            using (var db = new DbContext())
+            {
+                return db.Connection.Query<Assignment>(sql, new { UserId = userId, MinDate = minDate, MaxDate = maxDate });
+            }
+        }
+
         public void AddRow(Assignment assignment)
         {
             string sql = "INSERT INTO Assignments " +

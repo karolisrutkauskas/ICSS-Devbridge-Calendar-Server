@@ -98,6 +98,7 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             userToUpdate.ConsecLimit = userRestrictions.ConsecLimit;
             userToUpdate.MonthlyLimit = userRestrictions.MonthlyLimit;
             userToUpdate.YearlyLimit = userRestrictions.YearlyLimit;
+            userToUpdate.QuarterLimit = userRestrictions.QuarterLimit;
 
             usersDao.UpdateUser(userToUpdate);
             return userToUpdate;

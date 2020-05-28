@@ -8,12 +8,13 @@
     [Password] NVARCHAR(200) NULL,
 	[ManagerId] INT NULL,
     [ConsecLimit] INT NULL, 
-    [MonthlyLimit] INT NULL, 
+    [MonthlyLimit] INT NULL,
+	[QuarterLimit] INT NULL,
     [YearlyLimit] INT NULL,
 	[RegistrationToken] NVARCHAR(200) NULL
 	CONSTRAINT [PK_Users_UserID] PRIMARY KEY ([UserId] ASC)
 	CONSTRAINT [UQ_Users_Email] UNIQUE ([Email])
-	CONSTRAINT [FK_Users_Manager] FOREIGN KEY ([ManagerId]) REFERENCES [Users] ([UserId]) ON DELETE NO ACTION
+	CONSTRAINT [FK_Users_Manager] FOREIGN KEY ([ManagerId]) REFERENCES [Users] ([UserId]) ON DELETE NO ACTION 
 )
 
 GO

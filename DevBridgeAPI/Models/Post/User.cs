@@ -47,6 +47,10 @@ namespace DevBridgeAPI.Models.Post
         /// </summary>
         public int? MonthlyLimit { get; set; }
         /// <summary>
+        /// Constraint on user that limits how many assignments they can take per quarter
+        /// </summary>
+        public int? QuarterLimit { get; set; }
+        /// <summary>
         /// Constraint on user that limits how many assignments they can take per year
         /// </summary>
         public int? YearlyLimit { get; set; }
