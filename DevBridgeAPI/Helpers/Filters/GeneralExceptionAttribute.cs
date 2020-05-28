@@ -14,8 +14,17 @@ namespace DevBridgeAPI.Helpers.Filters
 {
     public class GeneralExceptionAttribute : ExceptionFilterAttribute
     {
+        private readonly IExceptionLogger logger;
+
+        public GeneralExceptionAttribute(IExceptionLogger logger)
+        {
+            this.logger = logger;
+        }
+
         public override void OnException(HttpActionExecutedContext actionExecutedContext)
         {
+            logger.LogException(actionExecutedContext.Exception);
+
             HttpResponseMessage response;
             if (exceptionHandlerMap.TryGetValue(actionExecutedContext.Exception.GetType(),
                 out var exceptionHandler))
