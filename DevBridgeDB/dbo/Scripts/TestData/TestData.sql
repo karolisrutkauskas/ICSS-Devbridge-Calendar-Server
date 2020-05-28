@@ -1,4 +1,5 @@
-﻿DELETE [dbo].[Assignments] WHERE [AsgnId] BETWEEN 1 AND 250;
+﻿DELETE [dbo].[LearntTopics] WHERE [TopicId] BETWEEN 1 AND 50;
+DELETE [dbo].[Assignments] WHERE [AsgnId] BETWEEN 1 AND 250;
 DELETE [dbo].[Goals] WHERE [GoalId] BETWEEN 1 AND 50;
 DELETE FROM [dbo].[Topics] WHERE [TopicId] BETWEEN 1 AND 50;
 

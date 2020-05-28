@@ -32,9 +32,9 @@ namespace DevBridgeAPI.UseCases.Integrations
         {
             var client = new EmailClient(sender: EmailCredentials.Email,
                                          senderPassword: EmailCredentials.Password,
-                                         host: ConfigurationManager.AppSettings["appSettings--emailHost"]);
+                                         host: ConfigurationManager.AppSettings["appSettings:emailHost"]);
             var registrationTokenUrlEnc = WebUtility.UrlEncode(invitedUser.RegistrationToken);
-            var baseUrl = ConfigurationManager.AppSettings["appSettings--websiteUrl"];
+            var baseUrl = ConfigurationManager.AppSettings["appSettings:websiteUrl"];
             var invitationUrl = baseUrl + Strings.UserInvitationUrlPath + "?registrationToken=" + registrationTokenUrlEnc;
 
             var emailBody = string.Format(format: _htmlString, invitedUser.FirstName, invitationUrl);
