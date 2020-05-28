@@ -194,5 +194,22 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             var ttNodes = GetTeamTree(ancestorId).BreadthFirstSearch(x => x.Children != null && x.Children.Any());
             return ttNodes.Select(x => x.This);
         }
+
+        public User GetByRegistrationToken(string registrationToken)
+        {
+            var validInfo = userValidator.ValidateRegToken(registrationToken);
+            if (!validInfo.IsValid)
+            {
+                throw new ValidationFailedException(validInfo);
+            }
+
+            var user = usersDao.SelectByRegToken(registrationToken);
+            if (user == null)
+            {
+                throw new EntityNotFoundException($"User with RegistrationToken {registrationToken} was not found", typeof(User));
+            }
+
+            return user;
+        }
     }
 }

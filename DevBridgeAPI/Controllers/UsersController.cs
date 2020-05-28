@@ -17,6 +17,7 @@ using DevBridgeAPI.Models.Patch;
 using DevBridgeAPI.Models.Misc;
 using Swashbuckle.Swagger.Annotations;
 using System.Collections.Generic;
+using System.Web.Helpers;
 
 namespace DevBridgeAPI.Controllers
 {
@@ -212,10 +213,35 @@ namespace DevBridgeAPI.Controllers
         [ValidateRequest]
         [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return registered user", Type = typeof(User))]
         [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
-        [SwaggerResponse(HttpStatusCode.NotFound, Description = "User with provided email not found", Type = typeof(ErrorMessage))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "User with provided registration token not found", Type = typeof(ErrorMessage))]
         public IHttpActionResult FinishRegistration([FromBody] RegCredentials regCredentials)
         {
             return Ok(userLogic.FinishRegistration(regCredentials));
+        }
+
+        /// <summary>
+        /// Requests user by provided registration token
+        /// (The token that is sent by invitation email)
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: User with provided token not found<br/>
+        /// 10: RegistrationToken is expired<br/>
+        /// 13: Missing mandatory 'token' query parameter
+        /// </remarks>
+        /// <param name="token">Registration token (mandatory parameter) for user lookup</param>
+        /// <returns>Requsted user data</returns>
+        [Route("api/users/regToken")]
+        [HttpGet]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return user", Type = typeof(User))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "User with provided registration token not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult GetByRegistrationToken(string token = null)
+        {
+            if (token == null)
+                throw new ApiException(HttpStatusCode.BadRequest,
+                    new ErrorMessage[] { Errors.MissingMandatoryQueryParameter(nameof(token)) });
+            return Ok(userLogic.GetByRegistrationToken(token));
         }
     }
 #pragma warning restore CA2000 // Dispose objects before losing scope
