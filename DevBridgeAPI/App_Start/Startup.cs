@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DevBridgeAPI.Helpers;
+using DevBridgeAPI.Repository.Dao;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
@@ -23,7 +24,7 @@ namespace DevBridgeAPI.App_Start
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(60),
                 Provider = myProvider
             };
             app.UseOAuthAuthorizationServer(options);
@@ -33,7 +34,8 @@ namespace DevBridgeAPI.App_Start
             WebApiConfig.Register(config);
 
             GlobalConfiguration.Configuration.Filters
-                .Add(new Helpers.Filters.GeneralExceptionAttribute());
+                .Add(new Helpers.Filters.GeneralExceptionAttribute(new ExceptionLoggerToDB(new ExceptionDao())));
+            //.Add(new Helpers.Filters.GeneralExceptionAttribute(new ExceptionLoggerToFile()));
         }
     }
 }
