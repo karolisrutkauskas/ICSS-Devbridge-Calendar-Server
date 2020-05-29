@@ -243,6 +243,31 @@ namespace DevBridgeAPI.Controllers
                     new ErrorMessage[] { Errors.MissingMandatoryQueryParameter(nameof(token)) });
             return Ok(userLogic.GetByRegistrationToken(token));
         }
+
+        /// <summary>
+        /// Request for user password to be changed
+        /// Requires old password for identity validation
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 6: User with provided ID not found<br/>
+        /// 14: Invalid OldPassword<br/>
+        /// </remarks>
+        /// <param name="changePassword">Old and new passwords</param>
+        /// <response code="204">Password changed successfully</response>
+        [Route("api/users/changePassword")]
+        [HttpPatch]
+        [Authorize]
+        [ValidateRequest]
+        [SwaggerResponse(HttpStatusCode.NoContent, Description = "Password changed successfully")]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "User was not found", Type = typeof(ErrorMessage))]
+        public IHttpActionResult ChangePassword([FromBody] ChangePassword changePassword)
+        {
+            var userId = User.Identity.GetId();
+            userLogic.ChangePassword(userId, changePassword.OldPassword, changePassword.NewPassword);
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
+        }
     }
 #pragma warning restore CA2000 // Dispose objects before losing scope
 }

@@ -62,5 +62,6 @@ namespace DevBridgeAPI.UseCases.UserLogicN
         User FinishRegistration(RegCredentials regCredentials);
         IEnumerable<User> GetDescendantTeamManagers(int ancestorId);
         User GetByRegistrationToken(string registrationToken);
+        void ChangePassword(int userId, string oldPassword, string newPassword);
     }
 }

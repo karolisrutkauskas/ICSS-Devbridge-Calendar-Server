@@ -92,6 +92,12 @@ namespace DevBridgeAPI.Resources
         {
             return new ErrorMessage { Code = 13, Message = $"Missing mandatory query parameter: {paramName}" };
         }
+
+        /// <summary>"Invalid password"</summary>
+        public static ErrorMessage InvalidPassword()
+        {
+            return new ErrorMessage { Code = 14, Message = "Invalid password" };
+        }
     }
 }
 #pragma warning restore CA1303 // Do not pass literals as localized parameters

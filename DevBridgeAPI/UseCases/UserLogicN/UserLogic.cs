@@ -15,6 +15,7 @@ using System.Configuration;
 using System.Transactions;
 using System.Collections.Generic;
 using System.Linq;
+using DevBridgeAPI.Models.Misc;
 
 namespace DevBridgeAPI.UseCases.UserLogicN
 {
@@ -211,6 +212,28 @@ namespace DevBridgeAPI.UseCases.UserLogicN
             }
 
             return user;
+        }
+
+        public void ChangePassword(int userId, string oldPassword, string newPassword)
+        {
+            using (var transaction = new TransactionScope())
+            {
+                var user = usersDao.SelectByID(userId);
+                if (user == null)
+                {
+                    throw new EntityNotFoundException($"User with ID {userId} was not found", typeof(User));
+                }
+
+                if (!HashingUtil.VerifyPassword(oldPassword, user.Password))
+                {
+                    throw new ValidationFailedException(new ValidationInfo(new ErrorMessage[] { Errors.InvalidPassword() }));
+                }
+
+                user.Password = HashingUtil.HashPasswordWithSalt(newPassword);
+                usersDao.UpdateUser(user);
+
+                transaction.Complete();
+            }
         }
     }
 }
