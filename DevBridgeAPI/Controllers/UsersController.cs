@@ -227,21 +227,17 @@ namespace DevBridgeAPI.Controllers
         /// Error codes:<br/>
         /// 6: User with provided token not found<br/>
         /// 10: RegistrationToken is expired<br/>
-        /// 13: Missing mandatory 'token' query parameter
         /// </remarks>
-        /// <param name="token">Registration token (mandatory parameter) for user lookup</param>
+        /// <param name="regToken">Registration token (mandatory parameter) for user lookup</param>
         /// <returns>Requsted user data</returns>
         [Route("api/users/regToken")]
-        [HttpGet]
+        [HttpPost]
         [SwaggerResponse(HttpStatusCode.OK, Description = "Successful request, Return user", Type = typeof(User))]
         [SwaggerResponse(HttpStatusCode.BadRequest, Description = "Request failed validations", Type = typeof(ErrorMessage))]
         [SwaggerResponse(HttpStatusCode.NotFound, Description = "User with provided registration token not found", Type = typeof(ErrorMessage))]
-        public IHttpActionResult GetByRegistrationToken(string token = null)
+        public IHttpActionResult GetByRegistrationToken([FromBody] RegistrationTokenWrapper regToken)
         {
-            if (token == null)
-                throw new ApiException(HttpStatusCode.BadRequest,
-                    new ErrorMessage[] { Errors.MissingMandatoryQueryParameter(nameof(token)) });
-            return Ok(userLogic.GetByRegistrationToken(token));
+            return Ok(userLogic.GetByRegistrationToken(regToken.RegistrationToken));
         }
 
         /// <summary>
