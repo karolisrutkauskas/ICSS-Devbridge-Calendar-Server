@@ -16,5 +16,7 @@ namespace DevBridgeAPI.Repository.Dao
         void UpdateTopic(Topic topic);
         IEnumerable<Topic> SelectLearnt(int userId);
         IEnumerable<Topic> SelectHistory(int topicId, int count);
+        void AddLearntTopic(LearntTopic learntTopic);
+        void RemoveLearntTopic(LearntTopic learntTopic);
     }
 }

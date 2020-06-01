@@ -16,5 +16,7 @@ namespace DevBridgeAPI.UseCases
         IEnumerable<TeamStatsPerTopic> GetTeamsWithPastTopicAssignment(int topicId, int managerId);
         Topic InsertOrUpdateTopic(PostTopic topic, int changeByUserId, int? topicId = null);
         IEnumerable<Topic> GetPrevVersions(int topicId, int maxCount);
+        void LearnTopic(int userId, int topicId);
+        void UnlearnTopic(int userId, int topicId);
     }
 }

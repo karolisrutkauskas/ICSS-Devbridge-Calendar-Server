@@ -9,9 +9,11 @@ using System.Security.Claims;
 using DevBridgeAPI.Helpers;
 using PostTopic = DevBridgeAPI.Models.Post.Topic;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace DevBridgeAPI.Controllers
 {
+#pragma warning disable CA2000 // Dispose objects before losing scope
     public class TopicsController : ApiController
     {
         private readonly ITopicLogic topicLogic;
@@ -229,5 +231,44 @@ namespace DevBridgeAPI.Controllers
         {
             return Ok(topicLogic.GetPrevVersions(topicId, maxCount));
         }
+
+        /// <summary>
+        /// Authorized user will learn the specified topic
+        /// </summary>
+        /// <remarks>
+        /// Error codes:<br/>
+        /// 5: User has already learned this topic<br/>
+        /// </remarks>
+        /// <param name="topicId">ID of the learned topic</param>
+        /// <response code="204">Learnt topic inserted</response>
+        [Route("api/topics/{topicId}/learnt")]
+        [HttpPost]
+        [Authorize]
+        [SwaggerResponse(HttpStatusCode.NoContent, Description = "Learnt topic inserted")]
+        [SwaggerResponse(HttpStatusCode.Conflict, Description = "User has already learned this topic", Type = typeof(ErrorMessage))]
+        public IHttpActionResult LearnTopic(int topicId)
+        {
+            var userId = User.Identity.GetId();
+            topicLogic.LearnTopic(userId, topicId);
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
+        }
+
+        /// <summary>
+        /// Authorized user will unlearn the specified topic
+        /// </summary>
+        /// <param name="topicId">ID of the unlearned topic</param>
+        /// <response code="204">Topic has been unlearned</response>
+        [Route("api/topics/{topicId}/learnt")]
+        [HttpDelete]
+        [Authorize]
+        [SwaggerResponse(HttpStatusCode.NoContent, Description = "Topic has been unlearned")]
+        [SwaggerResponse(HttpStatusCode.Conflict, Description = "User has already learned this topic", Type = typeof(ErrorMessage))]
+        public IHttpActionResult UnlearnTopic(int topicId)
+        {
+            var userId = User.Identity.GetId();
+            topicLogic.UnlearnTopic(userId, topicId);
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
+        }
     }
 }
+#pragma warning restore CA2000 // Dispose objects before losing scope
