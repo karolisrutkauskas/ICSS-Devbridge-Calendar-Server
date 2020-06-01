@@ -4,6 +4,7 @@ using DevBridgeAPI.Repository.Dao;
 using DevBridgeAPI.UseCases.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using PlannedTopic = DevBridgeAPI.Models.Complex.PlannedTopicsPerUser.PlannedTopic;
@@ -146,6 +147,23 @@ namespace DevBridgeAPI.UseCases
                 throw new EntityNotFoundException($"User with ID {userId} not found", typeof(User));
             }
             return new LearntTopicsPerUser { User = user, Topics = topicsDao.SelectLearnt(userId) } ;
+        }
+
+        public void LearnTopic(int userId, int topicId)
+        {
+            try
+            {
+                topicsDao.AddLearntTopic(new LearntTopic { UserId = userId, TopicId = topicId });
+            } catch (SqlException e) when(e.Number == 2627)
+            {
+                throw new UniqueFieldException($"Learnt topic with User ID {userId} and Topic ID {topicId} already exists",
+                    nameof(LearntTopic.TopicId) + "," + nameof(LearntTopic.UserId));
+            }
+        }
+
+        public void UnlearnTopic(int userId, int topicId)
+        {
+            topicsDao.RemoveLearntTopic(new LearntTopic { UserId = userId, TopicId = topicId });
         }
     }
 }

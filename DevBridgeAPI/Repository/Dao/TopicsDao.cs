@@ -69,5 +69,21 @@ namespace DevBridgeAPI.Repository.Dao
                 return db.Connection.Query<Topic>(sql, new { TopicId = topicId, Count = count });
             }
         }
+
+        public void AddLearntTopic(LearntTopic learntTopic)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Insert(learntTopic);
+            }
+        }
+
+        public void RemoveLearntTopic(LearntTopic learntTopic)
+        {
+            using (var db = new DbContext())
+            {
+                db.Connection.Delete(learntTopic);
+            }
+        }
     }
 }
