@@ -379,6 +379,7 @@
     <Compile Include="Models\Complex\LearntTopicsPerUser.cs" />
     <Compile Include="Models\Complex\PlannedTopicsPerUser.cs" />
     <Compile Include="Models\Complex\TeamStatsPerTopic.cs" />
+    <Compile Include="Models\Post\RegistrationTokenWrapper.cs" />
     <Compile Include="Models\Patch\ChangePassword.cs" />
     <Compile Include="Models\Patch\RegCredentials.cs" />
     <Compile Include="Controllers\TopicsController.cs" />
